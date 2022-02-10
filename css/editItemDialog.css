@@ -1,0 +1,70 @@
+
+.editItemDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.editItemDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 200px);
+  top: calc(50% - 300px);
+  width: 400px;
+  height: 600px;
+  background: #9ad3cd;
+}
+
+.editItemDialog .dialogContent {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 47px);
+  overflow-y: auto;
+}
+
+.editItemSubmit {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.editItemDialog .itemName {
+  font-size: 32px;
+  text-align: center;
+}
+
+.editItemDialog .itemImgBox {
+  text-align: center;
+  padding-top: 5px;
+  height: 140px;
+}
+
+.editItemDialog .itemImgBox img {
+  height: 100%;
+}
+
+.editItemDialog .actions {
+  text-align: center;
+}
+
+.editItemDialog .actionBtn {
+  width: 50px;
+  height: 50px;
+  padding: 0;
+  border: none;
+  outline: none;
+  background: var(--foreground);
+  box-shadow: 0 0 5px black;
+  margin: 0 10px 0 10px;
+  transition: .1s;
+}
+
+.editItemDialog .actionBtn:hover {
+  background: var(--foreground-highlight);
+  transition: .1s;
+}
+
+.editItemDialog .actionBtn img {
+  width: 100%;
+}

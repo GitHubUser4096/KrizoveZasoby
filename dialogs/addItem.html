@@ -1,0 +1,26 @@
+<div class="dialogBox">
+  <form class="addItemForm" autocomplete="off">
+    <div class="formTitle">
+      <span class="formTitleText">Přidat Položku</span>
+      <button class="formClose" type="button" name="close">X</button>
+    </div>
+    <div class="formError"></div>
+    <label class="formRow">
+      Produkt:
+      <input type="hidden" name="productId"></input>
+      <input class="formInput productNameInput" name="productName"></input>
+      <button class="addProductBtn" name="addProduct" type="button">+</button>
+    </label>
+    <label class="formRow">
+      Počet:
+      <input class="formInput" name="count" type="number"></input>
+    </label>
+    <label class="formRow">
+      Minimální trvanlivost:
+      <input class="formInput" name="expDate" type="date"></input>
+    </label>
+    <div>
+      <button class="formSubmit addItemSubmit" type="submit">Přidat</button>
+    </div>
+  </form>
+</div>

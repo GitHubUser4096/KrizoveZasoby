@@ -1,0 +1,55 @@
+<div class="dialogBox">
+  <div class="formTitle">
+    <span class="formTitleText">Přidat produkt</span>
+    <button class="formClose" type="button">X</button>
+  </div>
+  <div class="dialogContent">
+    <div class="formError"></div>
+    <form class="form">
+      <label class="formRow">
+        Název:
+        <input name="productName" class="formInput"></input>
+      </label>
+      <label class="formRow">
+        EAN:
+        <input name="ean" class="formInput"></input>
+      </label>
+      <div class="formRow">
+        Obrázek:
+        <div class="imgBox">
+          <div class="imgPreview"></div>
+          <button type="button" class="imgBtn imgSelect" title="Vybrat obrázek">
+            <img src="res/chooseImage.png"></img>
+          </button>
+          <button type="button" class="imgBtn imgClear" title="Zrušit výběr">
+            <img src="res/clear.png"></img>
+          </button>
+        </div>
+      </div>
+      <label class="formRow">
+        Balení:
+        <input name="packageType" class="formInput" list="package_types"></input>
+        <datalist id="package_types">
+        </datalist>
+      </label>
+      <div class="formRow">
+        Kategorie:
+        <div class="catBox">
+          <div class="categories"></div>
+          <div>
+            <!-- <input type="checkbox" class="newCatCheckbox" disabled></input> -->
+            <input name="catName" class="newCatInput" placeholder="Nová kategorie"></input>
+          </div>
+          <!-- <button type="button" name="newCat" class="newCatSubmit">&gt;</button> -->
+        </div>
+      </div>
+      <label class="formRow">
+        Popis:
+        <textarea name="description" class="formInput description"></textarea>
+      </label>
+      <div>
+        <button type="submit" class="formSubmit addProductSubmit">Přidat</button>
+      </div>
+    </form>
+  </div>
+</div>

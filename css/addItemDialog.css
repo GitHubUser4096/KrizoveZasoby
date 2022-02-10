@@ -1,0 +1,72 @@
+
+.addItemDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.addItemDialog .dialogBox {
+  position: absolute;
+  top: calc(50% - 300px);
+  left: calc(50% - 200px);
+  width: 400px;
+  height: 600px;
+  /* background: gray; */
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.productNameInput {
+  display: inline-block;
+  width: calc(100% - 59px);
+  color: gray;
+}
+
+.addItemSubmit {
+  bottom: 40px;
+  position: absolute;
+}
+
+.productNameInput.valid {
+  color: black;
+}
+
+.addProductBtn {
+  float: right;
+  background: var(--foreground);
+  color: var(--foreground-text);
+  border: none;
+  outline: none;
+  width: 39px;
+  height: 39px;
+  box-shadow: 0 0 8px black;
+  font-size: 20px;
+  margin-top: 5px;
+}
+
+.addProductBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.suggestions {
+  position: fixed;
+  background: white;
+  box-shadow: 0 0 5px black;
+  width: 271px;
+}
+
+.suggestionItem {
+  border: none;
+  padding: none;
+  outline: none;
+  background: white;
+  font-size: 20px;
+  width: 100%;
+}
+
+.suggestionItem:hover {
+  background: lightgray;
+}

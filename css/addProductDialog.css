@@ -1,0 +1,108 @@
+
+.addProductDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.addProductDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 200px);
+  top: calc(50% - 300px);
+  width: 400px;
+  height: 600px;
+  background: #9ad3cd;
+}
+
+.addProductDialog .dialogContent {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 47px);
+  overflow-y: auto;
+}
+
+.addProductDialog .description {
+  resize: none;
+  height: 100px;
+}
+
+.addProductSubmit {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.addProductDialog .newCatInput {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 18px;
+  padding: 5px;
+  padding-left: 3px;
+  margin-left: 17px;
+}
+
+.addProductDialog .newCatCheckbox {
+  visibility: hidden;
+}
+
+.addProductDialog .newCatSubmit {
+
+}
+
+.addProductDialog .categories label {
+  display: block;
+  font-size: 18px;
+}
+
+.addProductDialog .catBox {
+  box-shadow: 0 0 5px black;
+  padding: 5px;
+}
+
+.addProductDialog .imgBox {
+  position: relative;
+  box-shadow: 0 0 5px black;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+}
+
+.addProductDialog .imgPreview {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.addProductDialog .imgBtn {
+  padding: 0;
+  background: none;
+  border: none;
+  width: 40px;
+  height: 40px;
+}
+
+.addProductDialog .imgBtn:hover {
+  box-shadow: 0 0 5px black;
+}
+
+.addProductDialog .imgBtn img {
+  width: 100%;
+}
+
+.addProductDialog .imgSelect {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.addProductDialog .imgClear {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
