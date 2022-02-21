@@ -1,10 +1,5 @@
 <?php
 
-if(!isSet($_GET['key']) || $_GET['key']!='QF8VvdLQ'){
-  echo 'Missing or invalid security key!';
-  return;
-}
-
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\SMTP;
@@ -14,11 +9,15 @@ require_once '../config/supplies.conf.php';
 require_once '../api/internal/getConfig.php';
 require_once '../lib/php/formatDateDiff.php';
 require_once '../config/mail.conf.php';
+require_once '../config/notification.conf.php';
 require_once '../lib/php/phpMailer/src/Exception.php';
 require_once '../lib/php/phpMailer/src/PHPMailer.php';
 require_once '../lib/php/phpMailer/src/SMTP.php';
 
-define("DEBUG", true);
+if(!isSet($_GET['key']) || $_GET['key']!=NOTIFICATION_KEY){
+  echo 'Missing or invalid security key!';
+  return;
+}
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
@@ -85,10 +84,10 @@ foreach($users as $user){
 
   }
 
-  if(DEBUG) echo '<h2>Oznámení pro uživatele '.$user['email'].'</h2>';
+  if(NOTIFICATION_DEBUG) echo '<h2>Oznámení pro uživatele '.$user['email'].'</h2>';
 
   if(count($changedItems)==0){
-    if(DEBUG) echo 'Žádné oznámení nebude vygenerováno<hr>';
+    if(NOTIFICATION_DEBUG) echo 'Žádné oznámení nebude vygenerováno<hr>';
     continue;
   }
 
@@ -122,7 +121,7 @@ foreach($users as $user){
 
   $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'">Přejít do mých zásob</a></p>';
 
-  if(DEBUG) echo $str;
+  if(NOTIFICATION_DEBUG) echo $str;
 
   try {
 
@@ -154,7 +153,7 @@ foreach($users as $user){
     echo '<br>Mail not sent: '.$e;
   }
 
-  if(DEBUG) echo '<hr>';
+  if(NOTIFICATION_DEBUG) echo '<hr>';
 
 }
 

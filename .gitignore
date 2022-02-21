@@ -1,3 +1,4 @@
 config/online/
 config/mail.conf.php
 config/supplies.conf.php
+config/notification.conf.php
