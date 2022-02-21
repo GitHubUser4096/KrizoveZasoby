@@ -42,7 +42,13 @@
   padding: 5px;
   padding-left: 3px;
   margin-left: 17px;
+  border-bottom: 4px solid var(--foreground);
 }
+
+/* .addProductDialog .newCatInput:hover, .addProductDialog .newCatInput:focus {
+  border-bottom: 4px solid var(--foreground);
+  transition: .1s;
+} */
 
 .addProductDialog .newCatCheckbox {
   visibility: hidden;

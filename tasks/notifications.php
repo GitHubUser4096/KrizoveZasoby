@@ -18,7 +18,7 @@ require_once '../lib/php/phpMailer/src/Exception.php';
 require_once '../lib/php/phpMailer/src/PHPMailer.php';
 require_once '../lib/php/phpMailer/src/SMTP.php';
 
-define("DEBUG", false);
+define("DEBUG", true);
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
@@ -102,23 +102,25 @@ foreach($users as $user){
 
   $styles = ['expired'=>$expStyle, 'critical'=>$critStyle, 'warn'=>$warnStyle, 'recommended'=>$recStyle];
 
-  $str .= '<h2>Tyto zásoby vyžadují vaší pozornost:</h2>';
+  $str .= '<h2>Tyto položky vyžadují vaší pozornost:</h2>';
   $str .= '<ul>';
 
   foreach($changedItems as $item){
     $str .= '<li><span style="'.$styles[$item['state']].'">';
-    if($item['expTime']<$today) $str .= 'Položka '.$item['item'].' x'.$item['count'].' v tašce '.$item['bag'].' vypršela!';
-    else $str .= 'Položka <b>'.$item['item'].' x'.$item['count'].' v tašce '.$item['bag'].'</b> vyprší <b>'.formatDateDiff($today, $item['expTime']).'</b>';
+    if($item['expTime']<$today) $str .= 'Položka <b>'.$item['item'].' x'.$item['count'].'</b> v tašce <b>'.$item['bag'].' vypršela!</b>';
+    else $str .= 'Položka <b>'.$item['item'].' x'.$item['count'].'</b> v tašce <b>'.$item['bag'].'</b> vyprší <b>'.formatDateDiff($today, $item['expTime']).'</b>';
     $str .= '</span></li>';
   }
 
   $str .= '</ul>';
   $str .= "<h3>Stav vašich zásob:</h3>";
 
-  if($expiredCount) $str .= '<div><span style="'.$expStyle.'">Vypršené položky: celkem <b>'.$expiredCount.'</b> v taškách '.implode(', ', $expiredBags).'</span></div>';
-  if($criticalCount) $str .= '<div><span style="'.$critStyle.'">Položky v kritickém stavu: celkem <b>'.$criticalCount.'</b> v taškách '.implode(', ', $criticalBags).'</span></div>';
-  if($warnCount) $str .= '<div><span style="'.$warnStyle.'">Položky s varováním: celkem <b>'.$warnCount.'</b> v taškách '.implode(', ', $warnBags).'</span></div>';
-  if($recommendedCount) $str .= '<div><span style="'.$recStyle.'">Položky s doporučeným odevzdáním: celkem <b>'.$recommendedCount.'</b> v taškách '.implode(', ', $recommendedBags).'</span></div>';
+  if($expiredCount) $str .= '<div><span style="'.$expStyle.'">Vypršené položky: celkem <b>'.$expiredCount.'</b> v taškách <b>'.implode(', ', $expiredBags).'</b></span></div>';
+  if($criticalCount) $str .= '<div><span style="'.$critStyle.'">Položky v kritickém stavu: celkem <b>'.$criticalCount.'</b> v taškách <b>'.implode(', ', $criticalBags).'</b></span></div>';
+  if($warnCount) $str .= '<div><span style="'.$warnStyle.'">Položky s varováním: celkem <b>'.$warnCount.'</b> v taškách <b>'.implode(', ', $warnBags).'</b></span></div>';
+  if($recommendedCount) $str .= '<div><span style="'.$recStyle.'">Položky s doporučeným odevzdáním: celkem <b>'.$recommendedCount.'</b> v taškách <b>'.implode(', ', $recommendedBags).'</b></span></div>';
+
+  $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'">Přejít do mých zásob</a></p>';
 
   if(DEBUG) echo $str;
 

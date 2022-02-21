@@ -24,11 +24,16 @@ if(count($users)>0){
   return;
 }
 
+if(strlen(trim($_POST['password']))<=4){
+  echo json_encode(['success'=>false, 'message'=>'Heslo musí být delší než 4 znaky']);
+  return;
+}
+
 $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
 $userId = $db->insert("insert into User(email, password) values (?, ?)", $_POST['email'], $passwordHash);
 
-$_SESSION['user'] = ['id'=>$userId, 'email'=>$_POST['email'], 'password'=>$passwordHash];
+$_SESSION['user'] = ['id'=>$userId, 'email'=>$_POST['email']];
 
 echo json_encode(['success'=>true]);
 return;

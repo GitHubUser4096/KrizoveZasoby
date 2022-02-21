@@ -113,3 +113,14 @@
   display: none;
   box-sizing: border-box;
 }
+
+.formInfo {
+  margin-left: 10%;
+  width: calc(80% - 10px);
+  padding: 5px;
+  font-size: 18px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  display: none;
+  box-sizing: border-box;
+}

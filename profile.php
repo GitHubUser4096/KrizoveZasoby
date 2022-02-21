@@ -26,6 +26,8 @@ if(!isSet($_SESSION['user'])){
     <link rel="stylesheet" href="css/addProductDialog.css">
     <link rel="stylesheet" href="css/searchDialog.css">
     <link rel="stylesheet" href="css/userMenuDialog.css">
+    <link rel="stylesheet" href="css/settingsDialog.css">
+    <link rel="stylesheet" href="css/handedOutBagsDialog.css">
     <script src="lib/js/XHR.js" charset="utf-8"></script>
     <script src="js/addItem.js" charset="utf-8"></script>
     <script src="js/editItem.js" charset="utf-8"></script>
@@ -37,6 +39,8 @@ if(!isSet($_SESSION['user'])){
     <script src="js/charities.js" charset="utf-8"></script>
     <script src="js/searchDialog.js" charset="utf-8"></script>
     <script src="js/userMenu.js" charset="utf-8"></script>
+    <script src="js/settings.js" charset="utf-8"></script>
+    <script src="js/handedOutBags.js" charset="utf-8"></script>
     <script src="js/profile.js" charset="utf-8"></script>
   </head>
   <body>
@@ -78,41 +82,43 @@ if(!isSet($_SESSION['user'])){
       </div>
       <div class="items">
         <div class="lists">
-          <div id="listBox_exp">
-            <div class="hintLabel">Po vypršení:</div>
-            <div id="div_expList" class="itemList expList"></div>
-            <hr>
-          </div>
-          <div id="listBox_crit">
-            <div class="hintLabel">Kritické:</div>
-            <div id="div_critList" class="itemList critList"></div>
-            <hr>
-          </div>
-          <div id="listBox_warn">
-            <div class="hintLabel">Varování:</div>
-            <div id="div_warnList" class="itemList warnList"></div>
-            <hr>
-          </div>
-          <div id="listBox_rec">
-            <div class="hintLabel">Doporučené:</div>
-            <div id="div_recList" class="itemList recList"></div>
-            <hr>
-          </div>
-          <div id="listBox_ok">
-            <div class="hintLabel">V pořádku:</div>
-            <div id="div_okList" class="itemList okList"></div>
-            <hr>
-          </div>
-          <!-- <div id="listBox">
-            <div id="div_itemList" class="itemList"></div>
-            <hr>
-          </div> -->
-          <div id="listBox_used">
-            <div class="hintLabel">Použité:</div>
-            <div id="div_usedList" class="itemList usedList"></div>
-          </div>
-          <div id="listBox_empty">
-            <div class="hintLabel emptyHint">Přidejte položky kliknutím na Přidat položku</div>
+          <div class="listContent">
+            <div id="listBox_exp">
+              <div class="hintLabel">Po vypršení:</div>
+              <div id="div_expList" class="itemList expList"></div>
+              <hr>
+            </div>
+            <div id="listBox_crit">
+              <div class="hintLabel">Kritické:</div>
+              <div id="div_critList" class="itemList critList"></div>
+              <hr>
+            </div>
+            <div id="listBox_warn">
+              <div class="hintLabel">Varování:</div>
+              <div id="div_warnList" class="itemList warnList"></div>
+              <hr>
+            </div>
+            <div id="listBox_rec">
+              <div class="hintLabel">Doporučené:</div>
+              <div id="div_recList" class="itemList recList"></div>
+              <hr>
+            </div>
+            <div id="listBox_ok">
+              <div class="hintLabel">V pořádku:</div>
+              <div id="div_okList" class="itemList okList"></div>
+              <hr>
+            </div>
+            <!-- <div id="listBox">
+              <div id="div_itemList" class="itemList"></div>
+              <hr>
+            </div> -->
+            <div id="listBox_used">
+              <div class="hintLabel">Použité:</div>
+              <div id="div_usedList" class="itemList usedList"></div>
+            </div>
+            <div id="listBox_empty">
+              <div class="hintLabel emptyHint">Přidejte položky kliknutím na Přidat položku</div>
+            </div>
           </div>
         </div>
         <div class="bottomBtnBox addItem">

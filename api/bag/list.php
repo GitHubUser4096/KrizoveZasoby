@@ -29,7 +29,7 @@ $criticalTime = strtotime($config['criticalTime'])-time();
 $warnTime = strtotime($config['warnTime'])-time();
 $recommendedTime = strtotime($config['recommendedTime'])-time();
 
-$bags = $db->query("select id, name from Bag where userId=?", $userId);
+$bags = $db->query("select id, name from Bag where userId=? and not handedOut", $userId);
 
 for($i = 0; $i<count($bags); $i++){
 

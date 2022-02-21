@@ -15,6 +15,8 @@ create table Bag(
   name varchar(64) not null,
   description varchar(1024),
   userId int not null,
+  handedOut boolean not null default 0,
+  handedOutDate datetime,
   foreign key (userId) references User(id)
 );
 
@@ -73,7 +75,11 @@ create table Config(
   foreign key (userId) references User(id)
 );
 
--- enter test data
+-- update to V0.1
+alter table Bag add column handedOut boolean not null default 0;
+alter table Bag add column handedOutDate datetime;
+
+-- test data
 insert into User(username, password) values ('admin', '$2y$10$kWjwlTwT8V6/SedjOHZvUudfAYKYLVNobSHO1Pma8sQv3oAJJxYDC');
 insert into Bag(name, userId) values ('bag1', 1);
 insert into Bag(name, userId) values ('bag2', 1);

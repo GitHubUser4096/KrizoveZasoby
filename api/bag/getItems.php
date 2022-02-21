@@ -4,6 +4,7 @@ session_start();
 
 require_once '../../lib/php/db.php';
 require_once '../../config/supplies.conf.php';
+require_once '../../lib/php/formatDateDiff.php';
 require_once '../internal/getConfig.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
@@ -57,6 +58,8 @@ for($i = 0; $i<count($items); $i++){
   $items[$i]['product'] = $product;
 
   $expTime = strtotime($items[$i]['expiration']);
+  $items[$i]['expiration'] = date($config['dateFormat'], $expTime);
+  if($expTime>=$today) $items[$i]['useIn'] = formatDateDiff($expTime, $today);
 
   if($items[$i]['used']){
     $items[$i]['state'] = 'used';

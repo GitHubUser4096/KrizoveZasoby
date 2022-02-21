@@ -7,7 +7,7 @@ require_once '../../config/supplies.conf.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
 
-$products = $db->query("select * from Category");
+$products = $db->query("select * from Category order by name");
 
 echo json_encode($products);
 

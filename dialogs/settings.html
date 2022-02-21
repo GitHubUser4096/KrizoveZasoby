@@ -1,0 +1,67 @@
+<div class="dialogBox">
+  <div class="formTitle">
+    <span class="formTitleText">Nastavení</span>
+    <button class="formClose">X</button>
+  </div>
+  <div class="dialogContent">
+    <div class="formInfo"></div>
+    <form class="changePasswordForm">
+      <span class="sectionName">Změnit heslo:</span>
+      <label class="formRow">
+        Nové Heslo:
+        <input class="formInput" type="password" name="password"></input>
+      </label>
+      <label class="formRow">
+        Ověřit Heslo:
+        <input class="formInput" type="password" name="confirmPassword"></input>
+      </label>
+      <button class="formSubmit" type="submit">Změnit heslo</button>
+    </form>
+    <!-- <hr> -->
+    <form class="settingsForm">
+      <span class="sectionName">Nastavení webu:</span>
+      <span class="subSectionName">Stav položek:</span>
+      <label class="formRow">
+        <div class="timeDiffTitle critical">Kritický stav:</div>
+        <div class="timeDiffInput criticalInput">
+          <input type="number" class="timeDiffValue" name="criticalValue"></input>
+          <select class="timeDiffUnit" name="criticalUnit">
+            <option value="days">Dny</option>
+            <option value="weeks">Týdny</option>
+            <!-- <option value="Months">Měsíce</option> -->
+          </select>
+        </div>
+      </label>
+      <label class="formRow">
+        <div class="timeDiffTitle warn">Varování:</div>
+        <div class="timeDiffInput warnInput">
+          <input type="number" class="timeDiffValue" name="warnValue"></input>
+          <select class="timeDiffUnit" name="warnUnit">
+            <option value="days">Dny</option>
+            <option value="weeks">Týdny</option>
+            <!-- <option value="Months">Měsíce</option> -->
+          </select>
+        </div>
+      </label>
+      <label class="formRow">
+        <div class="timeDiffTitle recommended">Doporučené odevzdání:</div>
+        <div class="timeDiffInput recommendedInput">
+          <input type="number" class="timeDiffValue" name="recommendedValue"></input>
+          <select class="timeDiffUnit" name="recommendedUnit">
+            <option value="days">Dny</option>
+            <option value="weeks">Týdny</option>
+            <!-- <option value="Months">Měsíce</option> -->
+          </select>
+        </div>
+      </label>
+      <span class="subSectionName">Formát datumu:</span>
+      <label class="formRow">
+        <select name="dateFormat" class="formSelect">
+          <option value="Y-m-d">YYYY-MM-DD</option>
+          <option value="d. m. Y">DD. MM. YYYY</option>
+        </select>
+      </label>
+      <button class="formSubmit" type="submit">Uložit nastavení</button>
+    </form>
+  </div>
+</div>

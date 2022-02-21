@@ -9,4 +9,5 @@ db.sql - contains the database creation code and some testing data (not necessar
 
 ## 2. Setup the configuration
 config/mail.conf.php - has to contain configuration of the connection to your mail server
+
 config/supplies.conf.php - has to contain configuration of the connection to your db

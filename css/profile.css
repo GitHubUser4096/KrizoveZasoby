@@ -78,7 +78,7 @@ hr {
   display: none;
 }
 
-.statusbar.expired {
+/* .statusbar.expired {
   color: white;
   background: var(--expired-color);
 }
@@ -94,6 +94,26 @@ hr {
 }
 
 .statusbar.recommended {
+  color: black;
+  background: var(--recommended-color);
+} */
+
+.expired {
+  color: white;
+  background: var(--expired-color);
+}
+
+.critical {
+  color: white;
+  background: var(--critical-color);
+}
+
+.warn {
+  color: black;
+  background: var(--warn-color);
+}
+
+.recommended {
   color: black;
   background: var(--recommended-color);
 }
@@ -305,6 +325,13 @@ hr {
 
 .lists {
   padding: 10px;
+  padding-bottom: 0;
+  height: calc(100% - 90px);
+}
+
+.listContent {
+  overflow-y: auto;
+  height: 100%;
 }
 
 .itemList {
@@ -324,17 +351,18 @@ hr {
   font-size: 20px;
   padding: 2px;
   margin: 5px;
+  position: relative;
   /* background: #b4e6e8; */
 }
 
 .listItemExp {
   position: absolute;
-  right: 60px;
+  right: 50px;
 }
 
 .listItemOpt {
   position: absolute;
-  right: 20px;
+  right: 10px;
   background: var(--foreground);
   color: var(--foreground-text);
   border: none;
@@ -598,4 +626,14 @@ hr {
 
 #listBox_used {
   display: none;
+}
+
+.tooltip {
+  position: fixed;
+  /* background: #22dd11; */
+  background: var(--foreground);
+  color: white;
+  font-size: 20px;
+  padding: 5px;
+  box-shadow: 0 0 5px black;
 }

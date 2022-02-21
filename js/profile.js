@@ -7,6 +7,22 @@ let refresh;
 let auth;
 let allBags = [];
 let allItems;
+let tooltip;
+
+function showTooltip(x, y, msg){
+  if(tooltip) hideTooltip();
+  tooltip = document.createElement('div');
+  tooltip.innerText = msg;
+  tooltip.className = 'tooltip';
+  tooltip.style.left = x+'px';
+  tooltip.style.top = y+'px';
+  document.body.appendChild(tooltip);
+}
+
+function hideTooltip(){
+  document.body.removeChild(tooltip);
+  tooltip = null;
+}
 
 function hideDialogs(){
   for(let i = dialogs.length-1; i>=0; i--){
@@ -98,7 +114,7 @@ window.onload = async function(){
     }
 
     let bag = new URLSearchParams(location.search).get('bag');
-    if(bag){
+    if(bag && bags.find(b=>b.id==bag)){
       selectedBagId = +bag;
     } else {
       selectedBagId = bags[bags.length-1].id;
@@ -108,9 +124,12 @@ window.onload = async function(){
 
   loadBag = async function(id){
 
+    if(tooltip) hideTooltip();
+
     if(!id) return;
 
     if(!await checkAuth()) return;
+
 
     for(let btn of bagButtons){
       if(btn.bagId==id){
@@ -154,8 +173,19 @@ window.onload = async function(){
       let itemSpan = document.createElement('span');
       itemSpan.innerText = item.product.name+' ×'+item.count+' ';
       let expSpan = document.createElement('span');
+      // expSpan.innerText = item.expiration ? (item.expiration+(item.useIn?(' ('+item.useIn+')'):'')) : '---';
       expSpan.innerText = item.expiration ? item.expiration : '---';
       expSpan.className = 'listItemExp';
+
+      expSpan.onmouseover = function(e){
+        let bounds = expSpan.getBoundingClientRect();
+        if(item.useIn) showTooltip(bounds.left, bounds.top+bounds.height, item.useIn);
+      }
+
+      expSpan.onmouseout = function(e){
+        if(tooltip) hideTooltip();
+      }
+
       let optBtn = document.createElement('button');
       optBtn.innerText = '···';
       optBtn.className = 'listItemOpt';
@@ -260,10 +290,19 @@ window.onload = async function(){
 
   async function addBag(name){
 
+    name = name.substring(0, 1).toUpperCase()+name.substring(1).toLowerCase();
+
     if(!await checkAuth()) return;
 
     if(allBags.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
       alert('Taška se stejným názvem již existuje.');
+      return;
+    }
+
+    let handedOut = JSON.parse(await GET('api/bag/listHandedOut.php'));
+
+    if(handedOut.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
+      alert('Taška se stejným názvem je mezi odevzdanými taškami.');
       return;
     }
 
@@ -277,8 +316,10 @@ window.onload = async function(){
       alert('Nelze přidat tašku');
       return;
     }
+    await loadBags();
+    await loadBag(bag.id);
     // addBagButton(bag.id, name);
-    refresh();
+    // refresh();
 
   }
 
@@ -319,11 +360,19 @@ window.onload = async function(){
     showUserMenu(auth.user.email);
   }
 
-  // handOutBtn.onclick = async function(){
-  //   if(!await checkAuth()) return;
-  //   handOutDialog.style.display = 'block';
-  //   loadCharities();
-  // }
+  handOutBtn.onclick = async function(){
+    if(!await checkAuth()) return;
+    if(!allItems.find(i=>!i.used)) {
+      alert('Taška je prázdná!');
+      return;
+    }
+    if(!confirm('Označit tašku '+selectedBag.name+' jako odevzdanou?\n(Odevzdané tašky můžete zobrazit/obnovit v menu -> odevzdané tašky)')) return;
+    await POST('api/bag/handOut.php?bagId='+selectedBag.id);
+    refresh();
+    // if(!await checkAuth()) return;
+    // handOutDialog.style.display = 'block';
+    // loadCharities();
+  }
 
   // menuCloseBtn.onclick = function(){
   //   menuDialog.style.display = 'none';
@@ -382,7 +431,7 @@ window.onload = async function(){
     }
     if(!await checkAuth()) return;
     if(!confirm('Smazat tašku '+selectedBag.name+'?')) return;
-    window.history.replaceState('', '', '?');
+    // window.history.replaceState('', '', '?');
     await POST('api/bag/delete.php?bagId='+selectedBag.id);
     await refresh();
   }

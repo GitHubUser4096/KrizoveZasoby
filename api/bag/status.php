@@ -23,7 +23,7 @@ if(!isSet($_SESSION['user'])){
 
 $userId = $_SESSION['user']['id'];
 
-$bags = $db->query("select id, name from Bag where userId=?", $userId);
+$bags = $db->query("select id, name from Bag where userId=? and not handedOut", $userId);
 
 if(count($bags)==0){
   echo json_encode(['message'=>'', 'status'=>'hidden']);

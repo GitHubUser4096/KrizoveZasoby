@@ -26,6 +26,7 @@ body {
   right: var(--side-width);
   top: 0;
   bottom: 0;
+  overflow-y: auto;
 }
 
 .title {
@@ -104,8 +105,10 @@ body {
   position: absolute;
   left: 0;
   top: 80px;
-  width: 100%;
   height: calc(100% - 160px);
+  width: 100%;
+  /* top: 10%;
+  height: 80%; */
 }
 
 .formTitle {
@@ -204,4 +207,14 @@ body {
 .error {
   background: rgba(255, 0, 0, .5);
   transition: .2s;
+}
+
+@media only screen and (max-height: 700px) {
+  .formBox {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
 }

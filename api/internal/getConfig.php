@@ -14,6 +14,7 @@ function getUserConfig($userId, $db){
   if(!isSet($confMap['criticalTime'])) $confMap['criticalTime'] = '1 days';
   if(!isSet($confMap['warnTime'])) $confMap['warnTime'] = '1 weeks';
   if(!isSet($confMap['recommendedTime'])) $confMap['recommendedTime'] = '3 weeks';
+  if(!isSet($confMap['dateFormat'])) $confMap['dateFormat'] = 'Y-m-d';
 
   return $confMap;
 
@@ -27,20 +28,22 @@ function getConfig($db){
     return;
   }
 
-  $configs = $db->query("select * from Config where userId=?", $_SESSION['user']['id']);
+  return getUserConfig($_SESSION['user']['id'], $db);
 
-  $confMap = [];
-
-  foreach($configs as $config){
-    $confMap[$config['name']] = $config['value'];
-  }
-
-  /** Set defaults if values not set */
-  if(!isSet($confMap['criticalTime'])) $confMap['criticalTime'] = '1 days';
-  if(!isSet($confMap['warnTime'])) $confMap['warnTime'] = '1 weeks';
-  if(!isSet($confMap['recommendedTime'])) $confMap['recommendedTime'] = '3 weeks';
-
-  return $confMap;
+  // $configs = $db->query("select * from Config where userId=?", $_SESSION['user']['id']);
+  //
+  // $confMap = [];
+  //
+  // foreach($configs as $config){
+  //   $confMap[$config['name']] = $config['value'];
+  // }
+  //
+  // /** Set defaults if values not set */
+  // if(!isSet($confMap['criticalTime'])) $confMap['criticalTime'] = '1 days';
+  // if(!isSet($confMap['warnTime'])) $confMap['warnTime'] = '1 weeks';
+  // if(!isSet($confMap['recommendedTime'])) $confMap['recommendedTime'] = '3 weeks';
+  //
+  // return $confMap;
 
 }
 
