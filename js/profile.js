@@ -25,8 +25,11 @@ function hideTooltip(){
 }
 
 function hideDialogs(){
-  for(let i = dialogs.length-1; i>=0; i--){
-    dialogs[i].hide();
+  // for(let i = dialogs.length-1; i>=0; i--){
+  //   dialogs[i].hide();
+  // }
+  for(let dialog in dialogs){
+    dialogs[dialog].hide();
   }
 }
 
@@ -174,7 +177,7 @@ window.onload = async function(){
       itemSpan.innerText = item.product.name+' ×'+item.count+' ';
       let expSpan = document.createElement('span');
       // expSpan.innerText = item.expiration ? (item.expiration+(item.useIn?(' ('+item.useIn+')'):'')) : '---';
-      expSpan.innerText = item.expiration ? item.expiration : '---';
+      expSpan.innerText = item.expiration ? item.displayDate : '------';
       expSpan.className = 'listItemExp';
 
       expSpan.onmouseover = function(e){
@@ -294,15 +297,15 @@ window.onload = async function(){
 
     if(!await checkAuth()) return;
 
-    if(allBags.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
-      alert('Taška se stejným názvem již existuje.');
-      return;
-    }
-
     let handedOut = JSON.parse(await GET('api/bag/listHandedOut.php'));
 
     if(handedOut.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
       alert('Taška se stejným názvem je mezi odevzdanými taškami.');
+      return;
+    }
+
+    if(allBags.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
+      alert('Taška se stejným názvem již existuje.');
       return;
     }
 

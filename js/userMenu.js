@@ -1,12 +1,15 @@
 
 async function showUserMenu(username){
 
+  if(dialogs['userMenu']) return;
+
   let div = document.createElement('div');
   div.className = 'userMenuDialog';
   div.innerHTML = await GET('dialogs/userMenu.html');
   document.body.appendChild(div);
 
-  dialogs.push(div);
+  // dialogs.push(div);
+  dialogs['userMenu'] = div;
 
   let usernameField = div.querySelector('.usernameField');
   let closeBtn = div.querySelector('.formClose');
@@ -35,7 +38,8 @@ async function showUserMenu(username){
 
   div.hide = function(){
     document.body.removeChild(div);
-    dialogs.splice(dialogs.indexOf(div));
+    // dialogs.splice(dialogs.indexOf(div));
+    delete dialogs['userMenu'];
   }
 
 }

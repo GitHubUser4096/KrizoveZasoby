@@ -119,7 +119,7 @@ foreach($users as $user){
   if($warnCount) $str .= '<div><span style="'.$warnStyle.'">Položky s varováním: celkem <b>'.$warnCount.'</b> v taškách <b>'.implode(', ', $warnBags).'</b></span></div>';
   if($recommendedCount) $str .= '<div><span style="'.$recStyle.'">Položky s doporučeným odevzdáním: celkem <b>'.$recommendedCount.'</b> v taškách <b>'.implode(', ', $recommendedBags).'</b></span></div>';
 
-  $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'">Přejít do mých zásob</a></p>';
+  $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'/profile.php">Přejít do mých zásob</a></p>';
 
   if(NOTIFICATION_DEBUG) echo $str;
 

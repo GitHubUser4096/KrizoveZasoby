@@ -117,7 +117,7 @@ if(!isSet($_SESSION['user'])){
               <div id="div_usedList" class="itemList usedList"></div>
             </div>
             <div id="listBox_empty">
-              <div class="hintLabel emptyHint">Přidejte položky kliknutím na Přidat položku</div>
+              <div class="hintLabel emptyHint">Přidejte položky kliknutím na "Přidat položku"</div>
             </div>
           </div>
         </div>

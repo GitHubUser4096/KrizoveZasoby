@@ -1,12 +1,15 @@
 
 async function showHandedOutBagsDialog(username){
 
+  if(dialogs['handedOutBags']) return;
+
   let div = document.createElement('div');
   div.className = 'handedOutBagsDialog';
   div.innerHTML = await GET('dialogs/handedOutBags.html');
   document.body.appendChild(div);
 
-  dialogs.push(div);
+  // dialogs.push(div);
+  dialogs['handedOutBags'] = div;
 
   let closeBtn = div.querySelector('.formClose');
   let bagList = div.querySelector('.bagList');
@@ -17,7 +20,8 @@ async function showHandedOutBagsDialog(username){
 
   div.hide = function(){
     document.body.removeChild(div);
-    dialogs.splice(dialogs.indexOf(div));
+    // dialogs.splice(dialogs.indexOf(div));
+    delete dialogs['handedOutBags'];
   }
 
   let bags = JSON.parse(await GET('api/bag/listHandedOut.php'));

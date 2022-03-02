@@ -1,12 +1,15 @@
 
 async function showUnuseItemDialog(item){
 
+  if(dialogs['unuseItem']) return;
+
   let div = document.createElement('div');
   div.className = 'unuseItemDialog';
   div.innerHTML = await GET('dialogs/unuseItem.html');
   document.body.appendChild(div);
 
-  dialogs.push(div);
+  // dialogs.push(div);
+  dialogs['unuseItem'] = div;
 
   let closeBtn = div.querySelector('.formClose');
   let unuseForm = div.querySelector('.unuseForm');
@@ -38,7 +41,8 @@ async function showUnuseItemDialog(item){
 
   div.hide = function(){
     document.body.removeChild(div);
-    dialogs.splice(dialogs.indexOf(div));
+    // dialogs.splice(dialogs.indexOf(div));
+    delete dialogs['unuseItem'];
   }
 
   closeBtn.onclick = function(){

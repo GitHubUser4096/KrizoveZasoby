@@ -58,8 +58,8 @@ for($i = 0; $i<count($items); $i++){
   $items[$i]['product'] = $product;
 
   $expTime = strtotime($items[$i]['expiration']);
-  $items[$i]['expiration'] = date($config['dateFormat'], $expTime);
-  if($expTime>=$today) $items[$i]['useIn'] = formatDateDiff($expTime, $today);
+  $items[$i]['displayDate'] = $expTime ? date($config['dateFormat'], $expTime) : null;
+  if($expTime>=$today && !$items[$i]['used']) $items[$i]['useIn'] = formatDateDiff($expTime, $today);
 
   if($items[$i]['used']){
     $items[$i]['state'] = 'used';

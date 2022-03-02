@@ -1,10 +1,14 @@
 
 async function showAddItemDialog(){
 
+  if(dialogs['addItem']) return;
+
   let div = document.createElement('div');
   div.className = 'addItemDialog';
   div.innerHTML = await GET('dialogs/addItem.html');
   document.body.appendChild(div);
+
+  dialogs['addItem'] = div;
 
   let suggestions = document.createElement('div');
   suggestions.className = 'suggestions';
@@ -23,6 +27,13 @@ async function showAddItemDialog(){
 
   function hideSuggestions(){
     if(document.body.contains(suggestions)) document.body.removeChild(suggestions);
+  }
+
+  div.hide = function(){
+    hideSuggestions();
+    document.removeEventListener('keydown', closeListener);
+    document.body.removeChild(div);
+    delete dialogs['addItem'];
   }
 
   let form = div.querySelector('.addItemForm');
@@ -50,14 +61,15 @@ async function showAddItemDialog(){
 
   let closeListener;
 
-  function closeDialog(){
-    hideSuggestions();
-    document.removeEventListener('keydown', closeListener);
-    document.body.removeChild(div);
-  }
+  // function closeDialog(){
+  //   hideSuggestions();
+  //   document.removeEventListener('keydown', closeListener);
+  //   document.body.removeChild(div);
+  // }
 
   form.close.onclick = function(){
-    closeDialog();
+    // closeDialog();
+    div.hide();
   }
 
   closeListener = function(e){
@@ -173,7 +185,8 @@ async function showAddItemDialog(){
         return;
       }
 
-      closeDialog();
+      // closeDialog();
+      div.hide();
       await refresh();
 
     })();

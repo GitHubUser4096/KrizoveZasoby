@@ -1,12 +1,15 @@
 
 async function showMoveItemDialog(item){
 
+  if(dialogs['moveItem']) return;
+
   let div = document.createElement('div');
   div.className = 'moveItemDialog';
   div.innerHTML = await GET('dialogs/moveItem.html');
   document.body.appendChild(div);
 
-  dialogs.push(div);
+  // dialogs.push(div);
+  dialogs['moveItem'] = div;
 
   let closeBtn = div.querySelector('.formClose');
   let moveForm = div.querySelector('.moveForm');
@@ -49,7 +52,8 @@ async function showMoveItemDialog(item){
 
   div.hide = function(){
     document.body.removeChild(div);
-    dialogs.splice(dialogs.indexOf(div));
+    // dialogs.splice(dialogs.indexOf(div));
+    delete dialogs['moveItem'];
   }
 
   closeBtn.onclick = function(){

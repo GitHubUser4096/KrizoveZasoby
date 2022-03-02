@@ -1,12 +1,15 @@
 
 async function showEditItemDialog(item){
 
+  if(dialogs['editItem']) return;
+
   let div = document.createElement('div');
   div.className = 'editItemDialog';
   div.innerHTML = await GET('dialogs/editItem.html');
   document.body.appendChild(div);
 
-  dialogs.push(div);
+  // dialogs.push(div);
+  dialogs['editItem'] = div;
 
   let closeBtn = div.querySelector('.formClose');
   let itemNameField = div.querySelector('.itemName');
@@ -28,7 +31,8 @@ async function showEditItemDialog(item){
 
   div.hide = function(){
     document.body.removeChild(div);
-    dialogs.splice(dialogs.indexOf(div));
+    // dialogs.splice(dialogs.indexOf(div));
+    delete dialogs['editItem'];
   }
 
   closeBtn.onclick = function(){

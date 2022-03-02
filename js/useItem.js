@@ -1,12 +1,15 @@
 
 async function showUseItemDialog(item){
 
+  if(dialogs['useItem']) return;
+
   let div = document.createElement('div');
   div.className = 'useItemDialog';
   div.innerHTML = await GET('dialogs/useItem.html');
   document.body.appendChild(div);
 
-  dialogs.push(div);
+  // dialogs.push(div);
+  dialogs['useItem'] = div;
 
   let closeBtn = div.querySelector('.formClose');
   let useForm = div.querySelector('.useForm');
@@ -38,7 +41,8 @@ async function showUseItemDialog(item){
 
   div.hide = function(){
     document.body.removeChild(div);
-    dialogs.splice(dialogs.indexOf(div));
+    // dialogs.splice(dialogs.indexOf(div));
+    delete dialogs['useItem'];
   }
 
   closeBtn.onclick = function(){

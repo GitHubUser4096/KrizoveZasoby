@@ -207,6 +207,8 @@ hr {
 
 .bagsTitle {
   font-size: 14px;
+  padding: 10px;
+  padding-bottom: 0;
   text-align: center;
 }
 

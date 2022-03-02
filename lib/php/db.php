@@ -7,6 +7,7 @@ class DB {
   function __construct($server, $username, $password, $dbName){
     $this->db = new mysqli($server, $username, $password, $dbName);
     if($this->db->connect_error) throw new Exception($this->$db->connect_error);
+    $this->db->set_charset('utf8mb4');
   }
 
   function execute($query, ...$args) {

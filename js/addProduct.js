@@ -1,15 +1,25 @@
 
 async function showAddProductDialog(name, addItemDialog){
 
+  if(dialogs['addProduct']) return;
+
   let div = document.createElement('div');
   div.className = 'addProductDialog';
   div.innerHTML = await GET('dialogs/addProduct.html');
   document.body.appendChild(div);
 
+  dialogs['addProduct'] = div;
+
+  div.hide = function(){
+    document.body.removeChild(div);
+    delete dialogs['addProduct'];
+  }
+
   let closeBtn = div.querySelector('.formClose');
 
   closeBtn.onclick = function(){
-    document.body.removeChild(div);
+    // document.body.removeChild(div);
+    div.hide();
   }
 
   let content = div.querySelector('.dialogContent');
@@ -231,7 +241,8 @@ async function showAddProductDialog(name, addItemDialog){
 
         if(addItemDialog) addItemDialog.setProduct(product.id, name);
 
-        document.body.removeChild(div);
+        // document.body.removeChild(div);
+        div.hide();
 
       } catch(e){
         showError(e.message);

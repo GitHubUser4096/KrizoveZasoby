@@ -1,10 +1,14 @@
 
 async function showSettingsDialog(username){
 
+  if(dialogs['settings']) return;
+
   let div = document.createElement('div');
   div.className = 'settingsDialog';
   div.innerHTML = await GET('dialogs/settings.html');
   document.body.appendChild(div);
+
+  dialogs['settings'] = div;
 
   let closeBtn = div.querySelector('.formClose');
   let passwordForm = div.querySelector('.changePasswordForm');
@@ -46,6 +50,7 @@ async function showSettingsDialog(username){
 
   div.hide = function(){
     document.body.removeChild(div);
+    delete dialogs['settings'];
   }
 
   closeBtn.onclick = function(){
