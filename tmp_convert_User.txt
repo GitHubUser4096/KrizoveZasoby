@@ -1,0 +1,4 @@
+id email password 
+'1' 'admin@zasoby.nggcv.cz' '$2y$10$frUS6j/wC9y49W1xI9hHs.cJ5t7OMtf29EJis3fpqwITNZAsEO/0u' 
+'2' 'michal.klacer@gmail.com' '$2y$10$AfeErRfVtYX9wAgk4NEWXuMNfLvKvLKmXylUdiHMe5uzKDeJlhUoy' 
+'3' 'tomas.klacer@centrum.cz' '$2y$10$X3Wd99i5PncOX7HGS4UJLOWBfeuqCasTpjWedCqsSLRp55BOSGpHK' 

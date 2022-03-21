@@ -35,6 +35,16 @@ window.onload = function(){
     loginMsg.style.display = 'none';
   }
 
+  // loginForm.forgotPassword.onclick = function(){
+  //   loginDialog.style.display = 'none';
+  //   forgotPasswordDialog.style.display = 'block';
+  // }
+
+  forgotPasswordForm_close.onclick = function(){
+    loginDialog.style.display = 'block';
+    forgotPasswordDialog.style.display = 'none';
+  }
+
   // loginForm.email.oninput = function(){
   //   this.classList.remove('error');
   //   loginMsg.style.display = 'none';

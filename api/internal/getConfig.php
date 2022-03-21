@@ -4,19 +4,26 @@ function getUserConfig($userId, $db){
 
   $configs = $db->query("select * from Config where userId=?", $userId);
 
-  $confMap = [];
-
-  foreach($configs as $config){
-    $confMap[$config['name']] = $config['value'];
+  if(count($configs)==0){
+    $db->insert("insert into Config(userId) values (?)", $userId);
+    $configs = $db->query("select * from Config where userId=?", $userId);
   }
 
-  /** Set defaults if values not set */
-  if(!isSet($confMap['criticalTime'])) $confMap['criticalTime'] = '1 days';
-  if(!isSet($confMap['warnTime'])) $confMap['warnTime'] = '1 weeks';
-  if(!isSet($confMap['recommendedTime'])) $confMap['recommendedTime'] = '3 weeks';
-  if(!isSet($confMap['dateFormat'])) $confMap['dateFormat'] = 'Y-m-d';
+  return $configs[0];
 
-  return $confMap;
+  // $confMap = [];
+  //
+  // foreach($configs as $config){
+  //   $confMap[$config['name']] = $config['value'];
+  // }
+  //
+  // /** Set defaults if values not set */
+  // if(!isSet($confMap['criticalTime'])) $confMap['criticalTime'] = '1 days';
+  // if(!isSet($confMap['warnTime'])) $confMap['warnTime'] = '1 weeks';
+  // if(!isSet($confMap['recommendedTime'])) $confMap['recommendedTime'] = '3 weeks';
+  // if(!isSet($confMap['dateFormat'])) $confMap['dateFormat'] = 'Y-m-d';
+  //
+  // return $confMap;
 
 }
 

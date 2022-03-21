@@ -16,6 +16,8 @@ body {
   --critical-color: #F70;
   --warn-color: #FF0;
   --recommended-color: #CF0;
+  --background: #9ad3cd;
+  --item-background: #b4e6e8;
 }
 
 hr {
@@ -29,12 +31,7 @@ hr {
   top: 0;
   width: 100%;
   height: 100%;
-  background: #9ad3cd;
-  /* background-image: url('../res/index_background.png');
-  background-attachment: fixed;
-  background-position: center;
-  background-size: cover;
-  filter: brightness(.5) blur(4px); */
+  background: var(--background);
 }
 
 .titlebar {
@@ -76,46 +73,6 @@ hr {
 
 .statusbar.hidden {
   display: none;
-}
-
-/* .statusbar.expired {
-  color: white;
-  background: var(--expired-color);
-}
-
-.statusbar.critical {
-  color: white;
-  background: var(--critical-color);
-}
-
-.statusbar.warn {
-  color: black;
-  background: var(--warn-color);
-}
-
-.statusbar.recommended {
-  color: black;
-  background: var(--recommended-color);
-} */
-
-.expired {
-  color: white;
-  background: var(--expired-color);
-}
-
-.critical {
-  color: white;
-  background: var(--critical-color);
-}
-
-.warn {
-  color: black;
-  background: var(--warn-color);
-}
-
-.recommended {
-  color: black;
-  background: var(--recommended-color);
 }
 
 .initScreen {
@@ -166,7 +123,8 @@ hr {
   /* height: 32px; */
   box-shadow: 0 0 5px black;
   border-bottom: solid 4px var(--foreground);
-  color: white;
+  color: black;
+  background: var(--background);
 }
 
 .initFormSubmit {
@@ -218,7 +176,6 @@ hr {
   width: calc(100% - 20px);
   height: 30px;
   border: none;
-  background: none;
   font-size: 20px;
   box-shadow: 0 0 5px black;
   color: black;
@@ -229,22 +186,28 @@ hr {
   /* border-left: solid 8px #81B; */
   /* text-shadow: 0 0 2px black; */
   transition: .1s;
+  background: var(--item-background);
 }
 
 .bagBtn:hover {
   /* background: #81B1; */
   /* border-left: solid 14px #81B;
   transition: .1s; */
+  padding-left: 16px;
 }
 
-.bagBtn:hover::after {
+.bagBtn.selected {
+  font-weight: bold;
+  padding-left: 16px;
+}
+
+/* .bagBtn:hover::after {
   content: '>';
-  /* float: right; */
   position: absolute;
   right: 0;
   width: 30px;
   color: darkgray;
-}
+} */
 
 .bagBtn.selected::after {
   content: '>';
@@ -252,49 +215,27 @@ hr {
   position: absolute;
   right: 0;
   width: 30px;
-  color: white;
+  /* color: white; */
 }
 
-.bagBtn.expired {
-  color: white;
-  background: var(--expired-color);
+.bagBtn.selected:hover::after {
+  color: inherit;
 }
 
-.bagBtn.critical {
-  color: white;
-  background: var(--critical-color);
+.newBagBtnDiv {
+  text-align: center;
+  position: relative;
 }
 
-.bagBtn.warn {
-  color: black;
-  background: var(--warn-color);
+.newBagBtnDiv.enterName::after {
+  content: '>';
+  position: absolute;
+  right: 7px;
+  top: 2px;
+  width: 30px;
+  font-size: 20px;
+  font-weight: bold;
 }
-
-.bagBtn.recommended {
-  color: black;
-  background: var(--recommended-color);
-}
-
-.bagBtn.ok {
-  color: black;
-}
-
-.bagBtn.empty {
-  color: gray;
-}
-
-/* .bagBtnExp {
-  color: white;
-  background: red;
-}
-
-.bagBtnRec {
-  background: #ffd004;
-}
-
-.bagBtnUsed {
-  color: gray;
-} */
 
 .newBagInput {
   padding: 0;
@@ -305,17 +246,65 @@ hr {
   margin: 10px;
   width: calc(100% - 20px);
   height: 30px;
-  text-align: center;
+  padding-left: 5px;
   font-size: 20px;
+  font-weight: bold;
   box-shadow: 0 0 5px black;
+  box-sizing: border-box;
   border-bottom: solid 4px var(--foreground);
+  background: var(--item-background);
 }
 
-.newBag {
+.newBagInput::placeholder {
+  font-weight: normal;
+}
+
+.newBagBtn {
+  position: absolute;
+  left: 10px;
+  top: 0;
+  background: var(--foreground);
+  color: black;
+  padding: 0;
+  font-size: 24px;
+  font-weight: bold;
+  border: none;
+  /* margin: 10px; */
+  width: calc(100% - 20px);
+  /* width: 30px; */
+  height: 30px;
+  box-shadow: 0 0 5px black;
+  transition: .2s;
+}
+
+.newBagBtnDiv .newBagInput {
+  opacity: 0;
+  transition: 0;
+}
+
+.newBagBtnDiv.enterName .newBagInput {
+  opacity: 1;
+  transition: 0;
+}
+
+.newBagBtnDiv.enterName .newBagBtn {
+  opacity: 0;
+  z-index: -1;
+  transition: 0;
+  /* transition:
+      all 1s ease 0s,
+      z-index 0s ease 1s; */
+}
+
+.newBagBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+/* .newBag {
   position: absolute;
   width: 100%;
   bottom: 0;
-}
+} */
 
 .items {
   position: absolute;
@@ -331,13 +320,25 @@ hr {
   height: calc(100% - 90px);
 }
 
-.listContent {
-  overflow-y: auto;
-  height: 100%;
+.itemsTopBar {
+  height: 24px;
 }
 
-.itemList {
+.topBarSelect {
+  background: none;
+  border: none;
+  outline: none;
+  border-bottom: solid 3px var(--foreground);
+  box-shadow: 0 0 5px black;
+}
 
+.topBarItem {
+  padding: 5px;
+}
+
+.listContent {
+  overflow-y: auto;
+  height: calc(100% - 24px);
 }
 
 .hintLabel {
@@ -346,106 +347,13 @@ hr {
 }
 
 .emptyHint {
+  margin: 5px;
   text-align: center;
 }
 
-.listItem {
-  font-size: 20px;
-  padding: 2px;
-  margin: 5px;
-  position: relative;
-  /* background: #b4e6e8; */
-}
-
-.listItemExp {
-  position: absolute;
-  right: 50px;
-}
-
-.listItemOpt {
-  position: absolute;
-  right: 10px;
-  background: var(--foreground);
-  color: var(--foreground-text);
-  border: none;
-  box-shadow: 0 0 2px black;
-  height: 20px;
-  font-size: 18px;
-  margin-top: 2px;
-  width: 30px;
-}
-
-.listItemOpt:hover {
-  background: var(--foreground-highlight);
-}
-
-.expList .listItem {
-  background: var(--expired-color);
-  color: white;
-}
-
-.critList .listItem {
-  background: var(--critical-color);
-  color: white;
-}
-
-.warnList .listItem {
-  background: var(--warn-color);
-  color: black;
-}
-
-.recList .listItem {
-  background: var(--recommended-color);
-  color: black;
-}
-
-.okList .listItem {
-  background: #ace0e2;
-  color: black;
-}
-
-.usedList .listItem {
-  background: #ace0e2;
-  color: gray;
-}
-
-/* .expList .listItem {
-  border-bottom: solid 3px red;
-  color: black;
-}
-
-.critList .listItem {
-  border-bottom: solid 3px #F70;
-  color: black;
-}
-
-.warnList .listItem {
-  border-bottom: solid 3px #FF0;
-  color: black;
-}
-
-.recList .listItem {
-  border-bottom: solid 3px #CF0;
-  color: black;
-}
-
-.okList .listItem {
-  border-bottom: solid 3px black;
-  color: black;
-}
-
-.usedList .listItem {
-  border-bottom: solid 3px gray;
-  color: black;
-} */
-
-/* .usedList {
-  color: #888;
-} */
-
-.nearExp {
+/* .nearExp {
   background: #ffd004;
-}
+} */
 
 .addItem {
   position: absolute;
@@ -462,11 +370,6 @@ hr {
   box-shadow: 0 10px 5px black;
 }
 
-/* .bagInfoTitle {
-  font-size: 24px;
-  padding: 10px;
-} */
-
 .bagInfoName {
   box-sizing: border-box;
   width: calc(100% - 55px);
@@ -476,9 +379,6 @@ hr {
   border: none;
   outline: none;
   font-size: 26px;
-  /* border-bottom: solid 4px var(--foreground); */
-  /* box-shadow: 0 0 5px black; */
-  /* margin: 10px; */
 }
 
 .bagInfoName:hover, .bagInfoName:focus {
@@ -594,41 +494,13 @@ hr {
   display: none;
 }
 
-.yellow {
+/* .yellow {
   color: yellow;
 }
 
 .red {
   color: red;
-}
-
-#listBox_exp {
-  display: none;
-}
-
-#listBox_crit {
-  display: none;
-}
-
-#listBox_warn {
-  display: none;
-}
-
-#listBox_rec {
-  display: none;
-}
-
-#listBox_ok {
-  display: none;
-}
-
-/* #listBox {
-  display: none;
 } */
-
-#listBox_used {
-  display: none;
-}
 
 .tooltip {
   position: fixed;
@@ -638,4 +510,32 @@ hr {
   font-size: 20px;
   padding: 5px;
   box-shadow: 0 0 5px black;
+}
+
+.expired {
+  color: white;
+  background: var(--expired-color);
+}
+
+.critical {
+  color: white;
+  background: var(--critical-color);
+}
+
+.warn {
+  color: black;
+  background: var(--warn-color);
+}
+
+.recommended {
+  color: black;
+  background: var(--recommended-color);
+}
+
+.used {
+  color: gray;
+}
+
+.empty {
+  color: gray;
 }

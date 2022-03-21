@@ -1,13 +1,25 @@
 
-let dialogs = [];
-let selectedBagId = 0;
-let selectedBag;
-let loadBag;
-let refresh;
-let auth;
-let allBags = [];
-let allItems;
-let tooltip;
+function toFirstUpper(str){ // TODO move this to utils
+  return str.substring(0, 1).toUpperCase()+str.substring(1);
+}
+
+//const INACTIVITY_REFRESH =
+
+//let prevLoad; // most recent time of refresh - long time of inactivity will cause an automatic refresh
+let dialogs = []; // list of all open dialogs, TODO belongs to Application
+let selectedBagId = 0; // id of currently selected bag, DEPRECATED - use selectedBag instead
+let selectedBag; // currently selected bag
+let loadBag; // function to load all items from the current bag
+let refresh; // function to refresh everything (bags and items)
+let refreshItems; // function to refresh currently cached items
+let auth; // authentication data
+let allBags = []; // list of all bags
+let allItems; // list of all items in the current bags
+let itemDivs = []; // list of all item UI containers
+let tooltip; // currently shown tooltip, TODO belongs to Application
+let config; // user configuration
+// let nameDisplayMode;
+// let dateDisplayMode;
 
 function showTooltip(x, y, msg){
   if(tooltip) hideTooltip();
@@ -51,16 +63,7 @@ window.onload = async function(){
 
   let bagButtons = [];
 
-  // let span_username = document.querySelector('#span_username');
-  // usernameField.innerText = auth.user.email;
-
-  let div_bagList = document.querySelector('#div_bagList');
-  // let btn_addBag = document.querySelector('#btn_addBag');
-  let div_itemList = document.querySelector('#div_itemList');
-  let div_expList = document.querySelector('#div_expList');
-  let div_usedList = document.querySelector('#div_usedList');
   let btn_addItem = document.querySelector('#btn_addItem');
-  // let dialog_addItem = document.querySelector('#dialog_addItem');
   let div_bagInfoTitle = document.querySelector('#div_bagInfoTitle');
   let input_bagDates = document.querySelector('#input_bagDates');
   let input_bagNotes = document.querySelector('#input_bagNotes');
@@ -70,22 +73,18 @@ window.onload = async function(){
     btn.className = 'bagBtn';
     btn.innerText = name;
     btn.classList.add(state);
-    // if(state=='expired'){
-    //   btn.classList.add('bagBtnExp');
-    //   // btn.style.color = 'red';
-    // } else if(state=='useRecommended'){
-    //   btn.classList.add('bagBtnRec');
-    //   // btn.style.color = 'yellow';
-    // } else if(state=='empty'){
-    //   btn.classList.add('bagBtnUsed');
-    //   // btn.style.color = 'gray';
-    // }
     btn.bagId = id;
     btn.onclick = function(){
       loadBag(btn.bagId);
     }
     div_bagList.appendChild(btn);
     bagButtons.push(btn);
+  }
+
+  async function fetchConfig(){
+    config = JSON.parse(await GET('api/getSettings.php'));
+    nameDisplayOptions.value = config.itemDisplay;
+    sortOptions.value = config.sort;
   }
 
   async function loadBags(){
@@ -99,6 +98,8 @@ window.onload = async function(){
 
     let bags = JSON.parse(await GET('api/bag/list.php'));
 
+    allBags = bags;
+
     if(bags.length==0){
       initScreen.style.display = 'block';
       main.style.display = 'none';
@@ -108,8 +109,6 @@ window.onload = async function(){
       initScreen.style.display = 'none';
       main.style.display = 'block';
     }
-
-    allBags = bags;
 
     div_bagList.innerText = '';
     for(let bag of bags){
@@ -125,14 +124,63 @@ window.onload = async function(){
 
   }
 
+  refreshItems = function(){
+
+    itemListContainer.innerText = '';
+
+    let numUsed = 0;
+
+    if(itemDivs.length==0){
+      let emptyInfo = document.createElement('div');
+      emptyInfo.className = 'hintLabel emptyHint';
+      emptyInfo.innerText = 'Přidejte položky kliknutím na "Přidat položku"';
+      itemListContainer.appendChild(emptyInfo);
+      return;
+    }
+
+    for(let div of itemDivs){
+      if(div.item.state=='used'){
+        numUsed++;
+      } else {
+        div.update();
+        itemListContainer.appendChild(div);
+      }
+    }
+
+    if(numUsed==0) return;
+
+    let usedSep = document.createElement('span');
+    usedSep.className = 'hintLabel';
+    usedSep.innerText = 'Použité:';
+    itemListContainer.appendChild(usedSep);
+
+    for(let div of itemDivs){
+      if(div.item.state=='used'){
+        div.update();
+        itemListContainer.appendChild(div);
+      }
+    }
+
+  }
+
+  function sortItems(){
+
+    if(config.sort=='name'){
+      itemDivs.sort((d1, d2)=>d1.getDisplayName().localeCompare(d2.getDisplayName()));
+    } else {
+      itemDivs.sort((d1, d2)=>(new Date(d1.item.expiration)-new Date(d2.item.expiration)));
+    }
+
+  }
+
   loadBag = async function(id){
 
+    let start = performance.now();
+    console.log('loading items');
+
     if(tooltip) hideTooltip();
-
     if(!id) return;
-
     if(!await checkAuth()) return;
-
 
     for(let btn of bagButtons){
       if(btn.bagId==id){
@@ -142,134 +190,30 @@ window.onload = async function(){
       }
     }
 
-    let items = JSON.parse(await GET('api/bag/getItems.php?bagId='+id));
+    allItems = JSON.parse(await GET('api/bag/getItems.php?bagId='+id));
 
-    allItems = items;
-
-    if(items.length==0){
-      listBox_empty.style.display = 'block';
-    } else {
-      listBox_empty.style.display = 'none';
-    }
+    itemDivs = [];
+    itemListContainer.innerText = '';
 
     let numUnused = 0;
 
-    // let numItems = 0;
-    let numExp = 0;
-    let numCrit = 0;
-    let numWarn = 0;
-    let numRec = 0;
-    let numOk = 0;
-    let numUsed = 0;
-
-    div_expList.innerText = '';
-    div_critList.innerText = '';
-    div_warnList.innerText = '';
-    div_recList.innerText = '';
-    div_okList.innerText = '';
-    // div_itemList.innerText = '';
-    div_usedList.innerText = '';
-    for(let item of items){
-
-      let div = document.createElement('div');
-      div.className = 'listItem';
-      let itemSpan = document.createElement('span');
-      itemSpan.innerText = item.product.name+' ×'+item.count+' ';
-      let expSpan = document.createElement('span');
-      // expSpan.innerText = item.expiration ? (item.expiration+(item.useIn?(' ('+item.useIn+')'):'')) : '---';
-      expSpan.innerText = item.expiration ? item.displayDate : '------';
-      expSpan.className = 'listItemExp';
-
-      expSpan.onmouseover = function(e){
-        let bounds = expSpan.getBoundingClientRect();
-        if(item.useIn) showTooltip(bounds.left, bounds.top+bounds.height, item.useIn);
-      }
-
-      expSpan.onmouseout = function(e){
-        if(tooltip) hideTooltip();
-      }
-
-      let optBtn = document.createElement('button');
-      optBtn.innerText = '···';
-      optBtn.className = 'listItemOpt';
-      optBtn.onclick = async function(){
-        if(!await checkAuth()) return;
-        showEditItemDialog(item);
-      }
-      div.appendChild(itemSpan);
-      div.appendChild(expSpan);
-      div.appendChild(optBtn);
-
-      let today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      if(item.used) {
-        div_usedList.appendChild(div);
-        numUsed++;
-      } else {
+    for(let item of allItems){
+      let itemContainer = await createItem(item);
+      itemDivs.push(itemContainer);
+      if(!item.used) {
         numUnused++;
-        if(item.state=='expired'){
-          div_expList.appendChild(div);
-          numExp++;
-        } else if(item.state=='critical'){
-          div_critList.appendChild(div);
-          numCrit++;
-        } else if(item.state=='warn'){
-          div_warnList.appendChild(div);
-          numWarn++;
-        } else if(item.state=='recommended'){
-          div_recList.appendChild(div);
-          numRec++;
-        } else {
-          div_okList.appendChild(div);
-          numOk++;
-        }
       }
-      // else if(new Date(item.expiration)<today){
-      //   div_expList.appendChild(div);
-      //   numExp++;
-      // } else {
-      //   div_itemList.appendChild(div);
-      //   numItems++;
-      //   if(Math.abs(new Date(item.expiration)-today)<1000*60*60*24*7*3){ // TODO global config rec exp date
-      //     div.classList.add('nearExp');
-      //   }
-      // }
-
     }
 
-    listBox_exp.style.display = numExp?'block':'none';
-    listBox_crit.style.display = numCrit?'block':'none';
-    listBox_warn.style.display = numWarn?'block':'none';
-    listBox_rec.style.display = numRec?'block':'none';
-    listBox_ok.style.display = numOk?'block':'none';
-    listBox_used.style.display = numUsed?'block':'none';
+    sortItems();
+    refreshItems();
 
-    // if(numExp){
-    //   listBox_exp.style.display = 'block';
-    // } else {
-    //   listBox_exp.style.display = 'none';
-    // }
-    //
-    // if(numUsed){
-    //   listBox_used.style.display = 'block';
-    // } else {
-    //   listBox_used.style.display = 'none';
-    // }
-    //
-    // if(numItems){
-    //   listBox.style.display = 'block';
-    // } else {
-    //   listBox.style.display = 'none';
-    // }
+    console.log('loaded', performance.now()-start);
 
     let info = JSON.parse(await GET('api/bag/getInfo.php?bagId='+id));
 
     div_bagDates.innerText = 'Doporučené: '+info.useRecommended+'\n'+'Nejpozději: '+info.useBefore;
-
-    // div_bagInfoTitle.innerText = info.name;
     bagInfoForm.bagName.value = info.name;
-    // input_bagNotes.value = info.description;
     bagInfoForm.bagNotes.value = info.description;
 
     selectedBagId = id;
@@ -324,12 +268,45 @@ window.onload = async function(){
     // addBagButton(bag.id, name);
     // refresh();
 
+    return true;
+
   }
 
   // btn_addBag.onclick = function(){
   //   let name = prompt('Název tašky:');
   //   if(!name) return;
   //   addBag(name);
+  // }
+
+  // sortNameBtn.onclick = function(){
+  //   allItems.sort((i1, i2)=>i1.product.brand.localeCompare(i2.product.brand));
+  //   displayItems();
+  // }
+  //
+  // sortExpBtn.onclick = function(){
+  //   allItems.sort((i1, i2)=>(new Date(i1.expiration)-new Date(i2.expiration)));
+  //   displayItems();
+  // }
+
+  nameDisplayOptions.onchange = async function(){
+    // nameDisplayMode = nameDisplayOptions.value;
+    await POST('api/setConfig.php', {'itemDisplay':nameDisplayOptions.value});
+    await fetchConfig();
+    // refreshItems();
+    sortItems();
+    refreshItems();
+  }
+
+  sortOptions.onchange = async function(){
+    await POST('api/setConfig.php', {'sort':sortOptions.value});
+    await fetchConfig();
+    sortItems();
+    refreshItems();
+  }
+
+  // dateFormatOptions.onchange = function(){
+  //   dateDisplayMode = dateFormatOptions.value;
+  //   refreshItems();
   // }
 
   initForm.onsubmit = function(){
@@ -341,22 +318,63 @@ window.onload = async function(){
     return false;
   }
 
-  newBagInput.onchange = function(){
+  newBagInput.onkeydown = function(e){
+    if(e.code=='Escape'){
+      newBagInput.value = '';
+      // newBagInput.style.display = 'none';
+      // newBagBtn.style.display = 'inline-block';
+      newBagDiv.classList.remove('enterName');
+      newBagInput.blur();
+      refresh();
+    }
+  }
+
+  addedBag = false;
+
+  newBagInput.onchange = async function(){
     let name = newBagInput.value.trim();
     if(!name) return;
-    addBag(name);
+    // addedBag = true;
+    addedBag = await addBag(name);
     newBagInput.value = '';
+    newBagInput.blur();
+    newBagDiv.classList.remove('enterName');
+    // newBagInput.style.display = 'none';
+    // newBagBtn.style.display = 'inline-block';
   }
+
+  newBagInput.onblur = function(){
+    // newBagInput.style.display = 'none';
+    // newBagBtn.style.display = 'inline-block';
+    newBagDiv.classList.remove('enterName');
+    newBagInput.value = '';
+    if(!addedBag){
+      refresh();
+    }
+    addedBag = false;
+  }
+
+  newBagBtn.onclick = function(){
+    for(let btn of bagButtons){
+      btn.classList.remove('selected');
+    }
+    div_bagDates.innerText = 'Doporučené: \nNejpozději: ';
+    bagInfoForm.bagName.value = '';
+    bagInfoForm.bagNotes.value = '';
+    // newBagInput.style.display = 'block';
+    // newBagBtn.style.display = 'none';
+    newBagDiv.classList.add('enterName');
+    itemListContainer.innerHTML = '<div class="hintLabel emptyHint">Zadejte název tašky</div>';
+    newBagInput.focus();
+  }
+
+  // newBagInput.style.display = 'none';
 
   btn_addItem.onclick = async function(){
     if(!await checkAuth()) return;
     // dialog_addItem.style.display = 'block';
     showAddItemDialog();
   }
-
-  // input_bagNotes.onchange = async function(e){
-  //   if(selectedBagId) await POST('api/bag/updateInfo.php?bagId='+selectedBagId, {'description':input_bagNotes.value});
-  // }
 
   menuBtn.onclick = function(){
     // menuDialog.style.display = 'block';
@@ -377,22 +395,9 @@ window.onload = async function(){
     // loadCharities();
   }
 
-  // menuCloseBtn.onclick = function(){
-  //   menuDialog.style.display = 'none';
-  // }
-
-  handOutClose.onclick = function(){
-    handOutDialog.style.display = 'none';
-  }
-
   // searchBtn.onclick = async function(){
   //   if(!await checkAuth()) return;
   //   showSearchDialog();
-  // }
-
-  // logoutBtn.onclick = async function(){
-  //   await POST('api/logout.php');
-  //   location.href = 'index.php';
   // }
 
   bagInfoForm.onsubmit = function(){
@@ -402,11 +407,20 @@ window.onload = async function(){
   bagInfoForm.onchange = async function(){
     if(!await checkAuth()) return;
     let name = bagInfoForm.bagName.value.trim();
+
+    let handedOut = JSON.parse(await GET('api/bag/listHandedOut.php'));
+    if(handedOut.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
+      alert('Taška se stejným názvem je mezi odevzdanými taškami.');
+      bagInfoForm.bagName.value = selectedBag.name;
+      return;
+    }
+
     if(allBags.findIndex(b=>(b.name.toLowerCase()==name.toLowerCase() && b.id!=selectedBag.id))>=0){
       alert('Taška se stejným názvem již existuje.');
       bagInfoForm.bagName.value = selectedBag.name;
       return;
     }
+
     if(name.length>64){
       alert('Název je příliš dlouhý.');
       bagInfoForm.bagName.value = selectedBag.name;
@@ -424,7 +438,9 @@ window.onload = async function(){
     if(selectedBagId) {
       await POST('api/bag/updateInfo.php?bagId='+selectedBagId, {'name':name,'description':bagInfoForm.bagNotes.value});
     }
+
     await refresh();
+
   }
 
   bagInfoForm.deleteBag.onclick = async function(){
@@ -439,6 +455,7 @@ window.onload = async function(){
     await refresh();
   }
 
+  await fetchConfig();
   await loadBags();
   if(selectedBagId) await loadBag(selectedBagId);
   // initAddItemDialog();

@@ -51,7 +51,29 @@ if(isSet($_GET['logout'])){
           <label class="formRow">
             Heslo: <input class="formInput" name="password" type="password"></input>
           </label>
+          <!-- <div class="formRow">
+            <button class="forgotPassword" name="forgotPassword" type="button">Zapomenuté heslo</button>
+          </div> -->
           <button type="submit" class="formSubmit">Přihlásit se</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="forgotPasswordDialog" class="side loginForm">
+      <div class="formBox">
+        <form name="forgotPasswordForm" id="forgotPasswordForm" method="POST" action="forgotPassword.php">
+          <div class="formTitle">
+            <button type="button" class="formClose" id="forgotPasswordForm_close">&lt;</button>
+            <span class="formTitleText">Zapomenuté heslo</span>
+          </div>
+          <div class="loginMsg" id="forgotPasswordMsg"></div>
+          <div class="formRow">
+            Na váš e-mail bude odeslán odkaz na obnovení hesla.
+          </div>
+          <label class="formRow">
+            E-mail: <input class="formInput" name="email"></input>
+          </label>
+          <button type="submit" class="formSubmit">Obnovit heslo</button>
         </form>
       </div>
     </div>

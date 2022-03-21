@@ -67,6 +67,23 @@
   font-size: 18px;
 }
 
+.wideFormRow {
+  position: relative;
+  height: 40px;
+  vertical-align: middle;
+  display: block;
+  margin-left: 20px;
+  width: calc(100% - 40px);
+  margin-top: 20px;
+  color: black;
+  font-size: 22px;
+}
+
+.wideFormLabel {
+  display: inline-block;
+  padding-top: 6px;
+}
+
 .formInput {
   display: block;
   background: none;
@@ -123,4 +140,23 @@
   margin-bottom: 20px;
   display: none;
   box-sizing: border-box;
+}
+
+.squareBtn {
+  background: var(--foreground);
+  color: var(--foreground-text);
+  border: none;
+  outline: none;
+  width: 39px;
+  height: 39px;
+  box-shadow: 0 0 8px black;
+  font-size: 32px;
+}
+
+.squareBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.squareBtn img {
+  width: 100%;
 }

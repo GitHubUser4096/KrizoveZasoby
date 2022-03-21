@@ -4,17 +4,38 @@
     <button class="formClose" type="button">X</button>
   </div>
   <div class="dialogContent">
+    <div class="publicWarn">Přidáváte produkt do sdílené databáze</div>
     <div class="formError"></div>
     <form class="form">
-      <label class="formRow">
-        Název:
-        <input name="productName" class="formInput"></input>
-      </label>
-      <label class="formRow">
-        EAN:
-        <input name="ean" class="formInput"></input>
-      </label>
-      <div class="formRow">
+      <div class="brandBox">
+        Výrobce / Značka: <span title="Povinné pole">*</span> <a class="hint" title="Výrobce nebo značka produktu - např. Heinz">(?)</a>
+        <input name="brand" class="formInput" list="datalist_brands"></input>
+        <datalist id="datalist_brands"></datalist>
+      </div>
+      <div class="productTypeBox">
+        Typ produktu: <span title="Povinné pole">*</span> <a class="hint" title="Typ produktu - např. Fazole">(?)</a>
+        <input name="productType" class="formInput" list="datalist_type"></input>
+        <datalist id="datalist_type"></datalist>
+      </div>
+      <div class="amountBox">
+        Množství: <a class="hint" title="Hmotnost nebo objem v jednom balení">(?)</a>
+        <div class="amountInputBox">
+          <input name="amountValue" class="formInput amountValue"></input>
+          <select name="amountUnit" class="formSelect amountUnit">
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+          </select>
+        </div>
+      </div>
+      <div class="shortDescBox">
+        Krátký popis: <span title="Povinné pole">*</span> <a class="hint" title="Název nebo krátký popis (nápis na hlavní straně balení)  - např. Heinz Beanz In a rich tomato sauce">(?)</a>
+        <input name="shortDesc" class="formInput"></input>
+      </div>
+      <div class="productCodeBox">
+        Kód produktu: <span title="Povinné pole">*</span> <a class="hint" title="Číslo, které identifikuje produkt (číslo u čárového kódu, bez mezer)">(?)</a>
+        <input name="productCode" class="formInput"></input>
+      </div>
+      <div class="imgRow">
         Obrázek:
         <div class="imgBox">
           <div class="imgPreview"></div>
@@ -26,28 +47,25 @@
           </button>
         </div>
       </div>
-      <label class="formRow">
-        Balení:
-        <input name="packageType" class="formInput" list="package_types"></input>
-        <datalist id="package_types">
-        </datalist>
-      </label>
-      <div class="formRow">
+      <div class="packageTypeBox">
+        Typ balení: <a class="hint" title="Jak je produkt zabalený (např. Plechovka)">(?)</a>
+        <input name="packageType" class="formInput" list="datalist_packageTypes"></input>
+        <datalist id="datalist_packageTypes"></datalist>
+      </div>
+      <!-- <div class="formRow">
         Kategorie:
         <div class="catBox">
           <div class="categories"></div>
           <div>
-            <!-- <input type="checkbox" class="newCatCheckbox" disabled></input> -->
             <input name="catName" class="newCatInput" placeholder="Nová kategorie"></input>
           </div>
-          <!-- <button type="button" name="newCat" class="newCatSubmit">&gt;</button> -->
         </div>
-      </div>
-      <label class="formRow">
-        Popis:
+      </div> -->
+      <div class="descriptionBox">
+        Poznámky: <a class="hint" title="Poznámky k produktu (zobrazují se pouze při úpravě produktu)">(?)</a>
         <textarea name="description" class="formInput description"></textarea>
-      </label>
-      <div>
+      </div>
+      <div class="submitBox">
         <button type="submit" class="formSubmit addProductSubmit">Přidat</button>
       </div>
     </form>

@@ -37,7 +37,12 @@ async function showAddItemDialog(){
   }
 
   let form = div.querySelector('.addItemForm');
-
+  let searchProductDiv = div.querySelector('.searchProduct');
+  let displayProductDiv = div.querySelector('.displayProduct');
+  let productImageDiv = div.querySelector('.productImage');
+  let productNameDiv = div.querySelector('.productName');
+  let productShortDescDiv = div.querySelector('.productShortDesc');
+  let productPackageDiv = div.querySelector('.productPackage');
   let formError = form.querySelector('.formError');
 
   function showError(msg, element){
@@ -51,11 +56,12 @@ async function showAddItemDialog(){
       formError.style.top = (element.offsetTop+element.offsetHeight-4)+'px';
       formError.style.width = element.offsetWidth+'px';
     } else {
-      formError.style.position = 'static';
-      formError.style.margin = null;
+      // formError.style.position = 'static';
+      formError.style.margin = '10px';
       formError.style.left = null;
       formError.style.right = null;
-      formError.style.top = null;
+      formError.style.top = '0';
+      formError.style.width = 'calc(100% - 20px)';
     }
   }
 
@@ -129,7 +135,11 @@ async function showAddItemDialog(){
 
   form.addProduct.onclick = async function(){
     if(!await checkAuth()) return;
-    showAddProductDialog(form.productName.value, div);
+    showAddProductDialog(div);
+  }
+
+  form.clearProduct.onclick = async function(){
+    div.clearProduct();
   }
 
   form.onsubmit = function(){
@@ -139,23 +149,46 @@ async function showAddItemDialog(){
     let bagId = selectedBagId;
     let productId = form.productId.value;
     let count = form.count.value;
-    let expiration = form.expDate.value;
+    // let expiration = form.expDate.value;
+    let expiration;
+
+    if(!form.expYear.value || !form.expMonth.value){
+      if(form.expDay.value){
+        showError('Prosím zadejte celé datum!');
+        return false;
+      }
+      expiration = '';
+    } else {
+      let expDate = new Date(form.expYear.value+'-'+form.expMonth.value+'-'+form.expDay.value);
+      if(!expDate.getTime()){
+        showError('Neplatné datum!');
+        return false;
+      }
+      if(!form.expDay.value) {
+        expDate.setMonth(expDate.getMonth()+1);
+        expDate.setDate(0);
+      }
+      expiration = expDate.getFullYear()+'-'+(expDate.getMonth()+1).toString().padStart(2, '0')+'-'+expDate.getDate().toString().padStart(2, '0');
+    }
+
+    // console.log(form.expYear.value+'-'+form.expMonth.value+'-'+form.expDay.value, expDate);
+    // return false;
 
     if(!productId){
-      showError('Prosím vyberte produkt ze seznamu', form.productName);
+      showError('Prosím vyberte produkt ze seznamu');
       form.productName.classList.add('invalid');
       return false;
     }
 
     if(!count){
-      showError('Prosím zadejte počet', form.count);
+      showError('Prosím zadejte počet');
       form.count.classList.add('invalid');
       return false;
     }
 
     if(!(count>0) || count>999){
       form.count.classList.add('invalid');
-      showError('Počet musí být mezi 1 a 999', form.count);
+      showError('Neplatný počet!');
       return false;
     }
 
@@ -165,9 +198,14 @@ async function showAddItemDialog(){
     //   return false;
     // }
 
+    if((form.expYear.value && !form.expMonth.value) || (!form.expYear.value && form.expMonth.value)){
+      showError('Datum musí obsahovat alespoň měsíc a rok !');
+      return false;
+    }
+
     if(expiration && !(new Date(expiration)>new Date()) || new Date(expiration)>new Date('3000-01-01')){
-      showError('Datum musí být později než dnes.', form.expDate);
-      form.expDate.classList.add('invalid');
+      showError('Datum musí být později než dnes.');
+      // form.expDate.classList.add('invalid');
       return false;
     }
 
@@ -197,11 +235,50 @@ async function showAddItemDialog(){
 
   let searchTimeout;
 
-  div.setProduct = function(id, name){
-    form.productId.value = id;
-    form.productName.value = name;
+  div.setProduct = function(product){
+    form.productId.value = product.id;
+    // form.productName.value = name;
     form.productName.classList.remove('invalid');
-    form.productName.classList.add('valid');
+    // form.productName.classList.add('valid');
+    searchProductDiv.style.display = 'none';
+    displayProductDiv.style.display = 'block';
+
+    if(product.imgName) productImageDiv.style.backgroundImage = 'url(images/'+product.imgName+')';
+    productNameDiv.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
+    productNameDiv.title = productNameDiv.innerText;
+    productShortDescDiv.innerText = product.shortDesc;
+    productShortDescDiv.title = product.shortDesc;
+    productPackageDiv.innerText = product.packageType;
+
+  }
+
+  div.clearProduct = function(){
+    form.productId.value = null;
+    searchProductDiv.style.display = 'block';
+    displayProductDiv.style.display = 'none';
+  }
+
+  async function createSuggestionItem(product){
+    let item = document.createElement('div');
+    item.className = 'suggestionItem';
+    item.style.display = 'block';
+    // item.innerText = product.name;
+    let titleDiv = document.createElement('div');
+    titleDiv.className = 'suggestionItemTitle';
+    titleDiv.innerText = product.brand+' • '+product.productType+' • '+product.amountValue+' '+product.amountUnit;
+    titleDiv.title = titleDiv.innerText;
+    item.appendChild(titleDiv);
+    let descDiv = document.createElement('div');
+    descDiv.className = 'suggestionItemDesc';
+    descDiv.innerText = product.shortDesc;
+    descDiv.title = descDiv.innerText;
+    item.appendChild(descDiv);
+    item.onclick = function(){
+      div.setProduct(product);
+      // productSuggestions.innerText = '';
+      hideSuggestions();
+    }
+    return item;
   }
 
   async function loadSuggestions(){
@@ -213,6 +290,7 @@ async function showAddItemDialog(){
     let bounds = form.productName.getBoundingClientRect();
     suggestions.style.left = bounds.left+'px';
     suggestions.style.top = (bounds.top+bounds.height)+'px';
+    suggestions.style.width = bounds.width+'px';
 
     suggestions.innerText = '';
 
@@ -226,21 +304,22 @@ async function showAddItemDialog(){
     }
 
     for(let product of products){
-      let btn = document.createElement('button');
-      btn.className = 'suggestionItem';
-      btn.productId = product.id;
-      btn.innerText = product.name;
-      btn.style.display = 'block';
-      btn.onclick = function(){
-        div.setProduct(btn.productId, btn.innerText);
-        // productSuggestions.innerText = '';
-        hideSuggestions();
-      }
-      suggestions.appendChild(btn);
+      let item = await createSuggestionItem(product);
+      suggestions.appendChild(item);
     }
 
     showSuggestions();
 
+  }
+
+  form.decrementCount.onclick = function(){
+    form.count.value = form.count.value-1;
+    if(form.count.value<1) form.count.value = 1;
+  }
+
+  form.incrementCount.onclick = function(){
+    form.count.value = +form.count.value+1;
+    if(form.count.value<1) form.count.value = 1;
   }
 
   form.oninput = function(e){

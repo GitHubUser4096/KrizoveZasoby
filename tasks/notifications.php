@@ -57,13 +57,13 @@ foreach($users as $user){
       $expTime = strtotime($item['expiration']);
 
       if($yesterday==$expTime) {
-        $changedItems[] = ['item'=>$item['name'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'expired'];
+        $changedItems[] = ['item'=>$item['shortDesc'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'expired'];
       } else if($yesterday==$expTime-$criticalDiff) {
-        $changedItems[] = ['item'=>$item['name'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'critical'];
+        $changedItems[] = ['item'=>$item['shortDesc'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'critical'];
       } else if($yesterday==$expTime-$warnDiff) {
-        $changedItems[] = ['item'=>$item['name'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'warn'];
+        $changedItems[] = ['item'=>$item['shortDesc'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'warn'];
       } else if($yesterday  ==$expTime-$recommendedDiff) {
-        $changedItems[] = ['item'=>$item['name'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'recommended'];
+        $changedItems[] = ['item'=>$item['shortDesc'], 'expTime'=>$expTime, 'count'=>$item['count'], 'bag'=>$bag['name'], 'state'=>'recommended'];
       }
 
       if($expTime<$today){
@@ -119,7 +119,7 @@ foreach($users as $user){
   if($warnCount) $str .= '<div><span style="'.$warnStyle.'">Položky s varováním: celkem <b>'.$warnCount.'</b> v taškách <b>'.implode(', ', $warnBags).'</b></span></div>';
   if($recommendedCount) $str .= '<div><span style="'.$recStyle.'">Položky s doporučeným odevzdáním: celkem <b>'.$recommendedCount.'</b> v taškách <b>'.implode(', ', $recommendedBags).'</b></span></div>';
 
-  $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'/profile.php">Přejít do mých zásob</a></p>';
+  $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'/profile.php">Otevřít moje zásoby</a></p>';
 
   if(NOTIFICATION_DEBUG) echo $str;
 

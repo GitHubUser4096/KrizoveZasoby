@@ -11,9 +11,9 @@
 .editItemDialog .dialogBox {
   position: absolute;
   left: calc(50% - 200px);
-  top: calc(50% - 300px);
+  top: calc(50% - 160px);
   width: 400px;
-  height: 600px;
+  height: 320px;
   background: #9ad3cd;
 }
 
@@ -67,4 +67,40 @@
 
 .editItemDialog .actionBtn img {
   width: 100%;
+}
+
+.editItemDialog .expDateWrapper {
+  display: block;
+  position: relative;
+  box-shadow: 0 0 5px black;
+  height: 39px;
+}
+
+.editItemDialog .expInput {
+  position: absolute;
+  box-shadow: none;
+  margin: 0;
+  box-sizing: border-box;
+  height: 40px;
+  -moz-appearance: textfield;
+}
+
+.editItemDialog .expInput::-webkit-outer-spin-button, .expInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.editItemDialog .expDay {
+  width: 25%;
+  left: 0;
+}
+
+.editItemDialog .expMonth {
+  width: 25%;
+  left: 25%;
+}
+
+.editItemDialog .expYear {
+  width: 50%;
+  left: 50%;
 }

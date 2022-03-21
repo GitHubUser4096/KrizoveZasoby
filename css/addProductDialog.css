@@ -10,9 +10,9 @@
 
 .addProductDialog .dialogBox {
   position: absolute;
-  left: calc(50% - 200px);
+  left: calc(50% - 300px);
   top: calc(50% - 300px);
-  width: 400px;
+  width: 600px;
   height: 600px;
   background: #9ad3cd;
 }
@@ -26,7 +26,8 @@
 
 .addProductDialog .description {
   resize: none;
-  height: 100px;
+  /* height: 100px; */
+  height: calc(100% - 20px);
 }
 
 .addProductSubmit {
@@ -76,6 +77,7 @@
   text-align: center;
   vertical-align: middle;
   overflow: hidden;
+  margin-top: 5px;
 }
 
 .addProductDialog .imgPreview {
@@ -111,4 +113,116 @@
   position: absolute;
   right: 0;
   bottom: 0;
+}
+
+.addProductDialog .publicWarn {
+  text-align: center;
+  background: yellow;
+  font-size: 18px;
+  padding: 5px;
+}
+
+.brandBox {
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  width: 265px;
+  height: 70px;
+}
+
+.productTypeBox {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+  width: 265px;
+  height: 70px;
+}
+
+.amountBox {
+  position: absolute;
+  left: 20px;
+  top: 120px;
+  width: 560px;
+  height: 70px;
+}
+
+.amountInputBox {
+  box-shadow: 0 0 5px black;
+  height: 40px;
+  width: 110px;
+  position: relative;
+  margin-top: 5px;
+}
+
+.amountValue {
+  width: 60px;
+  display: block;
+  position: absolute;
+  box-shadow: none;
+  margin-top: 0;
+  box-sizing: border-box;
+  height: 40px;
+}
+
+.amountUnit {
+  width: 50px;
+  display: block;
+  position: absolute;
+  left: 60px;
+  box-shadow: none;
+  margin-top: 0;
+  box-sizing: border-box;
+  height: 40px;
+}
+
+.shortDescBox {
+  position: absolute;
+  left: 150px;
+  top: 120px;
+  /* width: 560px; */
+  height: 70px;
+  right: 20px;
+}
+
+.productCodeBox {
+  position: absolute;
+  left: 190px;
+  top: 200px;
+  /* width: 560px; */
+  height: 70px;
+  right: 20px;
+}
+
+.packageTypeBox {
+  position: absolute;
+  left: 190px;
+  top: 310px;
+  /* width: 560px; */
+  height: 70px;
+  right: 20px;
+}
+
+.imgRow {
+  position: absolute;
+  left: 20px;
+  top: 200px;
+  width: 150px;
+  height: 175px;
+}
+
+.descriptionBox {
+  position: absolute;
+  left: 20px;
+  top: 385px;
+  /* width: 380px; */
+  height: 150px;
+  right: 20px;
+}
+
+.submitBox {
+  position: absolute;
+  left: 20px;
+  top: 555px;
+  width: 540px;
+  height: 100px;
 }

@@ -1,0 +1,2 @@
+id name description userId handedOut handedOutDate 
+'1' 'Taška 1' null '1' '0' '2022-03-04 17:04:49' 

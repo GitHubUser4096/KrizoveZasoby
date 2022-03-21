@@ -5,20 +5,41 @@
       <button class="formClose" type="button" name="close">X</button>
     </div>
     <div class="formError"></div>
-    <label class="formRow">
-      Produkt:
+    <div class="wideFormRow">
+      <span class="wideFormLabel">Produkt: <span title="Povinné pole">*</span></span>
       <input type="hidden" name="productId"></input>
-      <input class="formInput productNameInput" name="productName"></input>
-      <button class="addProductBtn" name="addProduct" type="button">+</button>
-    </label>
-    <label class="formRow">
-      Počet:
-      <input class="formInput" name="count" type="number"></input>
-    </label>
-    <label class="formRow">
-      Minimální trvanlivost:
-      <input class="formInput" name="expDate" type="date"></input>
-    </label>
+    </div>
+    <div class="searchProduct">
+      <input class="formInput productNameInput" name="productName" placeholder="Hledat produkt"></input>
+      <button class="squareBtn addProductBtn" name="addProduct" type="button" title="Přidat produkt">+</button>
+    </div>
+    <div class="displayProduct">
+      <div class="productImage"></div>
+      <div class="productTitle">
+        <div class="productName"></div>
+        <div class="productShortDesc"></div>
+        <div class="productPackage"></div>
+      </div>
+      <button class="squareBtn editProductBtn" name="editProduct" type="button" title="Upravit"><img src="res/edit.png"></img></button>
+      <button class="squareBtn clearProductBtn" name="clearProduct" type="button" title="Zrušit výběr">×</button>
+    </div>
+    <div class="wideFormRow">
+      <span class="wideFormLabel">Počet: <span title="Povinné pole">*</span></span>
+      <div class="countWrapper">
+        <button class="squareBtn countBtn" name="decrementCount" type="button"><img src="res/decrement.png"></img></button>
+        <input class="formInput countInput" name="count" type="number" value="1"></input>
+        <button class="squareBtn countBtn" name="incrementCount" type="button"><img src="res/increment.png"></img></button>
+      </div>
+    </div>
+    <div class="wideFormRow">
+      <span class="wideFormLabel">Minimální trvanlivost:</span>
+      <!-- <input class="formInput" name="expDate" type="date"></input> -->
+      <div class="expDateWrapper">
+        <input class="formInput expInput expDay" name="expDay" type="number" placeholder="DD" title="Den (nepovinné)"></input>
+        <input class="formInput expInput expMonth" name="expMonth" type="number" placeholder="MM" title="Měsíc"></input>
+        <input class="formInput expInput expYear" name="expYear" type="number" placeholder="RRRR" title="Rok"></input>
+      </div>
+    </div>
     <div>
       <button class="formSubmit addItemSubmit" type="submit">Přidat</button>
     </div>

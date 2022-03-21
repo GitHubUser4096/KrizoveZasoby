@@ -4,7 +4,7 @@
     <button class="formClose" type="button">X</button>
   </div>
   <div class="dialogContent">
-    <div class="formRow">
+    <!-- <div class="formRow">
       <div class="itemName"></div>
       <div class="itemImgBox">
         <img class="itemImg"></img>
@@ -15,66 +15,31 @@
       <button class="unuseBtn actionBtn" title="Označit jako nepoužité"><img src="res/unuse.png"></img></button>
       <button class="moveBtn actionBtn" title="Přesunout"><img src="res/moveBags.png"></img></button>
       <button class="deleteBtn actionBtn" title="Smazat"><img src="res/delete.png"></img></button>
-    </div>
+    </div> -->
     <div class="formError"></div>
     <form class="itemForm">
       <input type="hidden" name="itemId"></input>
-      <label class="formRow">
+      <div class="formRow">
         Počet:
-        <input name="count" type="number" class="formInput"></input>
-      </label>
-      <label class="formRow">
+        <!-- <input name="count" type="number" class="formInput"></input> -->
+        <div class="countWrapper">
+          <button class="squareBtn countBtn" name="decrementCount" type="button"><img src="res/decrement.png"></img></button>
+          <input class="formInput countInput" name="count" type="number" value="1"></input>
+          <button class="squareBtn countBtn" name="incrementCount" type="button"><img src="res/increment.png"></img></button>
+        </div>
+      </div>
+      <div class="formRow">
         Minimální trvanlivost:
-        <input name="expDate" type="date" class="formInput"></input>
-      </label>
+        <!-- <input name="expDate" type="date" class="formInput"></input> -->
+        <div class="expDateWrapper">
+          <input class="formInput expInput expDay" name="expDay" type="number" placeholder="DD" title="Den (nepovinné)"></input>
+          <input class="formInput expInput expMonth" name="expMonth" type="number" placeholder="MM" title="Měsíc"></input>
+          <input class="formInput expInput expYear" name="expYear" type="number" placeholder="RRRR" title="Rok"></input>
+        </div>
+      </div>
       <div>
         <button class="formSubmit editItemSubmit" type="submit">Uložit</button>
       </div>
-      <!-- <hr> -->
     </form>
-    <!-- <form class="useForm">
-      <label class="formRow">
-        Označit jako použité:
-      </label>
-      <label class="formRow">
-        Počet:
-        <input type="number" name="useCount" class="formInput"></input>
-      </label>
-      <button type="submit" class="formSubmit editItemSubmit">Označit</button>
-      <hr>
-    </form>
-    <form class="unuseForm">
-      <label class="formRow">
-        Označit jako nepoužité:
-      </label>
-      <label class="formRow">
-        Počet:
-        <input type="number" name="unuseCount" class="formInput"></input>
-      </label>
-      <button type="submit" class="formSubmit editItemSubmit">Označit</button>
-      <hr>
-    </form>
-    <form class="moveForm">
-      <label class="formRow">
-        Přesunout do jiné tašky:
-      </label>
-      <label class="formRow">
-        Počet:
-        <input type="number" name="moveCount" class="formInput"></input>
-      </label>
-      <label class="formRow">
-        Taška:
-        <select name="bag" class="formSelect"></select>
-      </label>
-      <button type="submit" class="formSubmit editItemSubmit">Přesunout</button>
-      <hr>
-    </form>
-    <form class="deleteForm">
-      <label class="formRow">
-        Smazat:
-      </label>
-      <button type="submit" class="formSubmit editItemSubmit">Smazat</button>
-      <hr>
-    </form> -->
   </div>
 </div>

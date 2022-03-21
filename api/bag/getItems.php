@@ -54,12 +54,15 @@ $items = $db->query("select * from Item where bagId=? order by expiration", $_GE
 for($i = 0; $i<count($items); $i++){
 
   /** Get item type (product) */
-  $product = $db->query("select * from Product where id=?", $items[$i]['productId'])[0];
+  $product = $db->query("select *, Brand.name as 'brand', ProductType.name as 'type', PackageType.name as 'packageType' from Product inner join Brand on Brand.id=brandId inner join ProductType on ProductType.id=typeId left join PackageType on PackageType.id=packageTypeId where Product.id=?", $items[$i]['productId'])[0];
   $items[$i]['product'] = $product;
 
   $expTime = strtotime($items[$i]['expiration']);
   $items[$i]['displayDate'] = $expTime ? date($config['dateFormat'], $expTime) : null;
-  if($expTime>=$today && !$items[$i]['used']) $items[$i]['useIn'] = formatDateDiff($expTime, $today);
+  if(!$items[$i]['used']){
+    if($expTime>=$today) $items[$i]['useIn'] = formatDateDiff($expTime, $today);
+    else if($expTime) $items[$i]['useIn'] = 'po vypršení';
+  }
 
   if($items[$i]['used']){
     $items[$i]['state'] = 'used';

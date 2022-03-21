@@ -60,6 +60,18 @@ async function showMoveItemDialog(item){
     div.hide();
   }
 
+  moveForm.decrementCount.onclick = function(){
+    moveForm.moveCount.value = moveForm.moveCount.value-1;
+    if(moveForm.moveCount.value<1) moveForm.moveCount.value = 1;
+    if(moveForm.moveCount.value>item.count) moveForm.moveCount.value = item.count;
+  }
+
+  moveForm.incrementCount.onclick = function(){
+    moveForm.moveCount.value = +moveForm.moveCount.value+1;
+    if(moveForm.moveCount.value<1) moveForm.moveCount.value = 1;
+    if(moveForm.moveCount.value>item.count) moveForm.moveCount.value = item.count;
+  }
+
   moveForm.oninput = function(e){
     e.target.classList.remove('invalid');
     formError.style.display = 'none';
@@ -72,7 +84,7 @@ async function showMoveItemDialog(item){
 
     if(!(count>0) || count>item.count){
       moveForm.moveCount.classList.add('invalid');
-      showError('Prosím zadejte počet mezi 1 a '+item.count+'!', moveForm.moveCount);
+      showError('Prosím zadejte počet mezi 1 a '+item.count+'!');
       return false;
     }
 

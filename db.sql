@@ -1,8 +1,79 @@
--- create database
+--- Create Database (don't execute if you already have a database) ---
 create database EmergencySupplies;
 use EmergencySupplies;
 
--- create tables
+--- Tables (new) ---
+
+create table User(
+  id int primary key auto_increment,
+  email varchar(64) not null unique,
+  password varchar(255) not null
+);
+
+create table Bag(
+  id int primary key auto_increment,
+  name varchar(64) not null,
+  description varchar(1024),
+  userId int not null,
+  handedOut boolean not null default 0,
+  handedOutDate datetime,
+  foreign key (userId) references User(id)
+);
+
+create table Brand(
+  id int primary key auto_increment,
+  name varchar(64) not null unique
+);
+
+create table ProductType(
+  id int primary key auto_increment,
+  name varchar(64) not null unique
+);
+
+create table PackageType(
+  id int primary key auto_increment,
+  name varchar(64) not null unique
+);
+
+create table Product(
+  id int primary key auto_increment,
+  brandId int not null,
+  typeId int not null,
+  shortDesc varchar(128) not null,
+  code varchar(64) not null unique,
+  imgName varchar(64),
+  packageTypeId int,
+  description varchar(1024),
+  amountValue int,
+  amountUnit enum('g', 'ml') default 'g',
+  foreign key (brandId) references Brand(id),
+  foreign key (typeId) references ProductType(id),
+  foreign key (packageTypeId) references PackageType(id)
+);
+
+create table Item(
+  id int primary key auto_increment,
+  count int not null,
+  used boolean not null default 0,
+  expiration date,
+  productId int not null,
+  bagId int not null,
+  foreign key (productId) references Product(id),
+  foreign key (bagId) references Bag(id)
+);
+
+create table Config(
+  id int primary key auto_increment,
+  userId int not null,
+  criticalTime varchar(16) default '1 days',
+  warnTime varchar(16) default '1 weeks',
+  recommendedTime varchar(16) default '3 weeks',
+  dateFormat varchar(16) default 'Y-m-d',
+  itemDisplay enum('brandFirst', 'typeFirst') default 'brandFirst',
+  sort enum('date', 'name') default 'date'
+);
+
+--- Tables - OLD DATABASE ---
 
 create table User(
   id int primary key auto_increment,
@@ -75,12 +146,12 @@ create table Config(
   foreign key (userId) references User(id)
 );
 
--- update to V0.1
+--- Update to V0.1 (OLD DATABASE) ---
 alter table Bag add column handedOut boolean not null default 0;
 alter table Bag add column handedOutDate datetime;
 
--- test data
-insert into User(username, password) values ('admin', '$2y$10$kWjwlTwT8V6/SedjOHZvUudfAYKYLVNobSHO1Pma8sQv3oAJJxYDC');
+--- Test data (OLD DATABASE) ---
+insert into User(email, password) values ('admin', '$2y$10$kWjwlTwT8V6/SedjOHZvUudfAYKYLVNobSHO1Pma8sQv3oAJJxYDC');
 insert into Bag(name, userId) values ('bag1', 1);
 insert into Bag(name, userId) values ('bag2', 1);
 insert into Product(name) values ('Heinz Beans');
