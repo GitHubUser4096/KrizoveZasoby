@@ -43,7 +43,7 @@ foreach($users as $user){
   $warnCount = 0;
   $recommendedCount = 0;
 
-  $bags = $db->query("select * from Bag where userId=? and not handedOut", $user['id']);
+  $bags = $db->query("select * from Bag where userId=? and not donated", $user['id']);
 
   foreach($bags as $bag){
 

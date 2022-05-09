@@ -1,0 +1,198 @@
+
+.addProductDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.addProductDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 300px);
+  top: calc(50% - 300px);
+  width: 600px;
+  height: 600px;
+  background: #9ad3cd;
+  box-shadow: 0 0 5px black;
+}
+
+.addProductDialog .dialogContent {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 47px);
+  overflow-y: auto;
+}
+
+.addProductDialog .description {
+  resize: none;
+  height: calc(100% - 20px);
+}
+
+.addProductDialog .formSubmit {
+  width: calc(100%);
+  margin-left: 0;
+  margin-top: 20px;
+}
+
+.addProductDialog .imgBox {
+  position: relative;
+  box-shadow: 0 0 5px black;
+  width: 150px;
+  height: 150px;
+  text-align: center;
+  vertical-align: middle;
+  overflow: hidden;
+  margin-top: 5px;
+}
+
+.addProductDialog .imgPreview {
+  width: 100%;
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
+.addProductDialog .imgBtn {
+  padding: 0;
+  background: none;
+  border: none;
+  width: 40px;
+  height: 40px;
+}
+
+.addProductDialog .imgBtn:hover {
+  box-shadow: 0 0 5px black;
+}
+
+.addProductDialog .imgBtn img {
+  width: 100%;
+}
+
+.addProductDialog .imgSelect {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+.addProductDialog .imgClear {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+}
+
+.addProductDialog .publicWarn {
+  text-align: center;
+  background: yellow;
+  font-size: 18px;
+  padding: 3px;
+}
+
+.addProductDialog .brandBox {
+  position: absolute;
+  left: 20px;
+  top: 40px;
+  width: 265px;
+  height: 70px;
+}
+
+.addProductDialog .productTypeBox {
+  position: absolute;
+  right: 20px;
+  top: 40px;
+  width: 265px;
+  height: 70px;
+}
+
+.addProductDialog .amountBox {
+  position: absolute;
+  left: 20px;
+  top: 120px;
+  width: 560px;
+  height: 70px;
+}
+
+.addProductDialog .amountInputBox {
+  box-shadow: 0 0 5px black;
+  height: 40px;
+  width: 110px;
+  position: relative;
+  margin-top: 5px;
+}
+
+.addProductDialog .amountValue {
+  width: 60px;
+  display: block;
+  position: absolute;
+  box-shadow: none;
+  margin-top: 0;
+  box-sizing: border-box;
+  height: 40px;
+}
+
+.addProductDialog .amountUnit {
+  width: 50px;
+  display: block;
+  position: absolute;
+  left: 60px;
+  box-shadow: none;
+  margin-top: 0;
+  box-sizing: border-box;
+  height: 40px;
+}
+
+.addProductDialog .shortDescBox {
+  position: absolute;
+  left: 150px;
+  top: 120px;
+  height: 70px;
+  right: 20px;
+}
+
+.addProductDialog .productCodeBox {
+  position: absolute;
+  left: 190px;
+  top: 200px;
+  height: 70px;
+  right: 20px;
+}
+
+.addProductDialog .packageTypeBox {
+  position: absolute;
+  left: 190px;
+  top: 310px;
+  height: 70px;
+  right: 20px;
+}
+
+.addProductDialog .imgRow {
+  position: absolute;
+  left: 20px;
+  top: 200px;
+  width: 150px;
+  height: 175px;
+}
+
+.addProductDialog .descriptionBox {
+  position: absolute;
+  left: 20px;
+  top: 385px;
+  height: 150px;
+  right: 20px;
+}
+
+.addProductDialog .submitBox {
+  position: absolute;
+  left: 20px;
+  top: 555px;
+  width: 545px;
+  height: 100px;
+}
+
+.addProductDialog .errorMsg {
+  position: absolute;
+  top: 0;
+  /* TODO do we want the popup effect here? */
+  /* transition: 0s; */
+}

@@ -1,0 +1,80 @@
+<div class="dialogBox">
+  <div class="formTitle">
+    <span class="formTitleText">Nastavení</span>
+    <button dialog-close class="formClose">X</button>
+  </div>
+  <div class="dialogContent">
+    <div class="tabMenu">
+      <div><button class="tabMenuBtn changePasswordTabBtn" layout-id="changePasswordTabBtn">Změnit Heslo</button></div>
+      <div><button class="tabMenuBtn appSettingsTabBtn" layout-id="appSettingsTabBtn">Nastavení Webu</button></div>
+    </div>
+    <div class="tabHolder">
+      <div layout-id="changePasswordTab" class="tabBox changePasswordTab">
+        <div layout-id="changePasswordError" class="popupMsg errorMsg changePasswordError"></div>
+        <div class="popupMsg infoMsg changePasswordInfo"></div>
+        <form layout-error="changePasswordError" class="changePasswordForm">
+          <span class="sectionName">Změnit Heslo</span>
+          <div class="formRow">
+            Aktuální Heslo:
+            <input class="formInput" required type="password" name="currentPassword" autocomplete="current-password" layout-display="aktuální heslo"></input>
+          </div>
+          <div class="formRow">
+            Nové Heslo:
+            <input class="formInput" required type="password" name="newPassword" autocomplete="new-password" layout-display="nové heslo"></input>
+          </div>
+          <div class="formRow">
+            Ověřit Heslo:
+            <input class="formInput" required type="password" name="confirmPassword" autocomplete="new-password" layout-display="ověřit heslo"></input>
+          </div>
+          <button class="formSubmit" type="submit">Změnit heslo</button>
+        </form>
+      </div>
+      <div layout-id="appSettingsTab" class="tabBox appSettingsTab">
+        <div layout-id="appSettingsError" class="popupMsg errorMsg appSettingsError"></div>
+        <div class="popupMsg infoMsg appSettingsInfo"></div>
+        <form layout-error="appSettingsError" class="settingsForm">
+          <span class="sectionName">Nastavení Webu</span>
+          <span class="subSectionName">Stav položek:</span>
+          <div class="formRow">
+            <div class="timeDiffTitle critical">Kritický stav:</div>
+            <div class="timeDiffInput criticalInput">
+              <input type="number" required min="1" max="99999" class="timeDiffValue" name="criticalValue" layout-display="kritický stav"></input>
+              <select class="timeDiffUnit" name="criticalUnit">
+                <option value="days">Dny</option>
+                <option value="weeks">Týdny</option>
+              </select>
+            </div>
+          </div>
+          <div class="formRow">
+            <div class="timeDiffTitle warn">Varování:</div>
+            <div class="timeDiffInput warnInput">
+              <input type="number" required min="1" max="99999" class="timeDiffValue" name="warnValue" layout-display="varování"></input>
+              <select class="timeDiffUnit" name="warnUnit">
+                <option value="days">Dny</option>
+                <option value="weeks">Týdny</option>
+              </select>
+            </div>
+          </div>
+          <div class="formRow">
+            <div class="timeDiffTitle recommended">Doporučené odevzdání:</div>
+            <div class="timeDiffInput recommendedInput">
+              <input type="number" required min="1" max="99999" class="timeDiffValue" name="recommendedValue" layout-display="doporučené odevzdání"></input>
+              <select class="timeDiffUnit" name="recommendedUnit">
+                <option value="days">Dny</option>
+                <option value="weeks">Týdny</option>
+              </select>
+            </div>
+          </div>
+          <span class="subSectionName">Formát datumu:</span>
+          <div class="formRow">
+            <select name="dateFormat" class="formSelect">
+              <option value="Y-m-d">YYYY-MM-DD</option>
+              <option value="d. m. Y">DD. MM. YYYY</option>
+            </select>
+          </div>
+          <button class="formSubmit" type="submit">Uložit nastavení</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

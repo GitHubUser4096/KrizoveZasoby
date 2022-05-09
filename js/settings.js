@@ -1,116 +1,84 @@
 
-async function showSettingsDialog(username){
+async function createSettingsDialog(){
 
-  if(dialogs['settings']) return;
-
-  let div = document.createElement('div');
+  let div = await LayoutManager.getLayout('layouts/settings.html');
   div.className = 'settingsDialog';
-  div.innerHTML = await GET('dialogs/settings.html');
-  document.body.appendChild(div);
 
-  dialogs['settings'] = div;
-
-  let closeBtn = div.querySelector('.formClose');
+  // TODO replace these with layout-id
   let passwordForm = div.querySelector('.changePasswordForm');
   let settingsForm = div.querySelector('.settingsForm');
-  let formInfo = div.querySelector('.formInfo');
-  let criticalInput = div.querySelector('.criticalInput');
-  let warnInput = div.querySelector('.warnInput');
-  let recommendedInput = div.querySelector('.recommendedInput');
-  let content = div.querySelector('.dialogContent');
+  let changePasswordInfo = div.querySelector('.changePasswordInfo');
+  let appSettingsInfo = div.querySelector('.appSettingsInfo');
+  
+  // TODO make these part of layoutManager as well?
+  function showChangePasswordInfo(msg){
+    changePasswordInfo.innerText = msg;
+    changePasswordInfo.classList.add('show');
+  }
 
-  function showInfo(msg, status, element){
-    formInfo.style.display = 'block';
-    formInfo.innerText = msg;
-    if(status=='error'){
-      formInfo.style.background = 'red';
-      formInfo.style.color = 'white';
-    } else if(status=='success'){
-      formInfo.style.background = '#2D1';
-      formInfo.style.color = 'white';
+  function showAppSettingsInfo(msg){
+    appSettingsInfo.innerText = msg;
+    appSettingsInfo.classList.add('show');
+  }
+
+  passwordForm.submitForm = async function(){
+
+    // TODO layout-id?
+
+    let currentPassword = passwordForm.getValue(passwordForm.currentPassword);
+    let newPassword = passwordForm.getValue(passwordForm.newPassword);
+    let confirmPassword = passwordForm.getValue(passwordForm.confirmPassword);
+
+    if(newPassword!=confirmPassword){
+      passwordForm.newPassword.classList.add('invalid');
+      passwordForm.confirmPassword.classList.add('invalid');
+      passwordForm.currentPassword.value = '';
+      passwordForm.newPassword.value = '';
+      passwordForm.confirmPassword.value = '';
+      throw {
+        message: 'Hesla se neshodují!'
+      };
     }
-    if(element){
-      formInfo.style.position = 'absolute';
-      formInfo.style.margin = '0';
-      formInfo.style.left = (element.offsetLeft)+'px';
-      formInfo.style.right = (element.offsetLeft+element.offsetWidth)+'px';
-      formInfo.style.top = (element.offsetTop+element.offsetHeight-4)+'px';
-      formInfo.style.width = element.offsetWidth+'px';
-      content.scrollTo(0, element.offsetTop-35);
-    } else {
-      formInfo.style.position = 'static';
-      formInfo.style.margin = null;
-      formInfo.style.left = null;
-      formInfo.style.right = null;
-      formInfo.style.width = null;
-      formInfo.style.top = null;
-      content.scrollTo(0, 0);
+
+    let status;
+
+    try {
+      status = await POST('api/user/changePassword.php', {
+        'currentPassword': currentPassword,
+        'newPassword': newPassword,
+      });
+    } catch(e){
+      passwordForm.currentPassword.value = '';
+      passwordForm.newPassword.value = '';
+      passwordForm.confirmPassword.value = '';
+      throw e;
     }
-  }
 
-  div.hide = function(){
-    document.body.removeChild(div);
-    delete dialogs['settings'];
-  }
+    hideLoading();
 
-  closeBtn.onclick = function(){
-    div.hide();
-  }
+    if(status=='success'){
+      showChangePasswordInfo('Heslo změněno!');
+      passwordForm.currentPassword.value = '';
+      passwordForm.newPassword.value = '';
+      passwordForm.confirmPassword.value = '';
+      return;
+    }
 
-  passwordForm.onsubmit = function(){
+    passwordForm.currentPassword.value = '';
+    passwordForm.newPassword.value = '';
+    passwordForm.confirmPassword.value = '';
 
-    let password = passwordForm.password.value;
-    let confirmPassword = passwordForm.confirmPassword.value;
-
-    (async function(){
-
-      if(!password){
-        showInfo('Prosím zadejte heslo!', 'error', passwordForm.password);
-        passwordForm.password.classList.add('invalid');
-        return;
-      }
-
-      if(!confirmPassword){
-        showInfo('Prosím zadejte ověření hesla!', 'error', passwordForm.confirmPassword);
-        passwordForm.confirmPassword.classList.add('invalid');
-        return;
-      }
-
-      if(password!=confirmPassword){
-        showInfo('Hesla se neshodují!', 'error');
-        passwordForm.password.classList.add('invalid');
-        passwordForm.confirmPassword.classList.add('invalid');
-        passwordForm.password.value = '';
-        passwordForm.confirmPassword.value = '';
-        return;
-      }
-
-      try {
-
-        let status = await POST('api/changePassword.php', {'password':password});
-
-        if(status=='success'){
-          showInfo('Heslo změněno!', 'success');
-          passwordForm.password.value = '';
-          passwordForm.confirmPassword.value = '';
-          return;
-        }
-
-        showInfo('Nelze změnit heslo.', 'error');
-        passwordForm.password.value = '';
-        passwordForm.confirmPassword.value = '';
-
-      } catch(e) {
-        showInfo(e.message, 'error');
-        passwordForm.password.value = '';
-        passwordForm.confirmPassword.value = '';
-      }
-
-    })();
-
-    return false;
+    throw {
+      message: 'Nelze změnit heslo!'
+    };
 
   }
+
+  // passwordForm.onSubmitFail = function(){
+  //   passwordForm.currentPassword.value = '';
+  //   passwordForm.newPassword.value = '';
+  //   passwordForm.confirmPassword.value = '';
+  // }
 
   function toDays(str){
     if(str=='days'){
@@ -121,85 +89,131 @@ async function showSettingsDialog(username){
     throw "Invalid value "+str;
   }
 
-  settingsForm.onsubmit = function(){
+  settingsForm.submitForm = async function(){
 
-    let criticalValue = settingsForm.criticalValue.value;
-    let criticalUnit = settingsForm.criticalUnit.value;
-    let criticalTime = criticalValue+' '+criticalUnit;
-    let warnValue = settingsForm.warnValue.value;
-    let warnUnit = settingsForm.warnUnit.value;
-    let warnTime = warnValue+' '+warnUnit;
-    let recommendedValue = settingsForm.recommendedValue.value;
-    let recommendedUnit = settingsForm.recommendedUnit.value;
-    let recommendedTime = recommendedValue+' '+recommendedUnit;
+    // TODO change these to layout-id? (for consistency)
+
+    let criticalValue = settingsForm.getValue(settingsForm.criticalValue);
+    let warnValue = settingsForm.getValue(settingsForm.warnValue);
+    let recommendedValue = settingsForm.getValue(settingsForm.recommendedValue);
     let dateFormat = settingsForm.dateFormat.value;
+    let criticalUnit = settingsForm.criticalUnit.value;
+    let warnUnit = settingsForm.warnUnit.value;
+    let recommendedUnit = settingsForm.recommendedUnit.value;
 
-    (async function(){
+    if(!dateFormat) {
+      throw {
+        message: 'Prosím vyberte formát datumu!',
+        element: settingsForm.dateFormat
+      };
+    }
 
-      let criticalDays = criticalValue*toDays(criticalUnit);
-      let warnDays = warnValue*toDays(warnUnit);
-      let recommendedDays = recommendedValue*toDays(recommendedUnit);
+    if(!criticalUnit) {
+      throw {
+        message: 'Prosím vyberte jednotku kritického stavu!',
+        element: settingsForm.criticalUnit
+      };
+    }
 
-      if(!(criticalValue>0)){
-        showInfo('Prosím zadejte číslo větší než 0!', 'error', settingsForm.criticalValue);
-        settingsForm.criticalValue.classList.add('invalid');
-        return;
-      }
+    if(!warnUnit) {
+      throw {
+        message: 'Prosím vyberte jednotku stavu varování!',
+        element: settingsForm.warnUnit
+      };
+    }
 
-      if(!(warnValue>0)){
-        showInfo('Prosím zadejte číslo větší než 0!', 'error', settingsForm.warnValue);
-        settingsForm.warnValue.classList.add('invalid');
-        return;
-      }
+    if(!recommendedUnit) {
+      throw {
+        message: 'Prosím vyberte jednotku doporučeného odevzdání!',
+        element: settingsForm.recommendedUnit
+      };
+    }
 
-      if(!(recommendedValue>0)){
-        showInfo('Prosím zadejte číslo větší než 0!', 'error', settingsForm.recommendedValue);
-        settingsForm.recommendedValue.classList.add('invalid');
-        return;
-      }
+    let criticalTime = criticalValue+' '+criticalUnit;
+    let warnTime = warnValue+' '+warnUnit;
+    let recommendedTime = recommendedValue+' '+recommendedUnit;
 
-      if(criticalDays>=warnDays){
-        showInfo('Počet dnů musí být menší než u následujících stavů!', 'error', settingsForm.criticalValue);
-        settingsForm.criticalValue.classList.add('invalid');
-        return;
-      }
+    let criticalDays = criticalValue*toDays(criticalUnit);
+    let warnDays = warnValue*toDays(warnUnit);
+    let recommendedDays = recommendedValue*toDays(recommendedUnit);
 
-      if(criticalDays>=recommendedDays){
-        showInfo('Počet dnů musí být menší než u následujících stavů!', 'error', settingsForm.criticalValue);
-        settingsForm.criticalValue.classList.add('invalid');
-        return;
-      }
+    if(criticalDays>=warnDays){
+      throw {
+        message: 'Kritický stav musí být menší než stav varování!', // TODO message?
+        element: settingsForm.criticalValue
+      };
+    }
 
-      if(warnDays>=recommendedDays){
-        showInfo('Počet dnů musí být menší než u následujících stavů!', 'error', settingsForm.warnValue);
-        settingsForm.warnValue.classList.add('invalid');
-        return;
-      }
+    if(criticalDays>=recommendedDays){
+      throw {
+        message: 'Kritický stav musí být menší než doporučené odevzdání!',
+        element: settingsForm.criticalValue
+      };
+    }
 
-      try{
-        await POST('api/changeSettings.php', {'criticalTime':criticalTime,'warnTime':warnTime, 'recommendedTime':recommendedTime, 'dateFormat':dateFormat});
-        showInfo('Nastavení uloženo!', 'success');
-        refresh();
-      } catch(e){
-        showInfo(e.message, 'error');
-      }
+    if(warnDays>=recommendedDays){
+      throw {
+        message: 'Stav varování musí být menší než doporučené odevzdání!',
+        element: settingsForm.warnValue
+      };
+    }
 
-    })();
+    await POST('api/user/changeSettings.php', {
+      'criticalTime':criticalTime,
+      'warnTime':warnTime,
+      'recommendedTime':recommendedTime,
+      'dateFormat':dateFormat,
+    });
 
-    return false;
+    showAppSettingsInfo('Nastavení uloženo!');
+    await refresh();
 
   }
 
   div.oninput = function(e){
-    e.target.classList.remove('invalid');
-    formInfo.style.display = 'none';
+    changePasswordInfo.classList.remove('show');
+    appSettingsInfo.classList.remove('show');
   }
 
   div.onclick = function(){
-    formInfo.style.display = 'none';
+    changePasswordInfo.classList.remove('show');
+    appSettingsInfo.classList.remove('show');
   }
 
-  let settings = JSON.parse(await GET('api/getSettings.php'));
+  // tab management
+
+  let tabs = [
+    {btn: div.elements.changePasswordTabBtn, tab: div.elements.changePasswordTab},
+    {btn: div.elements.appSettingsTabBtn, tab: div.elements.appSettingsTab},
+  ];
+
+  function setTab(index){
+    for(let i = 0; i<tabs.length; i++){
+      if(i==index){
+        tabs[i].btn.classList.add('selected');
+        tabs[i].tab.style.display = 'block';
+      } else {
+        tabs[i].btn.classList.remove('selected');
+        tabs[i].tab.style.display = 'none';
+      }
+    }
+  }
+
+  div.elements.changePasswordTabBtn.onclick = function(){
+    setTab(0);
+  }
+
+  div.elements.appSettingsTabBtn.onclick = function(){
+    setTab(1);
+  }
+
+  // TODO move to onInit
+
+  setTab(0);
+
+  // load current settings
+
+  let settings = JSON.parse(await GET('api/user/getSettings.php'));
 
   if(settings.criticalTime){
     let parts = settings.criticalTime.split(' ');
@@ -222,5 +236,7 @@ async function showSettingsDialog(username){
   if(settings.dateFormat){
     settingsForm.dateFormat.value = settings.dateFormat;
   }
+
+  return div;
 
 }

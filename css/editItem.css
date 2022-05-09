@@ -1,0 +1,38 @@
+
+.editItemDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.editItemDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 200px);
+  top: calc(50% - 170px);
+  width: 400px;
+  height: 340px;
+  background: #9ad3cd;
+  box-shadow: 0 0 5px black;
+}
+
+.editItemDialog .dialogContent {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 47px);
+  overflow-y: auto;
+}
+
+.editItemDialog .formSubmit {
+  margin: 20px;
+  width: calc(100% - 40px);
+  height: 50px;
+  position: absolute;
+  bottom: 0;
+}
+
+.editItemDialog .row {
+  margin: 20px;
+}

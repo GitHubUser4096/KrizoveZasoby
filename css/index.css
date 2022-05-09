@@ -17,7 +17,6 @@ body {
   background-attachment: fixed;
   background-position: center;
   background-size: cover;
-  /* filter: brightness(.5) blur(4px); */
 }
 
 .main {
@@ -107,8 +106,6 @@ body {
   top: 80px;
   height: calc(100% - 160px);
   width: 100%;
-  /* top: 10%;
-  height: 80%; */
 }
 
 .formTitle {

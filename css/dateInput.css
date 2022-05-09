@@ -1,0 +1,50 @@
+
+/* TODO change names? (dateInput, dateInputField), nested selectors? */
+
+.dateInputWrapper {
+  display: inline-block;
+  /* position: absolute; */
+  /* right: 0px; */
+  box-shadow: 0 0 5px black;
+  border-bottom: solid 4px var(--foreground);
+  /* height: 39px; */
+}
+
+.dateInput {
+  /* position: absolute;
+  box-shadow: none;
+  margin: 0;
+  box-sizing: border-box;
+  height: 40px;
+  -moz-appearance: textfield; */
+  background: none;
+  margin: 0;
+  border: none;
+  outline: none;
+  font-size: 20px;
+  padding: 5px;
+  -moz-appearance: textfield;
+}
+
+.dateInput::-webkit-outer-spin-button, .dateInput::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.dateInput.dateDay {
+  width: 50px;
+  display: inline-block;
+  /* left: 0; */
+}
+
+.dateInput.dateMonth {
+  width: 50px;
+  display: inline-block;
+  /* left: 50px; */
+}
+
+.dateInput.dateYear {
+  width: 100px;
+  display: inline-block;
+  /* left: 100px; */
+}

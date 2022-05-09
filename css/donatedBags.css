@@ -1,0 +1,68 @@
+
+.donatedBagsDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.donatedBagsDialog .dialogBox {
+  position: absolute;
+  top: calc(50% - 300px);
+  left: calc(50% - 200px);
+  width: 400px;
+  height: 600px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.donatedBagsDialog .bagList {
+  width: 100%;
+  height: calc(100% - 46px);
+  overflow-y: auto;
+}
+
+.donatedBagsDialog .emptyInfo {
+  font-size: 14px;
+  padding: 10px;
+  text-align: center;
+}
+
+.donatedBagsDialog .bagDiv {
+  margin: 10px;
+  box-shadow: 0 0 5px black;
+  padding: 10px;
+  font-size: 20px;
+}
+
+.donatedBagsDialog .donatedBagInfo {
+  display: inline-block;
+  width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.donatedBagsDialog .bagName {
+  white-space: nowrap;
+}
+
+.donatedBagsDialog .restoreDiv {
+  width: 25%;
+  float: right;
+  height: 46px;
+}
+
+.donatedBagsDialog .restoreBtn {
+  border: none;
+  background: var(--foreground);
+  font-size: 20px;
+  box-shadow: 0 0 5px black;
+  width: 100%;
+  height: 100%;
+}
+
+.donatedBagsDialog .restoreBtn:hover {
+  background: var(--foreground-highlight);
+}

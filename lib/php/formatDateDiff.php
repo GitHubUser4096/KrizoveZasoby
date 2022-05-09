@@ -34,27 +34,6 @@ function formatDateDiff($fromTime, $toTime){
   if(count($parts)==2) return 'za '.$parts[0].' a '.$parts[1];
   return 'za '.$parts[0].', '.$parts[1].' a '.$parts[2];
 
-  // if($diff->days==0) return 'dnes';
-  // $str = 'za ';
-  // if($diff->y>0) {
-  //   if($diff->y==1) $str .= '1 rok';
-  //   else if($diff->y>=2 && $diff->y<=4) $str .= $diff->y.' roky';
-  //   else $str .= $diff->y.' let';
-  //   if($diff->m>0 && $diff->d>0) $str .= ', ';
-  //   else if($diff->m>0 || $diff->d>0) $str .= ' a ';
-  // }
-  // if($diff->m>0) {
-  //   if($diff->m==1) $str .= '1 měsíc';
-  //   else if($diff->m>=2 && $diff->m<=4) $str .= $diff->m.' měsíce';
-  //   else $str .= $diff->m.' měsíců';
-  //   if($diff->d>0) $str .= ' a ';
-  // }
-  // if($diff->d>0) {
-  //   if($diff->d==1) $str .= '1 den';
-  //   else if($diff->d>=2 && $diff->d<=4) $str .= $diff->d.' dny';
-  //   else $str .= $diff->d.' dnů';
-  // }
-  // return $str;
 }
 
 ?>

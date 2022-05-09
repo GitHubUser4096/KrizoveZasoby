@@ -15,8 +15,8 @@ create table Bag(
   name varchar(64) not null,
   description varchar(1024),
   userId int not null,
-  handedOut boolean not null default 0,
-  handedOutDate datetime,
+  donated boolean not null default 0,
+  donatedDate datetime,
   foreign key (userId) references User(id)
 );
 
@@ -71,6 +71,28 @@ create table Config(
   dateFormat varchar(16) default 'Y-m-d',
   itemDisplay enum('brandFirst', 'typeFirst') default 'brandFirst',
   sort enum('date', 'name') default 'date'
+);
+
+create table ResetPasswordRequests(
+  id int primary key auto_increment,
+  userId int not null,
+  code varchar(32) not null,
+  expires datetime not null,
+  foreign key (userId) references User(id)
+);
+
+--- Update to V0.4 ---
+alter table Bag drop column handedOut;
+alter table Bag drop column handedOutDate;
+alter table Bag add column donated boolean not null default 0;
+alter table Bag add column donatedDate datetime;
+
+create table ResetPasswordRequests(
+  id int primary key auto_increment,
+  userId int not null,
+  code varchar(32) not null,
+  expires datetime not null,
+  foreign key (userId) references User(id)
 );
 
 --- Tables - OLD DATABASE ---

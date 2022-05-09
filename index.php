@@ -18,7 +18,7 @@ if(isSet($_GET['logout'])){
     <link rel="icon" href="res/icon.png">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/index.css">
-    <script src="lib/js/XHR.js" charset="utf-8"></script>
+    <script src="js/requests.js" charset="utf-8"></script>
     <script src="js/index.js" charset="utf-8"></script>
   </head>
   <body>
@@ -51,9 +51,9 @@ if(isSet($_GET['logout'])){
           <label class="formRow">
             Heslo: <input class="formInput" name="password" type="password"></input>
           </label>
-          <!-- <div class="formRow">
+          <div class="formRow">
             <button class="forgotPassword" name="forgotPassword" type="button">Zapomenuté heslo</button>
-          </div> -->
+          </div>
           <button type="submit" class="formSubmit">Přihlásit se</button>
         </form>
       </div>
@@ -61,17 +61,47 @@ if(isSet($_GET['logout'])){
 
     <div id="forgotPasswordDialog" class="side loginForm">
       <div class="formBox">
-        <form name="forgotPasswordForm" id="forgotPasswordForm" method="POST" action="forgotPassword.php">
+        <form name="forgotPasswordForm" id="forgotPasswordForm">
           <div class="formTitle">
             <button type="button" class="formClose" id="forgotPasswordForm_close">&lt;</button>
             <span class="formTitleText">Zapomenuté heslo</span>
           </div>
           <div class="loginMsg" id="forgotPasswordMsg"></div>
           <div class="formRow">
-            Na váš e-mail bude odeslán odkaz na obnovení hesla.
+            Na váš e-mail bude odeslán kód pro obnovení hesla.
           </div>
           <label class="formRow">
-            E-mail: <input class="formInput" name="email"></input>
+            E-mail: <input type="email" class="formInput" name="email"></input>
+          </label>
+          <button type="submit" class="formSubmit">Odeslat</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="resetPasswordDialog" class="side loginForm">
+      <div class="formBox">
+        <form name="resetPasswordForm" id="resetPasswordForm">
+          <div class="formTitle">
+            <button type="button" class="formClose" id="resetPasswordForm_close">&lt;</button>
+            <span class="formTitleText">Obnovit heslo</span>
+          </div>
+          <div class="loginMsg" id="resetPasswordMsg"></div>
+          <div class="formRow">
+            <!-- Na váš e-mail byl odeslán kód pro obnovení hesla. -->
+            <!-- Zadejte kód, který byl odeslán na váš e-mail a nastavte nové heslo. -->
+            Zadejte kód, který bude odeslán na váš e-mail (může trvat několik minut) a nastavte nové heslo.
+          </div>
+          <label class="formRow">
+            E-mail: <input class="formInput" name="email" autocomplete="username" disabled></input>
+          </label>
+          <label class="formRow">
+            Kód: <input class="formInput" name="code" autocomplete="off"></input>
+          </label>
+          <label class="formRow">
+            Nové heslo: <input class="formInput" type="password" name="newPassword" autocomplete="new-password"></input>
+          </label>
+          <label class="formRow">
+            Ověření hesla: <input class="formInput" type="password" name="confirmPassword" autocomplete="new-password"></input>
           </label>
           <button type="submit" class="formSubmit">Obnovit heslo</button>
         </form>
@@ -87,13 +117,13 @@ if(isSet($_GET['logout'])){
           </div>
           <div class="loginMsg" id="signupMsg"></div>
           <label class="formRow">
-            E-mail: <input class="formInput" name="email"></input>
+            E-mail: <input class="formInput" name="email" autocomplete="off"></input>
           </label>
           <label class="formRow">
-            Heslo: <input class="formInput" name="password" type="password"></input>
+            Heslo: <input class="formInput" name="password" type="password" autocomplete="new-password"></input>
           </label>
           <label class="formRow">
-            Ověření hesla: <input class="formInput" name="confirmPassword" type="password"></input>
+            Ověření hesla: <input class="formInput" name="confirmPassword" type="password" autocomplete="new-password"></input>
           </label>
           <button type="submit" class="formSubmit">Registrovat</button>
         </form>

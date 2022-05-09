@@ -1,23 +1,13 @@
 
-async function showMoveItemDialog(item){
+async function createMoveItemDialog(item){
 
-  if(dialogs['moveItem']) return;
-
-  let div = document.createElement('div');
+  let div = await LayoutManager.getLayout('layouts/moveItem.html');
   div.className = 'moveItemDialog';
-  div.innerHTML = await GET('dialogs/moveItem.html');
-  document.body.appendChild(div);
-
-  // dialogs.push(div);
-  dialogs['moveItem'] = div;
-
-  let closeBtn = div.querySelector('.formClose');
-  let moveForm = div.querySelector('.moveForm');
-  let formError = div.querySelector('.formError');
-
-  moveForm.moveCount.value = 1;
-
-  let bags = JSON.parse(await GET('api/bag/list.php?userId='+auth.user.id));
+  
+  let moveForm = div.querySelector('.moveForm'); // TODO replace by layout-id?
+  
+  // TODO move to onInit?
+  let bags = JSON.parse(await GET('api/bag/listBags.php?userId='+auth.user.id));
 
   moveForm.bag.innerText = '';
   for(let bag of bags){
@@ -28,96 +18,35 @@ async function showMoveItemDialog(item){
     moveForm.bag.add(option);
   }
 
-  function showError(msg, element){
-    formError.style.display = 'block';
-    formError.innerText = msg;
-    if(element){
-      formError.style.position = 'absolute';
-      formError.style.margin = '0';
-      formError.style.left = (element.offsetLeft)+'px';
-      formError.style.right = (element.offsetLeft+element.offsetWidth)+'px';
-      formError.style.top = (element.offsetTop+element.offsetHeight-4)+'px';
-    } else {
-      formError.style.position = 'static';
-      formError.style.margin = null;
-      formError.style.left = null;
-      formError.style.right = null;
-      formError.style.top = null;
-    }
+  div.onInit = function(){
+    div.elements.moveCount.focusInput();
+    div.elements.moveCount.setMax(item.count);
   }
 
-  div.onclick = function(){
-    formError.style.display = 'none';
-  }
+  moveForm.submitForm = async function(){
 
-  div.hide = function(){
-    document.body.removeChild(div);
-    // dialogs.splice(dialogs.indexOf(div));
-    delete dialogs['moveItem'];
-  }
-
-  closeBtn.onclick = function(){
-    div.hide();
-  }
-
-  moveForm.decrementCount.onclick = function(){
-    moveForm.moveCount.value = moveForm.moveCount.value-1;
-    if(moveForm.moveCount.value<1) moveForm.moveCount.value = 1;
-    if(moveForm.moveCount.value>item.count) moveForm.moveCount.value = item.count;
-  }
-
-  moveForm.incrementCount.onclick = function(){
-    moveForm.moveCount.value = +moveForm.moveCount.value+1;
-    if(moveForm.moveCount.value<1) moveForm.moveCount.value = 1;
-    if(moveForm.moveCount.value>item.count) moveForm.moveCount.value = item.count;
-  }
-
-  moveForm.oninput = function(e){
-    e.target.classList.remove('invalid');
-    formError.style.display = 'none';
-  }
-
-  moveForm.onsubmit = function(){
-
-    let count = moveForm.moveCount.value;
+    let count = moveForm.getValue(div.elements.moveCount);
     let bagId = moveForm.bag.value;
 
-    if(!(count>0) || count>item.count){
-      moveForm.moveCount.classList.add('invalid');
-      showError('Prosím zadejte počet mezi 1 a '+item.count+'!');
-      return false;
-    }
+    let items = JSON.parse(await GET('api/bag/getItems.php?bagId='+bagId));
 
-    if(!bagId) return false;
+    if(items.findIndex(i=>(i.productId==item.productId && i.expiration==item.expiration && i.used==item.used))>=0)
+      if(!confirm('Položka již existuje. Spojit položky?')) return;
 
-    (async function(){
+    let newItem = JSON.parse(await POST('api/item/moveItem.php?itemId='+item.id, {
+      'moveCount':count,
+      'bagId':bagId
+    }));
 
-      if(!await checkAuth()) return;
+    div.hide();
 
-      let items = JSON.parse(await GET('api/bag/getItems.php?bagId='+bagId));
+    movedItemId = newItem.id;
 
-      if(items.findIndex(i=>(i.productId==item.productId && i.expiration==item.expiration && i.used==item.used))>=0)
-        if(!confirm('Položka již existuje. Spojit položky?')) return;
-
-      try {
-        await POST('api/bag/moveItem.php?itemId='+item.id, {'moveCount':count, 'bagId':bagId});
-      } catch(e){
-        showError(e.message);
-        // formError.style.display = 'block';
-        // formError.innerText = e.message;
-        return;
-      }
-
-      // div.hide();
-      hideDialogs();
-
-      await loadBag(bagId);
-      await refresh();
-
-    })();
-
-    return false;
+    await loadBag(bagId);
+    await refresh();
 
   }
+
+  return div;
 
 }

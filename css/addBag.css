@@ -1,0 +1,63 @@
+
+.addBagDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.addBagDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 250px);
+  top: calc(50% - 250px);
+  width: 500px;
+  height: 500px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.addBagDialog .formSubmit {
+  margin: 20px;
+  bottom: 0;
+  width: calc(100% - 40px);
+  position: absolute;
+}
+
+.addBagDialog .row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.addBagDialog .rowLabel {
+  font-size: 22px;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.addBagDialog .rowContent {
+  display: block;
+}
+
+.addBagDialog .input {
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 5px black;
+  border-bottom: solid 4px var(--foreground);
+  font-size: 20px;
+  padding: 5px;
+}
+
+.addBagDialog .bagDescription {
+  /* width: 100%; */
+  resize: none;
+  height: 200px;
+  font-family: Arial;
+}

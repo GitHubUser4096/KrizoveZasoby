@@ -1,4 +1,6 @@
 
+/* TODO: split these to dialog and form? */
+
 .formTitle {
   display: block;
   width: 100%;
@@ -8,6 +10,9 @@
   padding-top: 5px;
   padding-bottom: 5px;
   height: 36px;
+  /* TODO should it have a shadow? */
+  /* box-shadow: 0 0 5px black; */
+  /* z-index: 9; */
 }
 
 .formTitleText {
@@ -44,11 +49,7 @@
   color: var(--foreground-text);
   font-size: 24px;
   border: none;
-  margin: 0;
-  padding: 0;
   display: block;
-  margin-left: 10%;
-  width: 80%;
   height: 60px;
   box-shadow: 0 0 8px black;
   transition: .1s;
@@ -70,11 +71,9 @@
 .wideFormRow {
   position: relative;
   height: 40px;
-  vertical-align: middle;
   display: block;
   margin-left: 20px;
   width: calc(100% - 40px);
-  margin-top: 20px;
   color: black;
   font-size: 22px;
 }
@@ -82,6 +81,15 @@
 .wideFormLabel {
   display: inline-block;
   padding-top: 6px;
+}
+
+.wideFormContent {
+  float: right;
+}
+
+.doubleRowContent {
+  margin-top: 10px;
+  float: right;
 }
 
 .formInput {
@@ -117,31 +125,39 @@
 
 .invalid {
   background: rgba(255, 0, 0, .5) !important;
+  transition: .1s;
 }
 
-.formError {
+.popupMsg {
+  margin: 0;
+  width: 100%;
+  padding: 0;
+  height: 0px;
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  transition: .1s;
+  box-sizing: border-box;
+  font-size: 18px;
+}
+
+.popupMsg.show {
+  padding: 3px;
+  height: auto;
+  transition: .1s;
+}
+
+.errorMsg {
   background: red;
   color: white;
-  margin-left: 10%;
-  width: calc(80% - 10px);
-  padding: 5px;
-  font-size: 18px;
-  margin-top: 20px;
-  display: none;
-  box-sizing: border-box;
 }
 
-.formInfo {
-  margin-left: 10%;
-  width: calc(80% - 10px);
-  padding: 5px;
-  font-size: 18px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  display: none;
-  box-sizing: border-box;
+.infoMsg {
+  background: #2D1;
+  color: white;
 }
 
+/* Used in addItem (add product '+' btn) - TODO keep it this way? */
 .squareBtn {
   background: var(--foreground);
   color: var(--foreground-text);

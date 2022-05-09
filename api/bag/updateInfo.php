@@ -4,8 +4,10 @@ session_start();
 
 require_once '../../lib/php/db.php';
 require_once '../../config/supplies.conf.php';
+require_once '../internal/common.php';
+require_once '../internal/bag.php';
 
-$db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+$db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
 Update Bag Info
@@ -15,54 +17,21 @@ Post: name*, description
 Returns: id (json)
 **/
 
-if(!isSet($_SESSION['user'])){
-  header('HTTP/1.1 403 Forbidden');
-  echo 'Not logged in.';
-  return;
-}
+checkAuth();
+checkPost();
 
-if($_SERVER['REQUEST_METHOD']!=='POST'){
-  header('HTTP/1.1 400 Bad request');
-  echo 'Method must be post.';
-  return;
-}
+$bagId = getParam('bagId');
+$name = validate(['name'=>'name', 'required'=>true, 'maxLength'=>64]);
+$description = validate(['name'=>'description', 'maxLength'=>1024]);
 
-if(!isSet($_GET['bagId'])){
-  header('HTTP/1.1 400 Bad request');
-  echo 'Bag Id is not defined.';
-  return;
-}
-
-if(!isSet($_POST['name']) || !$_POST['name']){
-  header('HTTP/1.1 400 Bad request');
-  echo 'Invalid name.';
-  return;
-}
-
-$bagId = $_GET['bagId'];
-$name = $_POST['name'];
-$description = $_POST['description'];
-
-$bags = $db->query("select * from Bag where id=?", $bagId);
-
-if(count($bags)==0){
-  header('HTTP/1.1 400 Bad request');
-  echo 'Invalid bag.';
-  return;
-}
-
-if($_SESSION['user']['id']!=$bags[0]['userId']){
-  header('HTTP/1.1 403 Forbidden');
-  echo 'Bag does not belong to the current user.';
-  return;
-}
+verifyBag($bagId, $db);
 
 $bags = $db->query("select * from Bag where userId=? and name=? and id!=?", $_SESSION['user']['id'], $name, $bagId);
 
 if(count($bags)>0){
   header('HTTP/1.1 400 Bad request');
   echo 'Bag with this name already exists';
-  return;
+  exit;
 }
 
 $db->execute("update Bag set name=?, description=? where id=?", $name, $description, $bagId);

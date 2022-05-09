@@ -1,0 +1,20 @@
+<div class="dialogBox">
+  <div class="formTitle">
+    <span class="formTitleText">Přesunout</span>
+    <button dialog-close class="formClose" type="button">X</button>
+  </div>
+  <div class="dialogContent">
+    <div layout-id="error" class="popupMsg errorMsg formError"></div>
+    <form layout-error="error" class="moveForm">
+      <div class="row wideFormRow">
+        <span class="wideFormLabel">Počet: <span title="Povinné pole">*</span></span>
+        <span class="wideFormContent"><input type="count" min="1" required hold="jump" layout-id="moveCount" layout-display="počet"></input></span>
+      </div>
+      <div class="row wideFormRow">
+        <div class="wideFormLabel">Taška:</div>
+        <select name="bag" class="formSelect" layout-id="bag"></select>
+      </div>
+      <button type="submit" class="formSubmit">Přesunout</button>
+    </form>
+  </div>
+</div>

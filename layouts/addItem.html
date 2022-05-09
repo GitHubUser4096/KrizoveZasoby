@@ -1,0 +1,40 @@
+<div class="dialogBox">
+  <form layout-error="error" class="addItemForm">
+    <div class="formTitle">
+      <span class="formTitleText">Přidat Položku</span>
+      <button dialog-close class="formClose" type="button" name="close">X</button>
+    </div>
+    <div layout-id="error" class="popupMsg errorMsg formError"></div>
+    <div class="row">
+      <div class="wideFormRow">
+        <span class="wideFormLabel">Produkt: <span title="Povinné pole">*</span></span>
+      </div>
+      <input type="hidden" name="productId" layout-id="productId"></input>
+      <div layout-id="searchProductBox" class="searchProductBox">
+        <input class="formInput productNameInput" name="productName" placeholder="Hledat produkt" layout-id="searchProduct"></input>
+        <button class="squareBtn addProductBtn" name="addProduct" type="button" title="Přidat produkt">+</button>
+      </div>
+      <div layout-id="displayProductBox" class="displayProductBox">
+        <div layout-id="productImage" class="productImage"></div>
+        <div class="productTitle">
+          <div layout-id="productName" class="productName"></div>
+          <div layout-id="productShortDesc" class="productShortDesc"></div>
+          <div layout-id="productPackage" class="productPackage"></div>
+        </div>
+        <button class="squareBtn editProductBtn" name="editProduct" type="button" title="Upravit"><img src="res/edit.png"></img></button>
+        <button class="squareBtn clearProductBtn" name="clearProduct" type="button" title="Zrušit výběr">×</button>
+      </div>
+    </div>
+    <div class="row wideFormRow">
+      <span class="wideFormLabel">Počet: <span title="Povinné pole">*</span></span>
+      <span class="wideFormContent"><input type="count" required min="1" max="99999" layout-id="count" layout-display="počet"></input></span>
+    </div>
+    <div class="row wideFormRow">
+      <span class="wideFormLabel">Minimální trvanlivost: <a title="Musí obsahovat alespoň měsíc a rok, nebo musí být prázdné">(?)</a></span>
+      <span class="wideFormContent"><input type="dmy" futureDate layout-id="expiration" layout-display="minimální trvanlivost"></input></span>
+    </div>
+    <div>
+      <button class="formSubmit" type="submit">Přidat</button>
+    </div>
+  </form>
+</div>

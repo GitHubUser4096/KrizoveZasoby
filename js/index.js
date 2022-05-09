@@ -1,25 +1,35 @@
 
+// TODO organize this, lots of code can be reused
+
 window.onload = function(){
 
   let sidebar = document.querySelector('#sidebar');
 
-  if(new URLSearchParams(location.search).has('reauth')){
+  let params = new URLSearchParams(location.search);
+
+  if(params.has('reauth')){
     sidebar.style.display = 'none';
     loginDialog.style.display = 'block';
     loginMsg.style.display = 'block';
     loginMsg.innerText = 'Prosím přihlašte se znovu pro pokračování';
+  } else if(params.has('resetPassword')){
+    sidebar.style.display = 'none';
+    resetPasswordDialog.style.display = 'block';
+    resetPasswordForm.email.value = params.get('email')??'';
+    resetPasswordForm.code.value = params.get('code')??'';
   }
 
   loginBtn.onclick = async function(){
+    
+    sidebar.style.display = 'none';
 
-    let auth = JSON.parse(await GET('api/auth.php'));
+    let auth = JSON.parse(await GET('api/user/auth.php'));
 
     if(auth.loggedIn){
       location.href = 'profile.php';
       return;
     }
 
-    sidebar.style.display = 'none';
     loginDialog.style.display = 'block';
 
   }
@@ -35,62 +45,221 @@ window.onload = function(){
     loginMsg.style.display = 'none';
   }
 
-  // loginForm.forgotPassword.onclick = function(){
-  //   loginDialog.style.display = 'none';
-  //   forgotPasswordDialog.style.display = 'block';
-  // }
+  forgotPasswordForm.oninput = function(e){
+    e.target.classList.remove('error');
+    forgotPasswordMsg.style.display = 'none';
+  }
+
+  resetPasswordForm.oninput = function(e){
+    e.target.classList.remove('error');
+    resetPasswordMsg.style.display = 'none';
+  }
+
+  loginForm.forgotPassword.onclick = function(){
+    loginDialog.style.display = 'none';
+    forgotPasswordDialog.style.display = 'block';
+  }
 
   forgotPasswordForm_close.onclick = function(){
     loginDialog.style.display = 'block';
     forgotPasswordDialog.style.display = 'none';
   }
 
-  // loginForm.email.oninput = function(){
-  //   this.classList.remove('error');
-  //   loginMsg.style.display = 'none';
-  // }
-  //
-  // loginForm.password.oninput = function(){
-  //   this.classList.remove('error');
-  //   loginMsg.style.display = 'none';
-  // }
+  resetPasswordForm_close.onclick = function(){
+    forgotPasswordDialog.style.display = 'block';
+    resetPasswordDialog.style.display = 'none';
+  }
+
+  forgotPasswordForm.onsubmit = async function(e){
+
+    e.preventDefault();
+
+    // if(forgotPasswordForm.submitted) return;
+
+    if(!forgotPasswordForm.email.value){
+      forgotPasswordMsg.style.background = 'red';
+      forgotPasswordMsg.style.color = 'white';
+      forgotPasswordMsg.style.display = 'block';
+      forgotPasswordMsg.innerText = 'Prosím zadejte e-mail!';
+      forgotPasswordForm.email.focus();
+      forgotPasswordForm.email.classList.add('error');
+      return;
+    }
+
+    // forgotPasswordForm.submitted = true;
+
+    // forgotPasswordMsg.style.background = 'var(--foreground)';
+    // forgotPasswordMsg.style.color = 'black';
+    // forgotPasswordMsg.style.display = 'block';
+    // forgotPasswordMsg.innerText = 'Počkejte prosím...';
+
+    try {
+
+      POST('api/user/requestPasswordReset.php', {
+        email: forgotPasswordForm.email.value,
+      });
+
+      resetPasswordForm.email.value = forgotPasswordForm.email.value;
+
+      forgotPasswordDialog.style.display = 'none';
+      resetPasswordDialog.style.display = 'block';
+
+    } catch(ex){
+      forgotPasswordForm.submitted = false;
+      forgotPasswordMsg.style.background = 'red';
+      forgotPasswordMsg.style.color = 'white';
+      forgotPasswordMsg.style.display = 'block';
+      forgotPasswordMsg.innerText = ex.message;
+    }
+
+  }
+
+  resetPasswordForm.onsubmit = async function(e){
+
+    e.preventDefault();
+
+    if(resetPasswordForm.submitted) return;
+
+    // if(!resetPasswordForm.email.value){
+    //   resetPasswordMsg.style.background = 'red';
+    //   resetPasswordMsg.style.color = 'white';
+    //   resetPasswordMsg.style.display = 'block';
+    //   resetPasswordMsg.innerText = 'Prosím zadejte e-mail!';
+    //   resetPasswordForm.email.focus();
+    //   resetPasswordForm.email.classList.add('error');
+    //   return;
+    // }
+
+    if(!resetPasswordForm.code.value){
+      resetPasswordMsg.style.background = 'red';
+      resetPasswordMsg.style.color = 'white';
+      resetPasswordMsg.style.display = 'block';
+      resetPasswordMsg.innerText = 'Prosím zadejte kód!';
+      resetPasswordForm.code.focus();
+      resetPasswordForm.code.classList.add('error');
+      return;
+    }
+
+    if(!resetPasswordForm.newPassword.value){
+      resetPasswordMsg.style.background = 'red';
+      resetPasswordMsg.style.color = 'white';
+      resetPasswordMsg.style.display = 'block';
+      resetPasswordMsg.innerText = 'Prosím zadejte nové heslo!';
+      resetPasswordForm.newPassword.focus();
+      resetPasswordForm.newPassword.classList.add('error');
+      return;
+    }
+
+    if(!resetPasswordForm.confirmPassword.value){
+      resetPasswordMsg.style.background = 'red';
+      resetPasswordMsg.style.color = 'white';
+      resetPasswordMsg.style.display = 'block';
+      resetPasswordMsg.innerText = 'Prosím zadejte ověření hesla!';
+      resetPasswordForm.confirmPassword.focus();
+      resetPasswordForm.confirmPassword.classList.add('error');
+      return;
+    }
+
+    if(resetPasswordForm.newPassword.value!=resetPasswordForm.confirmPassword.value){
+      resetPasswordMsg.style.background = 'red';
+      resetPasswordMsg.style.color = 'white';
+      resetPasswordMsg.style.display = 'block';
+      resetPasswordMsg.innerText = 'Hesla se neshodují!';
+      resetPasswordForm.newPassword.value = '';
+      resetPasswordForm.confirmPassword.value = '';
+      resetPasswordForm.newPassword.classList.add('error');
+      resetPasswordForm.confirmPassword.classList.add('error');
+      return;
+    }
+
+    resetPasswordMsg.style.background = 'var(--foreground)';
+    resetPasswordMsg.style.color = 'black';
+    resetPasswordMsg.innerText = 'Přihlašování...';
+    resetPasswordMsg.style.display = 'block';
+
+    resetPasswordForm.submitted = true;
+
+    try {
+
+      await POST('api/user/resetPassword.php', {
+        email: resetPasswordForm.email.value,
+        code: resetPasswordForm.code.value,
+        password: resetPasswordForm.newPassword.value,
+      });
+
+      location.href = 'profile.php';
+
+    } catch(ex){
+      resetPasswordForm.submitted = false;
+      resetPasswordMsg.style.background = 'red';
+      resetPasswordMsg.style.color = 'white';
+      resetPasswordMsg.style.display = 'block';
+      resetPasswordMsg.innerText = ex.message;
+      resetPasswordForm.newPassword.value = '';
+      resetPasswordForm.confirmPassword.value = '';
+    }
+
+  }
 
   loginForm.onsubmit = async function(e){
 
     e.preventDefault();
 
-    // console.log(e.target);
+    if(loginForm.submitted) return;
 
     let email = e.target.email.value;
     let password = e.target.password.value;
 
     if(!email){
+      loginMsg.style.background = 'red';
+      loginMsg.style.color = 'white';
       loginForm.email.classList.add('error');
+      loginForm.email.focus();
       loginMsg.style.display = 'block';
       loginMsg.innerText = 'Prosím zadejte email!';
       return;
     }
 
     if(!password){
+      loginMsg.style.background = 'red';
+      loginMsg.style.color = 'white';
       loginForm.password.classList.add('error');
+      loginForm.password.focus();
       loginMsg.style.display = 'block';
       loginMsg.innerText = 'Prosím zadejte heslo!';
       return;
     }
 
-    let auth = JSON.parse(await POST('api/auth.php', {'email':email, 'password':password}));
+    loginMsg.style.background = 'var(--foreground)';
+    loginMsg.style.color = 'black';
+    loginMsg.innerText = 'Přihlašování...';
+    loginMsg.style.display = 'block';
+
+    loginForm.submitted = true;
+
+    let auth;
+    try {
+      auth = JSON.parse(await POST('api/user/auth.php', {'email':email, 'password':password}));
+    } catch(e){
+      loginForm.submitted = false;
+      loginMsg.style.background = 'red';
+      loginMsg.style.color = 'white';
+      loginMsg.style.display = 'block';
+      loginMsg.innerText = e.message;
+      loginForm.password.value = '';
+      return;
+    }
 
     if(auth.loggedIn){
       location.href = 'profile.php';
     } else {
+      loginForm.submitted = false;
+      loginMsg.style.background = 'red';
+      loginMsg.style.color = 'white';
       loginMsg.style.display = 'block';
-      loginMsg.innerText = auth.message;
-      // alert(auth.message);
-      e.target.password.value = '';
+      loginMsg.innerText = 'Unexpected error: auth successful but loggedIn!=true';
     }
-
-    // return false;
-
+    
   }
 
   signupForm.oninput = function(e){
@@ -102,12 +271,17 @@ window.onload = function(){
 
     e.preventDefault();
 
+    if(signupForm.submitted) return;
+
     let email = e.target.email.value;
     let password = e.target.password.value;
     let confirmPassword = e.target.confirmPassword.value;
 
     if(!email){ // TODO check it is an email
       signupForm.email.classList.add('error');
+      signupForm.email.focus();
+      signupMsg.style.background = 'red';
+      signupMsg.style.color = 'white';
       signupMsg.style.display = 'block';
       signupMsg.innerText = 'Prosím zadejte email!';
       return;
@@ -115,6 +289,9 @@ window.onload = function(){
 
     if(!password){
       signupForm.password.classList.add('error');
+      signupForm.password.focus();
+      signupMsg.style.background = 'red';
+      signupMsg.style.color = 'white';
       signupMsg.style.display = 'block';
       signupMsg.innerText = 'Prosím zadejte heslo!';
       return;
@@ -122,6 +299,9 @@ window.onload = function(){
 
     if(!confirmPassword){
       signupForm.confirmPassword.classList.add('error');
+      signupForm.confirmPassword.focus();
+      signupMsg.style.background = 'red';
+      signupMsg.style.color = 'white';
       signupMsg.style.display = 'block';
       signupMsg.innerText = 'Prosím zadejte ověření hesla!';
       return;
@@ -130,79 +310,42 @@ window.onload = function(){
     if(password!=confirmPassword){
       signupForm.password.classList.add('error');
       signupForm.confirmPassword.classList.add('error');
+      signupMsg.style.background = 'red';
+      signupMsg.style.color = 'white';
       signupMsg.style.display = 'block';
       signupMsg.innerText = 'Hesla se neshodují!';
+      signupForm.password.value = '';
+      signupForm.confirmPassword.value = '';
       return;
     }
 
-    // let auth = JSON.parse(await POST('api/auth.php', {'email':email, 'password':password}));
-    //
-    // if(auth.loggedIn){
-    //   location.href = 'profile.php';
-    // } else {
-    //   loginMsg.style.display = 'block';
-    //   loginMsg.innerText = auth.message;
-    //   // alert(auth.message);
-    //   e.target.password.value = '';
-    // }
+    signupMsg.style.background = 'var(--foreground)';
+    signupMsg.style.color = 'black';
+    signupMsg.innerText = 'Počkejte prosím...';
+    signupMsg.style.display = 'block';
 
-    let signup = JSON.parse(await POST('api/signup.php', {'email':email, 'password':password, 'verifyPassword':confirmPassword}));
+    signupForm.submitted = true;
+
+    let signup;
+
+    try {
+      signup = JSON.parse(await POST('api/user/signup.php', {'email':email, 'password':password}));
+    } catch(e){
+      signupForm.submitted = false;
+      signupMsg.style.background = 'red';
+      signupMsg.style.color = 'white';
+      signupMsg.style.display = 'block';
+      signupMsg.innerText = e.message;
+      signupForm.password.value = '';
+      signupForm.confirmPassword.value = '';
+      return;
+    }
 
     if(signup.success){
       location.href = 'profile.php';
-    } else {
-      signupMsg.style.display = 'block';
-      signupMsg.innerText = signup.message;
-      e.target.password.value = '';
-      e.target.confirmPassword.value = '';
     }
 
-    // return false;
-
   }
-
-  // signupForm_signup.onclick = async function(){
-  //
-  //   let email = signupForm_email.value;
-  //   let password = signupForm_password.value;
-  //   let verifyPassword = signupForm_verifyPassword.value;
-  //
-  //   if(password!=verifyPassword){
-  //     alert('Hesla se neshodují!');
-  //     return;
-  //   }
-  //
-  //   let signup = JSON.parse(await POST('api/signup.php', {'email':email, 'password':password, 'verifyPassword':verifyPassword}));
-  //
-  //   if(signup.success){
-  //     location.href = 'profile.php';
-  //   } else {
-  //     alert(signup.message);
-  //   }
-  //
-  // }
-
-  // let sidebar = document.querySelector('#sidebar');
-  // let signupBtn = document.querySelector('#signupBtn');
-  // let loginBtn = document.querySelector('#loginBtn');
-  //
-  // let loginForm = document.querySelector('#loginForm');
-  // let loginClose = document.querySelector('#loginForm_close');
-  // let loginEmail = document.querySelector('#loginForm_email');
-  // let loginPassword = document.querySelector('#loginForm_password');
-  // let loginSubmit = document.querySelector('#loginForm_login');
-  //
-  // let signupForm = document.querySelector('#signupForm');
-  // let signupClose = document.querySelector('#signupForm_close');
-  // let signupEmail = document.querySelector('#signupForm_email');
-  // let signupPassword = document.querySelector('#signupForm_password');
-  // let signupVerifyPassword = document.querySelector('#signupForm_verifyPassword');
-  // let signupSubmit = document.querySelector('#signupForm_signup');
-  //
-  // loginBtn.onclick = function(){
-  //   sidebar.style.display = 'none';
-  //   loginForm.style.display = 'block';
-  // }
 
   signupBtn.onclick = function(){
     sidebar.style.display = 'none';
@@ -213,25 +356,5 @@ window.onload = function(){
     signupDialog.style.display = 'none';
     sidebar.style.display = 'block';
   }
-
-  // loginSubmit.onclick = async function(){
-  //
-  //   let email = loginEmail.value;
-  //   let password = loginPassword.value;
-  //
-  //   let auth = JSON.parse(await POST('api/auth.php', {'email':email, 'password':password}));
-  //
-  //   if(auth.loggedIn){
-  //     location.href = 'profile.php';
-  //   } else {
-  //     alert(auth.message);
-  //   }
-  //
-  // }
-
-  // loginClose.onclick = function(){
-  //   loginForm.style.display = 'none';
-  //   sidebar.style.display = 'block';
-  // }
 
 }

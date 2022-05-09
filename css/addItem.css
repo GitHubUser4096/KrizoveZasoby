@@ -1,0 +1,193 @@
+
+.addItemDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.addItemDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 300px);
+  top: calc(50% - 300px);
+  width: 600px;
+  height: 600px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.addItemDialog .productNameInput {
+  display: inline-block;
+  color: gray;
+  width: calc(100% - 60px);
+}
+
+.addItemDialog .productNameInput.invalid {
+  color: lightgray;
+}
+
+.addItemDialog .productNameInput.invalid::placeholder {
+  color: lightgray;
+}
+
+.addItemDialog .formSubmit {
+  margin: 20px;
+  bottom: 0;
+  width: calc(100% - 40px);
+  position: absolute;
+}
+
+.addItemDialog .addProductBtn {
+  float: right;
+  margin-top: 5px;
+}
+
+.addItemDialog .searchProductBox {
+  position: relative;
+  left: 20px;
+  width: calc(100% - 40px);
+  height: 50px;
+}
+
+.addItemDialog .displayProductBox {
+  left: 20px;
+  width: calc(100% - 40px);
+  position: relative;
+  height: 100px;
+  display: none;
+  box-shadow: 0 0 5px black;
+}
+
+.addItemDialog .productImage {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background-color: white;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.addItemDialog .productTitle {
+  position: absolute;
+  left: 105px;
+  top: 0;
+  width: calc(100% - 155px);
+  height: 80px;
+}
+
+.addItemDialog .productName {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  width: 100%;
+  height: 24px;
+  font-size: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addItemDialog .productShortDesc {
+  position: absolute;
+  left: 0;
+  top: 30px;
+  width: 100%;
+  height: 20px;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addItemDialog .productPackage {
+  position: absolute;
+  left: 0;
+  top: 50px;
+  width: 100%;
+  height: 20px;
+  font-size: 16px;
+  font-style: italic;
+}
+
+.addItemDialog .editProductBtn {
+  position: absolute;
+  padding: 2px;
+  right: 5px;
+  top: 55px;
+}
+
+.addItemDialog .clearProductBtn {
+  position: absolute;
+  padding: 2px;
+  right: 5px;
+  top: 5px;
+  color: white;
+  background: red;
+}
+
+.addItemDialog .clearProductBtn:hover {
+  background: #F77;
+}
+
+.suggestionsBox {
+  position: fixed;
+  background: white;
+  box-shadow: 0 0 5px black;
+}
+
+.suggestionsBox .suggestionItem {
+  padding: 2px;
+  border: none;
+  outline: none;
+  background: white;
+  font-size: 20px;
+  width: 100%;
+  cursor: pointer;
+  border-bottom: 1px solid gray;
+  box-sizing: border-box;
+  /* text-align: center; */
+}
+
+.suggestionsBox .suggestionItem:hover {
+  background: lightgray;
+}
+
+.suggestionsBox .suggestionItemTitle {
+  font-size: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestionsBox .suggestionItemDesc {
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.suggestionsBox .suggestionMore {
+  text-align: left;
+  font-size: 16px;
+  padding: 2px;
+}
+
+.suggestionsBox .suggestionNotFound {
+  text-align: center;
+  font-size: 18px;
+  padding: 2px;
+}
+
+.suggestionsBox .suggestionLoading {
+  text-align: center;
+  font-size: 18px;
+  padding: 2px;
+}
+
+.addItemDialog .row {
+  margin-top: 5px;
+  margin-bottom: 15px;
+}

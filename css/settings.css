@@ -1,0 +1,126 @@
+
+.settingsDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.settingsDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 350px);
+  top: calc(50% - 300px);
+  width: 700px;
+  height: 600px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.settingsDialog .dialogContent {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 46px);
+  overflow-y: auto;
+}
+
+.settingsDialog .formSubmit {
+  margin-left: 10%;
+  width: 80%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 50px;
+}
+
+.settingsDialog .sectionName {
+  display: block;
+  font-weight: bold;
+  font-size: 24px;
+  padding-left: 10px;
+  padding-top: 5px;
+}
+
+.settingsDialog .subSectionName {
+  display: block;
+  font-size: 20px;
+  padding-left: 15px;
+  margin-top: 10px;
+}
+
+.settingsDialog .timeDiffTitle {
+  padding: 5px;
+}
+
+.settingsDialog .timeDiffInput {
+  margin-top: 10px;
+  border-bottom: 4px solid var(--foreground);
+  box-shadow: 0 0 5px black;
+}
+
+.settingsDialog .timeDiffValue {
+  padding: 5px;
+  font-size: 20px;
+  height: 35px;
+  width: 56%;
+  margin: 0;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  outline: none;
+  vertical-align: top;
+}
+
+.settingsDialog .timeDiffUnit {
+  font-size: 20px;
+  height: 35px;
+  width: 40%;
+  margin: 0;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  outline: none;
+}
+
+.settingsDialog .tabMenu {
+  position: absolute;
+  width: 250px;
+  height: 100%;
+  box-shadow: 0 0 5px black;
+}
+
+.settingsDialog .tabHolder {
+  position: absolute;
+  right: 0;
+  width: 450px;
+  overflow-y: auto;
+  height: 100%;
+}
+
+.settingsDialog .tabBox {
+  display: none;
+}
+
+.settingsDialog .tabMenuBtn {
+  border: none;
+  background: var(--foreground);
+  width: calc(100% - 20px);
+  margin-left: 10px;
+  font-size: 22px;
+  height: 40px;
+  margin-top: 10px;
+  box-shadow: 0 0 5px black;
+  text-align: left;
+}
+
+.settingsDialog .tabMenuBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.settingsDialog .tabMenuBtn.selected {
+  font-weight: bold;
+}
+
+.settingsDialog .tabMenuBtn.selected::after {
+  content: ' >';
+}

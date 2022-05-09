@@ -1,7 +1,0 @@
-id name 
-'1' 'Konzerva' 
-'2' 'Plastový obal' 
-'3' 'Kartonový tetra pack obal' 
-'4' 'Krabička plech' 
-'5' 'Sklenice' 
-'6' 'Papírový obal' 

@@ -1,17 +1,11 @@
 
-async function showAddItemDialog(){
+async function createAddItemDialog(){
 
-  if(dialogs['addItem']) return;
-
-  let div = document.createElement('div');
+  let div = await LayoutManager.getLayout('layouts/addItem.html');
   div.className = 'addItemDialog';
-  div.innerHTML = await GET('dialogs/addItem.html');
-  document.body.appendChild(div);
-
-  dialogs['addItem'] = div;
 
   let suggestions = document.createElement('div');
-  suggestions.className = 'suggestions';
+  suggestions.className = 'suggestionsBox';
 
   suggestions.onmouseover = function(){
     suggestions.mouseover = true;
@@ -21,7 +15,7 @@ async function showAddItemDialog(){
   }
 
   function showSuggestions(){
-    if(document.body.contains(suggestions)) document.body.removeChild(suggestions);
+    if(document.body.contains(suggestions)) return;
     document.body.appendChild(suggestions);
   }
 
@@ -29,61 +23,23 @@ async function showAddItemDialog(){
     if(document.body.contains(suggestions)) document.body.removeChild(suggestions);
   }
 
-  div.hide = function(){
+  div.onHide = function(){
     hideSuggestions();
     document.removeEventListener('keydown', closeListener);
-    document.body.removeChild(div);
-    delete dialogs['addItem'];
   }
 
-  let form = div.querySelector('.addItemForm');
-  let searchProductDiv = div.querySelector('.searchProduct');
-  let displayProductDiv = div.querySelector('.displayProduct');
-  let productImageDiv = div.querySelector('.productImage');
-  let productNameDiv = div.querySelector('.productName');
-  let productShortDescDiv = div.querySelector('.productShortDesc');
-  let productPackageDiv = div.querySelector('.productPackage');
-  let formError = form.querySelector('.formError');
-
-  function showError(msg, element){
-    formError.style.display = 'block';
-    formError.innerText = msg;
-    if(element){
-      formError.style.position = 'absolute';
-      formError.style.margin = '0';
-      formError.style.left = (element.offsetLeft)+'px';
-      formError.style.right = (element.offsetLeft+element.offsetWidth)+'px';
-      formError.style.top = (element.offsetTop+element.offsetHeight-4)+'px';
-      formError.style.width = element.offsetWidth+'px';
-    } else {
-      // formError.style.position = 'static';
-      formError.style.margin = '10px';
-      formError.style.left = null;
-      formError.style.right = null;
-      formError.style.top = '0';
-      formError.style.width = 'calc(100% - 20px)';
-    }
+  div.onInit = function(){
+    div.elements.searchProduct.focus();
   }
+
+  let form = div.querySelector('.addItemForm'); // TODO replace by layout-id
 
   let closeListener;
-
-  // function closeDialog(){
-  //   hideSuggestions();
-  //   document.removeEventListener('keydown', closeListener);
-  //   document.body.removeChild(div);
-  // }
-
-  form.close.onclick = function(){
-    // closeDialog();
-    div.hide();
-  }
 
   closeListener = function(e){
     if(e.key=='Escape'){
       if(document.body.contains(suggestions)){
         hideSuggestions();
-      } else {
-        // closeDialog();
       }
     }
   }
@@ -97,139 +53,51 @@ async function showAddItemDialog(){
     form.productName.mouseover = false;
   }
 
-  // function showError(msg){
-  //   formError.style.display = 'block';
-  //   formError.innerText = msg;
-  // }
-
-  // let dialog = document.querySelector('#dialog_addItem');
-  // let btn_close = document.querySelector('#dialog_addItem_btn_close');
-  // // let input_productId = document.querySelector('#dialog_addItem_input_productId');
-  // let btn_addProduct = document.querySelector('#dialog_addItem_btn_addProduct');
-  // let input_count = document.querySelector('#dialog_addItem_input_count');
-  // let input_expDate = document.querySelector('#dialog_addItem_input_expDate');
-  // let btn_submit = document.querySelector('#dialog_addItem_btn_submit');
-  //
-  // let addProductDialog = document.querySelector('#dialog_addProduct');
-  //
-  // btn_close.onclick = function(){
-  //   productSuggestions.innerText = '';
-  //   dialog.style.display = 'none';
-  // }
-  //
-  // btn_submit.onclick = async function(){
-  //
-  //   productSuggestions.innerText = '';
-  //
-  //   let bagId = selectedBagId;
-  //   let productId = addItemProductId.value;
-  //   let count = input_count.value;
-  //   let expDate = input_expDate.value;
-  //
-  //   await POST('api/bag/addItem.php?bagId='+bagId, {'productId':productId, 'count':count, 'expDate':expDate});
-  //
-  //   dialog.style.display = 'none';
-  //   await loadBag(selectedBagId);
-  //
-  // }
-
   form.addProduct.onclick = async function(){
+    showLoading();
     if(!await checkAuth()) return;
-    showAddProductDialog(div);
+    await showDialog('addProduct', div);
+    hideLoading();
   }
 
   form.clearProduct.onclick = async function(){
     div.clearProduct();
   }
 
-  form.onsubmit = function(){
+  form.submitForm = async function(){
 
     hideSuggestions();
 
-    let bagId = selectedBagId;
-    let productId = form.productId.value;
-    let count = form.count.value;
-    // let expiration = form.expDate.value;
-    let expiration;
+    let bagId = selectedBag.id;
 
-    if(!form.expYear.value || !form.expMonth.value){
-      if(form.expDay.value){
-        showError('Prosím zadejte celé datum!');
-        return false;
-      }
-      expiration = '';
-    } else {
-      let expDate = new Date(form.expYear.value+'-'+form.expMonth.value+'-'+form.expDay.value);
-      if(!expDate.getTime()){
-        showError('Neplatné datum!');
-        return false;
-      }
-      if(!form.expDay.value) {
-        expDate.setMonth(expDate.getMonth()+1);
-        expDate.setDate(0);
-      }
-      expiration = expDate.getFullYear()+'-'+(expDate.getMonth()+1).toString().padStart(2, '0')+'-'+expDate.getDate().toString().padStart(2, '0');
-    }
+    let productId = div.elements.productId.value;
+    if(!productId)
+        throw {
+          message: 'Prosím vyberte produkt!',
+          element: div.elements.productName,
+        };
+      
+    let count = form.getValue(div.elements.count);
+    let expiration = form.getValue(div.elements.expiration);
 
-    // console.log(form.expYear.value+'-'+form.expMonth.value+'-'+form.expDay.value, expDate);
-    // return false;
-
-    if(!productId){
-      showError('Prosím vyberte produkt ze seznamu');
-      form.productName.classList.add('invalid');
-      return false;
-    }
-
-    if(!count){
-      showError('Prosím zadejte počet');
-      form.count.classList.add('invalid');
-      return false;
-    }
-
-    if(!(count>0) || count>999){
-      form.count.classList.add('invalid');
-      showError('Neplatný počet!');
-      return false;
-    }
-
-    // if(!expiration){
-    //   showError('Prosím zadejte datum', form.expDate);
-    //   form.expDate.classList.add('invalid');
-    //   return false;
-    // }
-
-    if((form.expYear.value && !form.expMonth.value) || (!form.expYear.value && form.expMonth.value)){
-      showError('Datum musí obsahovat alespoň měsíc a rok !');
-      return false;
-    }
-
-    if(expiration && !(new Date(expiration)>new Date()) || new Date(expiration)>new Date('3000-01-01')){
-      showError('Datum musí být později než dnes.');
-      // form.expDate.classList.add('invalid');
-      return false;
-    }
-
-    (async function() {
-
-      if(!await checkAuth()) return;
-
-      if(allItems.findIndex(i=>(i.productId==productId && (i.expiration??'')==expiration && !i.used))>=0)
-        if(!confirm('Položka již existuje. Spojit položky?')) return;
-
-      try {
-        await POST('api/bag/addItem.php?bagId='+bagId, {'productId':productId, 'count':count, 'expiration':expiration});
-      } catch(e) {
-        showError(e.message);
+    let existingItem = itemDivs.find(i=>(i.item.productId==productId && (i.item.expiration??'')==(expiration??'') && !i.used));
+    if(existingItem){
+      if(!confirm('Položka již existuje. Spojit položky?')) {
+        hideLoading();
         return;
       }
+    }
 
-      // closeDialog();
-      div.hide();
-      await refresh();
+    let newItem = JSON.parse(await POST('api/item/addItem.php?bagId='+bagId, {
+      'productId':productId,
+      'count':count,
+      'expiration':expiration,
+    }));
+    expandedItemId = newItem.id;
 
-    })();
+    div.hide();
 
-    return false;
+    await refresh();
 
   }
 
@@ -237,35 +105,32 @@ async function showAddItemDialog(){
 
   div.setProduct = function(product){
     form.productId.value = product.id;
-    // form.productName.value = name;
     form.productName.classList.remove('invalid');
-    // form.productName.classList.add('valid');
-    searchProductDiv.style.display = 'none';
-    displayProductDiv.style.display = 'block';
+    div.elements.searchProductBox.style.display = 'none';
+    div.elements.displayProductBox.style.display = 'block';
 
-    if(product.imgName) productImageDiv.style.backgroundImage = 'url(images/'+product.imgName+')';
-    productNameDiv.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
-    productNameDiv.title = productNameDiv.innerText;
-    productShortDescDiv.innerText = product.shortDesc;
-    productShortDescDiv.title = product.shortDesc;
-    productPackageDiv.innerText = product.packageType;
+    if(product.imgName) div.elements.productImage.style.backgroundImage = 'url(images/'+product.imgName+')';
+    div.elements.productName.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
+    div.elements.productName.title = div.elements.productName.innerText;
+    div.elements.productShortDesc.innerText = product.shortDesc;
+    div.elements.productShortDesc.title = product.shortDesc;
+    div.elements.productPackage.innerText = product.packageType;
 
   }
 
   div.clearProduct = function(){
     form.productId.value = null;
-    searchProductDiv.style.display = 'block';
-    displayProductDiv.style.display = 'none';
+    div.elements.searchProductBox.style.display = 'block';
+    div.elements.displayProductBox.style.display = 'none';
   }
 
   async function createSuggestionItem(product){
     let item = document.createElement('div');
     item.className = 'suggestionItem';
     item.style.display = 'block';
-    // item.innerText = product.name;
     let titleDiv = document.createElement('div');
     titleDiv.className = 'suggestionItemTitle';
-    titleDiv.innerText = product.brand+' • '+product.productType+' • '+product.amountValue+' '+product.amountUnit;
+    titleDiv.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
     titleDiv.title = titleDiv.innerText;
     item.appendChild(titleDiv);
     let descDiv = document.createElement('div');
@@ -275,7 +140,6 @@ async function showAddItemDialog(){
     item.appendChild(descDiv);
     item.onclick = function(){
       div.setProduct(product);
-      // productSuggestions.innerText = '';
       hideSuggestions();
     }
     return item;
@@ -283,51 +147,64 @@ async function showAddItemDialog(){
 
   async function loadSuggestions(){
 
-    if(!form.productName.value) return;
+    let products = JSON.parse(await GET('api/product/searchProducts.php?search='+encodeURIComponent(form.productName.value)));
 
-    let products = JSON.parse(await GET('api/product/find.php?search='+encodeURIComponent(form.productName.value)));
-
-    let bounds = form.productName.getBoundingClientRect();
-    suggestions.style.left = bounds.left+'px';
-    suggestions.style.top = (bounds.top+bounds.height)+'px';
-    suggestions.style.width = bounds.width+'px';
+    if(!form.productName.value) {
+      hideSuggestions();
+      return;
+    }
 
     suggestions.innerText = '';
 
     if(!products.length) {
-      let btn = document.createElement('button');
-      btn.className = 'suggestionItem';
-      btn.innerText = '(Žádný produkt nenalezen)';
-      btn.style.color = 'gray';
-      btn.style.display = 'block';
-      suggestions.appendChild(btn);
+      let div = document.createElement('div');
+      div.className = 'suggestionNotFound';
+      div.innerText = '(Žádný produkt nenalezen)';
+      suggestions.appendChild(div);
     }
 
-    for(let product of products){
+    let maxCount = 8;
+
+    for(let i = 0; i<Math.min(products.length, maxCount); i++){
+      let product = products[i];
       let item = await createSuggestionItem(product);
       suggestions.appendChild(item);
+    }
+
+    if(products.length>maxCount){
+      let div = document.createElement('div');
+      div.className = 'suggestionMore';
+      let more = products.length-maxCount;
+      let txt = (more>4) ? 'dalších' : 'další';
+      div.innerText = '(+'+more+' '+txt+')';
+      suggestions.appendChild(div);
     }
 
     showSuggestions();
 
   }
 
-  form.decrementCount.onclick = function(){
-    form.count.value = form.count.value-1;
-    if(form.count.value<1) form.count.value = 1;
-  }
+  function showLoadingSuggestions(){
 
-  form.incrementCount.onclick = function(){
-    form.count.value = +form.count.value+1;
-    if(form.count.value<1) form.count.value = 1;
-  }
+    showSuggestions();
 
-  form.oninput = function(e){
-    e.target.classList.remove('invalid');
-    formError.style.display = 'none';
+    suggestions.innerText = '';
+
+    let bounds = form.productName.getBoundingClientRect();
+    suggestions.style.left = bounds.left+'px';
+    suggestions.style.top = (bounds.top+bounds.height)+'px';
+    suggestions.style.width = bounds.width+'px';
+
+    let div = document.createElement('div');
+    div.className = 'suggestionLoading';
+    div.innerText = 'Načítání...';
+    suggestions.appendChild(div);
+
   }
 
   form.productName.onclick = function(){
+    if(!form.productName.value) return;
+    showLoadingSuggestions();
     loadSuggestions();
   }
 
@@ -339,12 +216,11 @@ async function showAddItemDialog(){
     if(searchTimeout) clearTimeout(searchTimeout);
 
     if(!form.productName.value) {
-      // suggestions.innerText = '';
       hideSuggestions();
       return;
     }
 
-    hideSuggestions();
+    showLoadingSuggestions();
 
     searchTimeout = setTimeout(async function(){
       loadSuggestions();
@@ -353,10 +229,11 @@ async function showAddItemDialog(){
   }
 
   div.onclick = function(){
-    formError.style.display = 'none';
     if(!suggestions.mouseover && !form.productName.mouseover){
       hideSuggestions();
     }
   }
+
+  return div;
 
 }

@@ -1,0 +1,64 @@
+<div class="dialogBox">
+  <div class="formTitle">
+    <span class="formTitleText">Přidat produkt</span>
+    <button dialog-close class="formClose" type="button" layout-id="closeBtn">X</button>
+  </div>
+  <div class="dialogContent">
+    <div class="publicWarn">Přidáváte produkt do sdílené databáze</div>
+    <div layout-id="error" class="popupMsg errorMsg formError"></div>
+    <form layout-error="error" class="form">
+      <div class="brandBox">
+        Výrobce / Značka: <span title="Povinné pole">*</span> <a class="hint" tooltip="Výrobce nebo značka produktu - např. Heinz">(?)</a>
+        <input required maxlength="64" layout-id="brand" layout-display="značka" class="formInput" list="datalist_brands"></input>
+        <datalist id="datalist_brands"></datalist>
+      </div>
+      <div class="productTypeBox">
+        Typ produktu: <span title="Povinné pole">*</span> <a class="hint" tooltip="Typ produktu - např. Fazole">(?)</a>
+        <input required maxlength="64" layout-id="productType" layout-display="typ produktu" class="formInput" list="datalist_type"></input>
+        <datalist id="datalist_type"></datalist>
+      </div>
+      <div class="amountBox">
+        Množství: <a class="hint" tooltip="Hmotnost nebo objem obsahu jednoho balení">(?)</a>
+        <div class="amountInputBox">
+          <input type="int" min="1" max="99999" layout-id="amountValue" layout-display="množství" class="formInput amountValue"></input>
+          <select layout-id="amountUnit" class="formSelect amountUnit">
+            <option value="g">g</option>
+            <option value="ml">ml</option>
+          </select>
+        </div>
+      </div>
+      <div class="shortDescBox">
+        Krátký popis: <span title="Povinné pole">*</span> <a class="hint" tooltip="Název nebo krátký popis (nápis na hlavní straně balení) - např. Heinz Beanz In a rich tomato sauce">(?)</a>
+        <input required maxlength="128" layout-id="shortDesc" layout-display="krátký popis" class="formInput"></input>
+      </div>
+      <div class="productCodeBox">
+        Kód produktu: <span title="Povinné pole">*</span> <a class="hint" tooltip="Číslo, které identifikuje produkt (číslo u čárového kódu, bez mezer)">(?)</a>
+        <input required maxlength="64" layout-id="productCode" layout-display="kód produktu" class="formInput"></input>
+      </div>
+      <div class="imgRow">
+        Obrázek:
+        <div class="imgBox">
+          <div layout-id="imgPreview" class="imgPreview"></div>
+          <button layout-id="imgSelect" type="button" class="imgBtn imgSelect" tooltip="Vybrat obrázek">
+            <img src="res/chooseImage.png"></img>
+          </button>
+          <button layout-id="imgClear" type="button" class="imgBtn imgClear" tooltip="Zrušit výběr">
+            <img src="res/clear.png"></img>
+          </button>
+        </div>
+      </div>
+      <div class="packageTypeBox">
+        Typ balení: <a class="hint" tooltip="Jak je produkt zabalený (např. Plechovka)">(?)</a>
+        <input maxlength="64" layout-id="packageType" layout-display="typ balení" class="formInput" list="datalist_packageTypes"></input>
+        <datalist id="datalist_packageTypes"></datalist>
+      </div>
+      <div class="descriptionBox">
+        Poznámky: <a class="hint" tooltip="Poznámky k produktu (zobrazují se pouze při úpravě produktu)">(?)</a>
+        <textarea maxlength="1024" layout-id="description" layout-display="poznámky" class="formInput description"></textarea>
+      </div>
+      <div class="submitBox">
+        <button type="submit" class="formSubmit">Přidat</button>
+      </div>
+    </form>
+  </div>
+</div>

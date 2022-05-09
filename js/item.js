@@ -1,15 +1,19 @@
 
 async function createItem(item){
 
-  let div = document.createElement('div');
+  // let div = document.createElement('div');
+  let div = await LayoutManager.getRawLayout('layouts/item.html'); // TODO use getLayout() ? use it's IDs and validation?
   div.className = 'itemContainer';
 
   div.item = item;
+  item.container = div;
   div.expanded = false;
 
-  div.classList.add(item.state);
+  // div.classList.add(item.state);
 
-  div.innerHTML = await RequestCache.get('layouts/item.html');
+  // div.innerHTML = await RequestCache.get('layouts/item.html');
+
+  // TODO what to do with these? (layout-id?)
 
   let itemBrief = div.querySelector('.itemBrief');
   let itemBriefName = div.querySelector('.itemBriefName');
@@ -58,8 +62,12 @@ async function createItem(item){
     itemUnuseBtn.style.display = 'none';
   }
 
-  itemEditBtn.onclick = function(e){
-    showEditItemDialog(item);
+  itemEditBtn.onclick = async function(e){
+    showLoading();
+    await checkAuth();
+    // await showEditItemDialog(div.item);
+    await showDialog('editItem', div.item);
+    hideLoading();
   }
 
   itemUseBtn.onclick = function(e){
@@ -76,17 +84,24 @@ async function createItem(item){
     itemUseCountInput.value = 1;
   }
 
-  itemMoveBtn.onclick = function(e){
+  itemMoveBtn.onclick = async function(e){
     if(allBags.length==1) {
       alert('Neexistuje žádná taška, do které by bylo možné položku přesunout!');
       return;
     }
-    showMoveItemDialog(item);
+    showLoading();
+    await checkAuth();
+    // await showMoveItemDialog(item);
+    await showDialog('moveItem', item);
+    hideLoading();
   }
 
   itemDeleteBtn.onclick = async function(e){
+    itemDeleteBtn.blur();
     if(!confirm('Smazat položku '+item.product.shortDesc+'?')) return;
-    await POST('api/bag/deleteItem.php?itemId='+item.id);
+    showLoading();
+    await POST('api/item/deleteItem.php?itemId='+item.id);
+    hideLoading();
     await refresh();
   }
 
@@ -94,6 +109,8 @@ async function createItem(item){
     itemDetailsMenu.style.display = 'block';
     itemUseMenu.style.display = 'none';
   }
+
+  // TODO replace this with counter?
 
   itemUseDecrementBtn.onclick = function(e){
     itemUseCountInput.classList.remove('invalid');
@@ -134,9 +151,6 @@ async function createItem(item){
   }
 
   itemUseCountInput.onkeypress = function(e){
-    // if(isNaN(itemUseCountInput.value)) itemUseCountInput.value = 1;
-    // if(itemUseCountInput.value<1) itemUseCountInput.value = 1;
-    // if(itemUseCountInput.value>item.count) itemUseCountInput.value = item.count;
     if(e.code=='Enter') useItem();
   }
 
@@ -146,15 +160,27 @@ async function createItem(item){
 
   async function useItem(){
 
+    if(div.submitted) return;
+    div.submitted = true;
+
     let count = itemUseCountInput.value;
-    if(isNaN(count) || count<1 || count>item.count) {
+    if(parseInt(count)!=count || count<1 || count>item.count) {
       itemUseCountInput.classList.add('invalid');
+      div.submitted = false;
       return;
     }
+    count = parseInt(count);
 
-    if(item.used) await POST('api/bag/setItemUnused.php?itemId='+item.id, {'unuseCount':count});
-    else await POST('api/bag/setItemUsed.php?itemId='+item.id, {'useCount':count});
+    showLoading();
+    let res;
+    if(item.used) res = JSON.parse(await POST('api/item/setItemUnused.php?itemId='+div.item.id, {'unuseCount':count}));
+    else res = JSON.parse(await POST('api/item/setItemUsed.php?itemId='+div.item.id, {'useCount':count}));
+    expandedItemId = res.id;
+    hideLoading();
+
     await refresh();
+
+    div.submitted = false;
 
   }
 
@@ -164,10 +190,14 @@ async function createItem(item){
   itemDetailsShortDesc.title = item.product.shortDesc;
   itemDetailsPackage.innerText = item.product.packageType;
   if(item.product.imgName) itemDetailsImg.style.backgroundImage = 'url(images/'+item.product.imgName+')';
+  else itemDetailsImg.style.backgroundImage = 'url(res/noImage.png)';
 
   div.expand = function(){
-    if(div.expanded) return;
+    for(let itemDiv of itemDivs){
+      itemDiv.collapse();
+    }
     div.classList.add('expanded');
+    expandedItemId = div.item.id;
     div.expanded = true;
     itemBrief.style.display = 'block';
     itemDetails.style.display = 'block';
@@ -179,6 +209,7 @@ async function createItem(item){
 
   div.collapse = function(){
     if(!div.expanded) return;
+    expandedItemId = null;
     div.classList.remove('expanded');
     div.expanded = false;
     itemDetailsMenu.style.display = 'block';
@@ -206,19 +237,27 @@ async function createItem(item){
   div.getDisplayName = function(){
     let res = '';
     if(config.itemDisplay=='typeFirst'){
-      res = item.product.type+' • '+item.product.brand;
+      res = div.item.product.type+' • '+div.item.product.brand;
     } else {
-      res = item.product.brand+' • '+item.product.type;
+      res = div.item.product.brand+' • '+div.item.product.type;
     }
-    if(item.product.amountValue){
-      res += ' • '+item.product.amountValue+' '+item.product.amountUnit;
+    if(div.item.product.amountValue){
+      res += ' • '+div.item.product.amountValue+' '+div.item.product.amountUnit;
     }
     return res;
   }
 
+  div.setItem = function(item){
+    div.item = item;
+    item.container = div;
+    div.update();
+  }
+
   div.update = function(){
 
-    if(item.count==1){
+    div.className = 'itemContainer '+div.item.state+(div.expanded?' expanded':'');
+
+    if(div.item.count==1){
       itemUseDecrementBtn.classList.add('disabled');
       itemUseIncrementBtn.classList.add('disabled');
       itemUseCountInput.disabled = true;
@@ -234,50 +273,14 @@ async function createItem(item){
     itemDetailsName.innerText = displayName;
     itemDetailsName.title = displayName;
 
-    itemBriefCount.innerText = '× '+item.count;
-    itemDetailsCount.innerText = '× '+item.count;
+    itemBriefCount.innerText = '× '+div.item.count;
+    itemDetailsCount.innerText = '× '+div.item.count;
 
-    // let date = new Date(item.expiration);
-    // let today = new Date(new Date().getTime()-new Date().getTime()%(1000*60*60*24));
-    // if(item.expiration==null) {
-    //   div.displayDate = '';
-    // } else if(date<today){
-    //   div.displayDate = 'Po vypršení';
-    // } else /*if(date.getTime()==today.getTime()){
-    //   div.displayDate = 'Dnes';
-    // } else*/ {
-    //   if(dateDisplayMode=='DMY'){
-    //     div.displayDate = date.getDate().toString().padStart(2, '0')+'. '+(date.getMonth()+1).toString().padStart(2, '0')+'. '+date.getFullYear();
-    //   } else if(dateDisplayMode=='inD'){
-    //     // console.log((date-today)/());
-    //     let numDays = ((date-today)/(1000*60*60*24));
-    //     // if(numDays==0){
-    //     //   div.displayDate = 'Dnes';
-    //     // } else
-    //     if(numDays==1){
-    //       div.displayDate = 'Za 1 den';
-    //     } else if(numDays<5){
-    //       div.displayDate = 'Za '+numDays+' dny';
-    //     } else {
-    //       div.displayDate = 'Za '+numDays+' dnů';
-    //     }
-    //   } else if(dateDisplayMode=='inYMD'){
-    //     // let difDate = new Date(date-today);
-    //     // div.displayDate = 'Za '+(difDate.getUTCFullYear()-1970)+'r '+(difDate.getUTCMonth())+'m '+(difDate.getUTCDate()-1)+'d'
-    //     //     +'-'+date.getFullYear()+'-'+(date.getMonth()+1).toString().padStart(2, '0')+'-'+date.getDate().toString().padStart(2, '0');
-    //     div.displayDate = item.useIn;
-    //   } else {
-    //     div.displayDate = date.getFullYear()+'-'+(date.getMonth()+1).toString().padStart(2, '0')+'-'+date.getDate().toString().padStart(2, '0');
-    //   }
-    // }
-    // itemBriefExp.innerText = div.displayDate;
-    // itemDetailsExp.innerText = div.displayDate;
+    itemBriefExpDate.innerText = div.item.displayDate;
+    itemBriefExpIn.innerText = div.item.useIn??'';
 
-    itemBriefExpDate.innerText = item.displayDate;
-    itemBriefExpIn.innerText = item.useIn??'';
-
-    itemDetailsExpDate.innerText = item.displayDate;
-    itemDetailsExpIn.innerText = item.useIn??'';
+    itemDetailsExpDate.innerText = div.item.displayDate;
+    itemDetailsExpIn.innerText = div.item.useIn??'';
 
   }
 
