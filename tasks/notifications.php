@@ -19,7 +19,7 @@ if(!isSet($_GET['key']) || $_GET['key']!=NOTIFICATION_KEY){
   return;
 }
 
-$db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+$db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 $users = $db->query("select * from User");
 
