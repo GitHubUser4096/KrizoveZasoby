@@ -199,7 +199,7 @@ async function loadBag(id){
 
   if(id!=selectedBagId) expandedItemId = null;
 
-  let allItems = JSON.parse(await GET('api/bag/getItems.php?bagId='+id));
+  let allItems = JSON.parse(await GET('api/item/getItems.php?bagId='+id));
 
   itemDivs = [];
   itemListContainer.innerText = '';

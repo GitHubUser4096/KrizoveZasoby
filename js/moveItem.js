@@ -28,7 +28,7 @@ async function createMoveItemDialog(item){
     let count = moveForm.getValue(div.elements.moveCount);
     let bagId = moveForm.bag.value;
 
-    let items = JSON.parse(await GET('api/bag/getItems.php?bagId='+bagId));
+    let items = JSON.parse(await GET('api/item/getItems.php?bagId='+bagId));
 
     if(items.findIndex(i=>(i.productId==item.productId && i.expiration==item.expiration && i.used==item.used))>=0)
       if(!confirm('Položka již existuje. Spojit položky?')) return;
