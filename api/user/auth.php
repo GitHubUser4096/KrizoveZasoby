@@ -35,10 +35,13 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     exit;
   }
 
+  // TODO make sure user is not disabled (sorry, I know it sounds bad)
+
   // dealing with sensitive data, make sure only necessary info is sent
   $user = [
     'id'=>$users[0]['id'],
-    'email'=>$users[0]['email']
+    'email'=>$users[0]['email'],
+    'userRole'=>$users[0]['userRole']
   ];
 
   $_SESSION['user'] = $user;
@@ -49,11 +52,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 }
 
 if(isSet($_SESSION['user'])){
+  $users = $db->query("select * from User where id=?", $_SESSION['user']['id']);
   // dealing with sensitive data, make sure only necessary info is sent
   $user = [
-    'id'=>$_SESSION['user']['id'],
-    'email'=>$_SESSION['user']['email']
+    'id'=>$users[0]['id'],
+    'email'=>$users[0]['email'],
+    'userRole'=>$users[0]['userRole']
   ];
+  $_SESSION['user'] = $user;
   echo json_encode(['loggedIn'=>true, 'user'=>$user]);
   return;
 }

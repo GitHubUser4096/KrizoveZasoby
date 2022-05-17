@@ -251,6 +251,14 @@ window.onload = function(){
     }
 
     if(auth.loggedIn){
+      if(auth.user.userRole=='disabled'){
+        loginForm.submitted = false;
+        loginMsg.style.background = 'red';
+        loginMsg.style.color = 'white';
+        loginMsg.style.display = 'block';
+        loginMsg.innerText = 'Váš účet byl zablokován administrátorem';
+        return;
+      }
       location.href = 'profile.php';
     } else {
       loginForm.submitted = false;

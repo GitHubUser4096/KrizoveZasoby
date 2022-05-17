@@ -1,10 +1,10 @@
 <div class="dialogBox">
   <div class="formTitle">
-    <span class="formTitleText">Přidat produkt</span>
+    <span layout-id="title" class="formTitleText"></span>
     <button dialog-close class="formClose" type="button" layout-id="closeBtn">X</button>
   </div>
   <div class="dialogContent">
-    <div class="publicWarn">Přidáváte produkt do sdílené databáze</div>
+    <div layout-id="warning" class="publicWarn"></div>
     <div layout-id="error" class="popupMsg errorMsg formError"></div>
     <form layout-error="error" class="form">
       <div class="brandBox">
@@ -57,7 +57,7 @@
         <textarea maxlength="1024" layout-id="description" layout-display="poznámky" class="formInput description"></textarea>
       </div>
       <div class="submitBox">
-        <button type="submit" class="formSubmit">Přidat</button>
+        <button type="submit" class="formSubmit">Uložit</button>
       </div>
     </form>
   </div>

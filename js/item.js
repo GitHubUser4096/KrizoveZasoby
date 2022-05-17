@@ -2,12 +2,16 @@
 async function createItem(item){
 
   // let div = document.createElement('div');
-  let div = await LayoutManager.getRawLayout('layouts/item.html'); // TODO use getLayout() ? use it's IDs and validation?
+  let div = await LayoutManager.getLayout('layouts/item.html');
   div.className = 'itemContainer';
 
   div.item = item;
   item.container = div;
   div.expanded = false;
+
+  if(checkRole('contributor')){
+    div.classList.add('productEditable');
+  }
 
   // div.classList.add(item.state);
 
@@ -26,6 +30,7 @@ async function createItem(item){
   let itemDetails = div.querySelector('.itemDetails');
   let itemDetailsImg = div.querySelector('.itemDetailsImg');
   let itemDetailsName = div.querySelector('.itemDetailsName');
+  let itemDetailsEditProduct = div.querySelector('.itemDetailsEditProduct');
   let itemDetailsShortDesc = div.querySelector('.itemDetailsShortDesc');
   let itemDetailsPackage = div.querySelector('.itemDetailsPackage');
   let itemDetailsCount = div.querySelector('.itemDetailsCount');
@@ -47,6 +52,14 @@ async function createItem(item){
   let itemUseCountInput = div.querySelector('.itemUseCountInput');
   let itemUseIncrementBtn = div.querySelector('.itemUseIncrementBtn');
   let itemUseAcceptBtn = div.querySelector('.itemUseAcceptBtn');
+
+  itemDetailsEditProduct.onclick = async function(e){
+    e.stopPropagation();
+    showLoading();
+    if(!await checkAuth()) return;
+    await showDialog('addProduct', null, div.item.product);
+    hideLoading();
+  }
 
   itemDetailsMenu.onclick = function(e){
     e.stopPropagation();
@@ -189,6 +202,7 @@ async function createItem(item){
   itemDetailsShortDesc.innerText = item.product.shortDesc;
   itemDetailsShortDesc.title = item.product.shortDesc;
   itemDetailsPackage.innerText = item.product.packageType;
+  itemDetailsPackage.title = item.product.packageType;
   if(item.product.imgName) itemDetailsImg.style.backgroundImage = 'url(images/'+item.product.imgName+')';
   else itemDetailsImg.style.backgroundImage = 'url(res/noImage.png)';
 
@@ -256,6 +270,10 @@ async function createItem(item){
   div.update = function(){
 
     div.className = 'itemContainer '+div.item.state+(div.expanded?' expanded':'');
+
+    if(checkRole('contributor')){
+      div.classList.add('productEditable');
+    }
 
     if(div.item.count==1){
       itemUseDecrementBtn.classList.add('disabled');

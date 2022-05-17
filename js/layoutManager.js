@@ -63,6 +63,7 @@ let LayoutManager = new (function(){
         }
         element.getValue = function(){
           if(element.getError()) return null;
+          if(!element.hasAttribute('required') && !element.value.trim()) return null;
           if(element.getAttribute('type')=='int') return +element.value;
           return element.value.trim();
         }
@@ -104,6 +105,7 @@ let LayoutManager = new (function(){
           }
         }
     
+        // TODO move this to input.getValue() ?
         element.getValue = function(el){
           if(el.getError())
               throw {

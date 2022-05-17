@@ -1,4 +1,4 @@
-/** Application stuff, not related to profile directly **/
+/** General application stuff, not directly related to any particular page **/
 
 let dialogDefs = {};
 let dialogs = []; // list of all open dialogs
@@ -6,6 +6,26 @@ let tooltip; // currently shown tooltip
 let loading; // loading overlay
 let scripts = []; // included scripts
 let stylesheets = []; // included stylesheets
+/** authentication data **/
+let auth;
+
+/** returns whether currently logged in user's role level is at least the specified one **/
+function checkRole(roleName){
+  let roleNames = ['disabled', 'viewer', 'contributor', 'editor', 'admin'];
+  let requested = roleNames.indexOf(roleName);
+  let actual = roleNames.indexOf(auth.user.userRole);
+  return actual>=requested;
+}
+
+/** connects to the server to check whether the user is authenticated - if not, error is thrown and user is redirected to login screen **/
+async function checkAuth(){
+  auth = JSON.parse(await GET('api/user/auth.php'));
+  if(!auth.loggedIn){
+    location.href = 'index.php?reauth';
+    throw new Error('Not authenticated!');
+  }
+  return true;
+}
 
 function showLoading(){
   if(loading) return;
@@ -125,3 +145,18 @@ function requireCSS(src){
   });
   
 }
+
+window.onfocus = async function(){
+  await checkAuth();
+}
+
+// window.ononline = async function(){
+//   console.log('connection restored - refreshing');
+//   offline = false;
+//   if(focused){
+//     await checkAuth();
+//     await refresh();
+//   } else {
+//     connectionRestored = true;
+//   }
+// }

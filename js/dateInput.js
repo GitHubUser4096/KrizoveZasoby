@@ -8,7 +8,6 @@ async function createDateInput(){
   let month = div.querySelector('.dateMonth');
   let year = div.querySelector('.dateYear');
 
-  // TODO not working correctly in special cases
   day.oninput = function(e){
     div.classList.remove('invalid');
     // if(!checkDay()) day.classList.add('invalid');

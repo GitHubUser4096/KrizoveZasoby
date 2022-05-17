@@ -17,10 +17,7 @@ include 'requests.js';
 echo "\n/* page.js */\n";
 include 'page.js';
 
-echo "\n/* item.js */\n";
-include 'item.js';
-
-echo "\n/* profile.js */\n";
-include 'profile.js';
+echo "\n/* management.js */\n";
+include 'management.js';
 
 ?>

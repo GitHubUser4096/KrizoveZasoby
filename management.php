@@ -18,8 +18,8 @@ if(!isSet($_SESSION['user'])){
     <title>Krizové zásoby</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="res/icon.png">
-    <link rel="stylesheet" href="css/profile.css.php">
-    <script src="js/profile.js.php" charset="utf-8"></script>
+    <link rel="stylesheet" href="css/management.css.php">
+    <script src="js/management.js.php" charset="utf-8"></script>
     <script>
       console.log('loading head done', performance.now()-loadHeadStart, 'ms');
     </script>
@@ -35,36 +35,34 @@ if(!isSet($_SESSION['user'])){
         <button class="menuBtn" id="menuBtn"><img src="res/menu.png"></img></button>
       </span>
     </div>
-    <div id="statusBar" class="statusbar"></div>
-    <div id="initScreen" class="initScreen">
-      <div class="initTitle">Vítejte v krizových zásobách!</div>
-      <div class="initSubtitle">Začněte přidáním tašky.</div>
-      <form class="initForm" id="initForm">
-        <div class="initFormRow">
-          <div class="initFormLabel">Název:</div>
-          <input name="bagName" maxlength="64" class="initFormInput" placeholder="např. Taška 1"></input>
-        </div>
-        <div class="initFormRow">
-          <div class="initFormLabel">Popis:</div>
-          <textarea name="bagDesc" maxlength="1024" class="initFormTextarea"></textarea>
-        </div>
-        <button type="submit" class="initFormSubmit">Přidat</button>
-      </form>
-    </div>
+    <div id="statusBar" class="statusbar"><button id="statusBarBackBtn" class="statusBarBackBtn">&lt;</button>Správa webu</div>
     <div id="main" class="main">
-      <div class="bags">
-        <div class="bagsTitle">Tašky:</div>
-        <div id="div_bagList" class="bagList"></div>
+      <div class="actions">
+        <div class="actionsTitle">Možnosti:</div>
+        <div id="div_actionList" class="actionList">
+          <!-- <button class="actionBtn">Návrhy změn</button>
+          <button class="actionBtn">Produkty</button>
+          <button class="actionBtn">Uživatelé</button> -->
+        </div>
         <!-- <div class="newBagBtnDiv" id="newBagDiv">
           <input class="newBagInput" id="newBagInput" placeholder="Zadejte název"></input>
           <button class="newBagBtn" id="newBagBtn">+</button>
         </div> -->
-        <div class="bottomBtnBox addBag">
+        <!-- <div class="bottomBtnBox addBag">
           <button class="bottomBtn addBagBtn" id="btn_addBag">Přidat tašku</button>
+        </div> -->
+      </div>
+      <div class="currentAction">
+        <div class="items">
+          <div class="listContent" id="itemListContainer">
+            <!-- <div class="hintLabel">Navrhované změny:</div>
+            <div class="itemContainer">
+              Změna 1
+            </div> -->
+          </div>
         </div>
       </div>
-      <!-- <div class="tempNewBag"></div> -->
-      <div class="currentBag">
+      <!-- <div class="currentBag">
         <div class="items">
           <div class="lists">
             <div class="itemsTopBar">
@@ -107,7 +105,7 @@ if(!isSet($_SESSION['user'])){
             <button id="donateBtn" class="bottomBtn">Odevzdat</button>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="menu" id="menu">

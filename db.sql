@@ -7,7 +7,8 @@ use EmergencySupplies;
 create table User(
   id int primary key auto_increment,
   email varchar(64) not null unique,
-  password varchar(255) not null
+  password varchar(255) not null,
+  userRole enum('disabled', 'viewer', 'contributor', 'editor', 'admin') default ('contributor')
 );
 
 create table Bag(
@@ -46,9 +47,40 @@ create table Product(
   description varchar(1024),
   amountValue int,
   amountUnit enum('g', 'ml') default 'g',
+  createdBy int not null,
   foreign key (brandId) references Brand(id),
   foreign key (typeId) references ProductType(id),
-  foreign key (packageTypeId) references PackageType(id)
+  foreign key (packageTypeId) references PackageType(id),
+  foreign key (createdBy) references User(id)
+);
+
+create table ProductEditSuggestion(
+  id int primary key auto_increment,
+  productId int not null,
+  brandId int,
+  changedBrandId boolean not null default 0,
+  typeId int,
+  changedTypeId boolean not null default 0,
+  shortDesc varchar(128),
+  changedShortDesc boolean not null default 0,
+  code varchar(64),
+  changedCode boolean not null default 0,
+  imgName varchar(64),
+  changedImgName boolean not null default 0,
+  packageTypeId int,
+  changedPackageTypeId boolean not null default 0,
+  description varchar(1024),
+  changedDescription boolean not null default 0,
+  amountValue int,
+  changedAmountValue boolean not null default 0,
+  amountUnit enum('g', 'ml') default 'g',
+  changedAmountUnit boolean not null default 0,
+  editedBy int not null,
+  foreign key (productId) references Product(id),
+  foreign key (brandId) references Brand(id),
+  foreign key (typeId) references ProductType(id),
+  foreign key (packageTypeId) references PackageType(id),
+  foreign key (editedBy) references User(id)
 );
 
 create table Item(
@@ -93,6 +125,41 @@ create table ResetPasswordRequests(
   code varchar(32) not null,
   expires datetime not null,
   foreign key (userId) references User(id)
+);
+
+--- Update to 0.5 ---
+alter table Product add column createdBy int not null;
+update Product set createdBy=1;
+alter table Product add foreign key (createdBy) references User(id);
+alter table User add column userRole enum('disabled', 'viewer', 'contributor', 'editor', 'admin') default ('contributor');
+
+create table ProductEditSuggestion(
+  id int primary key auto_increment,
+  productId int not null,
+  brandId int,
+  changedBrandId boolean not null default 0,
+  typeId int,
+  changedTypeId boolean not null default 0,
+  shortDesc varchar(128),
+  changedShortDesc boolean not null default 0,
+  code varchar(64),
+  changedCode boolean not null default 0,
+  imgName varchar(64),
+  changedImgName boolean not null default 0,
+  packageTypeId int,
+  changedPackageTypeId boolean not null default 0,
+  description varchar(1024),
+  changedDescription boolean not null default 0,
+  amountValue int,
+  changedAmountValue boolean not null default 0,
+  amountUnit enum('g', 'ml') default 'g',
+  changedAmountUnit boolean not null default 0,
+  editedBy int not null,
+  foreign key (productId) references Product(id),
+  foreign key (brandId) references Brand(id),
+  foreign key (typeId) references ProductType(id),
+  foreign key (packageTypeId) references PackageType(id),
+  foreign key (editedBy) references User(id)
 );
 
 --- Tables - OLD DATABASE ---

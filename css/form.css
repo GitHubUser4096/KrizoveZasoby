@@ -173,6 +173,10 @@
   background: var(--foreground-highlight);
 }
 
+.squareBtn[disabled] {
+  background: none;
+}
+
 .squareBtn img {
   width: 100%;
 }

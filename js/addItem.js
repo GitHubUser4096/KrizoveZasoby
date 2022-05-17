@@ -1,6 +1,8 @@
 
 async function createAddItemDialog(){
 
+  let selectedProduct = null;
+
   let div = await LayoutManager.getLayout('layouts/addItem.html');
   div.className = 'addItemDialog';
 
@@ -29,7 +31,14 @@ async function createAddItemDialog(){
   }
 
   div.onInit = function(){
+
     div.elements.searchProduct.focus();
+
+    if(!checkRole('contributor')){
+      form.addProduct.disabled = true;
+      form.editProduct.disabled = true;
+    }
+
   }
 
   let form = div.querySelector('.addItemForm'); // TODO replace by layout-id
@@ -62,6 +71,13 @@ async function createAddItemDialog(){
 
   form.clearProduct.onclick = async function(){
     div.clearProduct();
+  }
+
+  form.editProduct.onclick = async function(){
+    showLoading();
+    if(!await checkAuth()) return;
+    await showDialog('addProduct', div, selectedProduct);
+    hideLoading();
   }
 
   form.submitForm = async function(){
@@ -104,12 +120,14 @@ async function createAddItemDialog(){
   let searchTimeout;
 
   div.setProduct = function(product){
+    selectedProduct = product;
     form.productId.value = product.id;
     form.productName.classList.remove('invalid');
     div.elements.searchProductBox.style.display = 'none';
     div.elements.displayProductBox.style.display = 'block';
 
     if(product.imgName) div.elements.productImage.style.backgroundImage = 'url(images/'+product.imgName+')';
+    else div.elements.productImage.style.backgroundImage = 'url(res/noImage.png)';
     div.elements.productName.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
     div.elements.productName.title = div.elements.productName.innerText;
     div.elements.productShortDesc.innerText = product.shortDesc;
@@ -119,6 +137,7 @@ async function createAddItemDialog(){
   }
 
   div.clearProduct = function(){
+    selectedProduct = null;
     form.productId.value = null;
     div.elements.searchProductBox.style.display = 'block';
     div.elements.displayProductBox.style.display = 'none';

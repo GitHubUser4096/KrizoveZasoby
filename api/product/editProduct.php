@@ -13,6 +13,15 @@ checkAuth();
 checkPost();
 checkRole('contributor');
 
+$productId = getParam('productId');
+
+$oldProduct = $db->query("select * from Product where id=?", $productId)[0];
+
+// check that user either owns the product or is an editor
+if($_SESSION['user']['id']!=$oldProduct['createdBy'] && !getRole('editor')){
+  fail('403 Forbidden', 'User not qualified to edit this product');
+}
+
 $code = validate(['name'=>'code', 'required'=>true, 'maxLength'=>64]);
 $brand = validate(['name'=>'brand', 'required'=>true, 'maxLength'=>64]);
 $type = validate(['name'=>'type', 'required'=>true, 'maxLength'=>64]);
@@ -21,14 +30,6 @@ $amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1]); // TO
 $packageType = validate(['name'=>'packageType', 'maxLength'=>128]);
 $amountUnit = validate(['name'=>'amountUnit', 'required'=>true, 'enum'=>['g', 'ml']]);
 $description = validate(['name'=>'description', 'maxLength'=>1024]);
-
-$products = $db->query("select * from Product where code=?", $code);
-
-if(count($products)>0){
-  header('HTTP/1.1 400 Bad request');
-  echo 'Produkt již existuje.';
-  exit;
-}
 
 $brands = $db->query("select * from Brand where name=?", $brand);
 if(count($brands)==0){
@@ -57,10 +58,10 @@ if($packageType){
 
 $imgName = (isSet($_POST['imgName']) && $_POST['imgName']) ? $_POST['imgName'] : null;
 
-$prodId = $db->insert("insert into Product(brandId, typeId, shortDesc, code, imgName, packageTypeId, description, amountValue, amountUnit, createdBy) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $_SESSION['user']['id']);
+$db->execute("update Product set brandId=?, typeId=?, shortDesc=?, code=?, imgName=?, packageTypeId=?, description=?, amountValue=?, amountUnit=? where id=?",
+    $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $productId);
 
-$product = getProductById($prodId, $db);
+$product = getProductById($productId, $db);
 
 echo json_encode($product);
 

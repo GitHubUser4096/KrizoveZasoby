@@ -8,13 +8,10 @@ include 'general.css';
 echo "\n/* form.css */\n";
 include 'form.css';
 
-echo "\n/* item.css */\n";
-include 'item.css';
-
 echo "\n/* page.css */\n";
 include 'page.css';
 
-echo "\n/* profile.css */\n";
-include 'profile.css';
+echo "\n/* management.css */\n";
+include 'management.css';
 
 ?>

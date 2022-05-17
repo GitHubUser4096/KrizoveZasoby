@@ -6,8 +6,6 @@ let expandedItemId = null;
 let movedItemId = null;
 /** info about the currently selected bag **/
 let selectedBag;
-/** authentication data **/
-let auth;
 /** list of all bags **/
 let allBags = [];
 /** list of bag buttons **/
@@ -28,16 +26,6 @@ let config;
 
 // TODO what is this?
 // let addedBag = false;
-
-/** connects to the server to check whether the user is authenticated - if not, error is thrown and user is redirected to login screen **/
-async function checkAuth(){
-  auth = JSON.parse(await GET('api/user/auth.php'));
-  if(!auth.loggedIn){
-    location.href = 'index.php?reauth';
-    throw new Error('Not authenticated!');
-  }
-  return true;
-}
 
 /** adds a button to the list of bags **/
 function addBagButton(id, name, state){
@@ -91,7 +79,7 @@ async function loadBags(){
   if(bag && bags.find(b=>b.id==bag)){
     selectedBagId = +bag;
   } else {
-    selectedBagId = bags[bags.length-1].id; // TODO last or first bag?
+    selectedBagId = bags[bags.length-1].id; // TODO last or first bag? - make it previous loaded bag (save to DB)
   }
 
   hideLoading();
@@ -202,7 +190,7 @@ async function loadBag(id){
   let allItems = JSON.parse(await GET('api/item/getItems.php?bagId='+id));
 
   itemDivs = [];
-  itemListContainer.innerText = '';
+  // itemListContainer.innerText = ''; // TODO unnecessary? (done in refreshItems)
 
   let numUnused = 0;
   let expandedItem;
@@ -229,7 +217,9 @@ async function loadBag(id){
 
   // scroll expanded item to view AFTER all items are loaded
   if(expandedItem){
-    expandedItem.scrollIntoViewIfNeeded();
+    // expandedItem.scrollIntoViewIfNeeded(); // scrollIntoViewIfNeeded is not supported on some platforms
+    // TODO check if in view manually and then call scrollIntoView()
+    expandedItem.scrollIntoViewIfNeeded ? expandedItem.scrollIntoViewIfNeeded() : expandedItem.scrollIntoView();
   }
 
   console.log('loaded', performance.now()-start);
@@ -329,15 +319,6 @@ async function addBag(name, description){
 
 }
 
-window.onfocus = async function(){
-  await checkAuth();
-}
-
-window.ononline = function(){
-  console.log('connection restored - refreshing');
-  refresh();
-}
-
 window.onload = async function(){
 
   await checkAuth();
@@ -386,9 +367,7 @@ window.onload = async function(){
   // let currentBagDiv = document.querySelector('.currentBag');
   // let tempNewBagDiv = document.querySelector('.tempNewBag');
 
-  userNameField.innerText = auth.user.email;
-
-  
+  initMenu('profile');
 
   // name and sort change listeners - update the state online and locally
   // (don't wait for online update - to improve performance, out of sync state does not matter too much here)
@@ -427,6 +406,8 @@ window.onload = async function(){
     hideLoading();
     // await refresh(); // refresh to hide the init screen - TODO init screen should be hidden here directly (?) - bag has to be loaded anyway
   }
+
+  // TODO is the new adding bag good? can this be deleted? \/
 
   // new bag replaced by a regular dialog - keep it that way? (code below should be deleted if we agree on the new design)
 
@@ -523,62 +504,10 @@ window.onload = async function(){
     showLoading();
     await checkAuth();
     // dialog_addItem.style.display = 'block';
-    // TODO make this more generic, don't require stuff here
     // await requireJS('js/addItem.js');
     // await requireCSS('css/addItem.css');
     // await showAddItemDialog();
     await showDialog('addItem');
-    hideLoading();
-  }
-
-  // menu
-
-  menu.onmouseover = menuBtn.onmouseover = function(){
-    menu.selected = true;
-  }
-
-  menu.onmouseout = menuBtn.onmouseout = function(){
-    menu.selected = false;
-  }
-
-  function showMenu(){
-    menu.style.display = menu.style.display=='block' ? 'none' : 'block';
-    // menu.style.display = 'block';
-  }
-
-  menuBtn.onclick = function(){
-    // menuDialog.style.display = 'block';
-    // showUserMenu(auth.user.email);
-    showMenu();
-  }
-
-  document.addEventListener('click', function(){
-    if(!menu.selected){
-      menu.style.display = 'none';
-    }
-  });
-
-  logoutBtn.onclick = async function(){
-    menu.style.display = 'none';
-    showLoading();
-    await POST('api/user/logout.php');
-    location.href = 'index.php';
-    hideLoading();
-  }
-
-  donatedBagsBtn.onclick = async function(){
-    menu.style.display = 'none';
-    showLoading();
-    // await showDonatedBagsDialog();
-    await showDialog('donatedBags');
-    hideLoading();
-  }
-
-  settingsBtn.onclick = async function(){
-    menu.style.display = 'none';
-    showLoading();
-    // await showSettingsDialog();
-    await showDialog('settings');
     hideLoading();
   }
 
@@ -649,7 +578,7 @@ window.onload = async function(){
     //   return;
     // }
     
-    if(selectedBagId) { // <--- why?
+    if(selectedBagId) { // <--- TODO why?
       showLoading();
       try{
         await POST('api/bag/updateInfo.php?bagId='+selectedBagId, {'name':name,'description':bagInfoForm.bagNotes.value});

@@ -50,7 +50,17 @@ $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
 $userId = $db->insert("insert into User(email, password) values (?, ?)", $_POST['email'], $passwordHash);
 
-$_SESSION['user'] = ['id'=>$userId, 'email'=>$_POST['email']];
+// TODO globalize this
+$users = $db->query("select * from User where id=?", $userId);
+
+// dealing with sensitive data, make sure only necessary info is sent
+$user = [
+  'id'=>$users[0]['id'],
+  'email'=>$users[0]['email'],
+  'userRole'=>$users[0]['userRole']
+];
+
+$_SESSION['user'] = $user;
 
 echo json_encode(['success'=>true]);
 

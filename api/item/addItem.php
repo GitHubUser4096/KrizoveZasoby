@@ -42,6 +42,8 @@ if(count($products)==0){
   exit;
 }
 
+// TODO should expiration in the past be checked here? (not too important since it can be edited to a past date afterwards)
+
 if(!$expiration) $items = $db->query("select * from Item where bagId=? and productId=? and expiration is null and used=0", $bagId, $productId);
 else $items = $db->query("select * from Item where bagId=? and productId=? and expiration=? and used=0", $bagId, $productId, $expiration);
 

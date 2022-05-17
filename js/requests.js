@@ -13,14 +13,15 @@ function GET(request){
 			if(this.readyState==4){
 				if(this.status==0){
 					hideLoading();
-					alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
-					reject('Connection failed');
+					// alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
+					reject({status:0, message:'Connection failed'});
 				}
-				if(this.status==401 || this.status==403){ // TODO is this safe? can there be a case when 401 or 403 does NOT mean reauth? (change status to 401 reauth?)
+				// TODO 401 should mean not authorized (reauth), 403 should mean forbidden (this should check only 401, not sure if implemented correctly everywhere on backend)
+				if(this.status==401 || this.status==403){
 					location.href = 'index.php?reauth';
-					reject('Auth failed');
+					reject({status:this.status, message:'Auth failed'});
 				}
-				if(this.status>=200 && this.status<300) {
+				if(this.status>=200 && this.status<300) { // TODO status codes below 200 and 300-399 are not handled, this promise might get stuck
 					if(XHR_DEBUG) console.log('GET:', request, this.responseText);
 					resolve(this.responseText);
 				} else if(this.status>=400) {
@@ -43,10 +44,10 @@ function POST(request, data){
 			if(this.readyState==4){
 				if(this.status==0){
 					hideLoading();
-					alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
+					// alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
 					reject('Connection failed');
 				}
-				if(this.status==401 || this.status==403){
+				if(this.status==401 || this.status==403){ // TODO above
 					location.href = 'index.php?reauth';
 					reject('Auth failed');
 				}
@@ -90,6 +91,7 @@ async function POST_FILE(request, file){
 		let xhr = new XMLHttpRequest();
 		xhr.onreadystatechange = function(){
 			if(this.readyState==4){
+				// TODO check for offline and auth
 				if(this.status>=200 && this.status<300){
 					if(XHR_DEBUG==XHR_DEBUG_NO_POST) console.log('POST:', request, this.responseText);
 					else if(XHR_DEBUG==XHR_DEBUG_ALL) console.log('POST:', request, data, this.responseText);

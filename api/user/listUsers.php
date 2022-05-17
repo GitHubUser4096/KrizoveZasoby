@@ -4,24 +4,24 @@ session_start();
 
 require_once '../../lib/php/db.php';
 require_once '../../config/supplies.conf.php';
-require_once '../internal/product.php';
 require_once '../internal/common.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 checkAuth();
+checkRole('admin');
 
-$products = listProducts($db);
+$users = $db->query("select * from User");
 $res = [];
 
-foreach($products as $product){
+foreach($users as $user){
 
-  $user = $db->query("select * from User where id=?", $product['createdBy'])[0];
-  $product['createdBy'] = [
+  // make sure password hash is not leaked
+  $res[] = [
     'id'=>$user['id'],
     'email'=>$user['email'],
+    'userRole'=>$user['userRole'],
   ];
-  $res[] = $product;
 
 }
 

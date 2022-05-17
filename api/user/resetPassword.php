@@ -79,9 +79,11 @@ $db->execute("delete from ResetPasswordRequests where id=?", $request['id']);
 
 // log the user in
 
+// TODO globalize this
 $user = [
   'id'=>$users[0]['id'],
-  'email'=>$users[0]['email']
+  'email'=>$users[0]['email'],
+  'userRole'=>$users[0]['userRole']
 ];
 
 $_SESSION['user'] = $user;

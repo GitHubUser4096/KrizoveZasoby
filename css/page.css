@@ -1,0 +1,132 @@
+
+:root {
+  --titlebar-height: 50px;
+  --statusbar-height: 40px;
+  --expired-color: red;
+  --critical-color: #F70;
+  --warn-color: #FF0;
+  --recommended-color: #CF0;
+  --background: #9ad3cd;
+  --item-background: #b4e6e8;
+}
+
+body {
+  overflow: hidden;
+  font-family: sans-serif;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+
+.background {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+}
+
+.titlebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: var(--titlebar-height);
+}
+
+.userMenu {
+  float: right;
+}
+
+.userNameField {
+  float: left;
+  height: 50px;
+  line-height: 50px;
+  font-size: 24px;
+  margin-right: 10px;
+}
+
+.menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 50px;
+  width: 250px;
+  box-shadow: 0 0 5px black;
+}
+
+.menuItemBtn {
+  width: 100%;
+  height: 40px;
+  font-size: 20px;
+  border: none;
+  background: var(--foreground);
+}
+
+.menuItemBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.menuBtn {
+  border: none;
+  padding: 0;
+  background: none;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
+
+.menuBtn img {
+  width: 100%;
+}
+
+/* TODO rename to topbar? (not statusbar in management) */
+.statusbar {
+  position: absolute;
+  left: 0;
+  top: var(--titlebar-height);
+  width: 100%;
+  height: calc(var(--statusbar-height) - 10px);
+  padding: 5px;
+  font-size: 24px;
+  background: #ace0e2;
+}
+
+.statusbar.hidden {
+  display: none;
+}
+
+.main {
+  position: absolute;
+  left: 0;
+  top: calc(var(--titlebar-height) + var(--statusbar-height));
+  width: 100%;
+  bottom: 0;
+}
+
+.loading {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .1);
+  z-index: 999;
+}
+
+.loading img {
+  vertical-align: top;
+}
+
+.loadingBox {
+  background: white;
+  text-align: center;
+  position: absolute;
+  left: calc(50% - 100px);
+  top: calc(50% - 15px);
+  width: 200px;
+  height: 30px;
+  font-size: 24px;
+}
