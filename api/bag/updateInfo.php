@@ -30,7 +30,7 @@ $bags = $db->query("select * from Bag where userId=? and name=? and id!=?", $_SE
 
 if(count($bags)>0){
   header('HTTP/1.1 400 Bad request');
-  echo 'Bag with this name already exists';
+  echo 'Taška se stejným názvem již existuje!';
   exit;
 }
 

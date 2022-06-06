@@ -1,5 +1,7 @@
 <?php
 
+// TODO possibly do database init and user init ($user = ...) here?
+
 function fail($status, $msg){
   header('HTTP/1.1 '.$status);
   echo $msg;
@@ -108,6 +110,14 @@ function validate($input){
 
   return $value;
 
+}
+
+// TODO belongs to utils.php
+function has($array, $filter){
+  foreach($array as $e){
+    if($filter($e)) return true;
+  }
+  return false;
 }
 
 ?>

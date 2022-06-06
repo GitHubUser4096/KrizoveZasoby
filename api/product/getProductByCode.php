@@ -11,11 +11,13 @@ $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 checkAuth();
 
-if(!isSet($_GET['code'])){
-  fail('400 Bad request', 'Missing parameter code');
-}
+// if(!isSet($_GET['code'])){
+//   fail('400 Bad request', 'Missing parameter code');
+// }
 
-$code = $_GET['code'];
+// $code = $_GET['code'];
+
+$code = getParam('code');
 
 echo json_encode(getProductByCode($code, $db));
 

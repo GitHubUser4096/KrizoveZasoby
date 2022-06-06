@@ -29,6 +29,8 @@ let LayoutManager = new (function(){
 
     if(replacement){
 
+      replacement.base = base;
+
       if(element.hasAttribute('layout-id')){
         base.elements[element.getAttribute('layout-id')] = replacement;
       }
@@ -38,6 +40,8 @@ let LayoutManager = new (function(){
       }
 
     } else {
+
+      element.base = base;
 
       if(element.hasAttribute('tooltip')){
         element.onmousemove = function(e){
@@ -125,7 +129,7 @@ let LayoutManager = new (function(){
           try {
             await element.submitForm();
           } catch(e){
-            if(element.onSubmitFail) element.onSubmitFail();
+            if(element.onSubmitFail) element.onSubmitFail(e);
             element.showError(e.message, e.element);
             console.error(e);
           }

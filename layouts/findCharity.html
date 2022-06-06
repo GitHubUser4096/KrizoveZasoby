@@ -1,0 +1,19 @@
+<div class="dialogBox">
+  <div class="formTitle">
+    <span class="formTitleText">Najít charitu</span>
+    <button dialog-close class="formClose" type="button" name="close">X</button>
+  </div>
+  <div class="leftPane">
+    <div class="listTopBar">
+      <div class="searchBar">
+        <input layout-id="searchInput" placeholder="Název nebo místo..."></input>
+        <button class="searchBtn" layout-id="searchBtn" title="Hledat"><img draggable="false" src="res/search.png"></button>
+        <button class="locateBtn" layout-id="locateBtn" title="Hledat podle mojí polohy"><img draggable="false" src="res/locate.png"></button>
+      </div>
+    </div>
+    <div class="charityList" layout-id="charityList"></div>
+  </div>
+  <div class="rightPane">
+    <div id="map"></div>
+  </div>
+</div>

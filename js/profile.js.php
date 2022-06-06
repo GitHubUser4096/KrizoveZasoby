@@ -5,6 +5,9 @@ header("Content-Type: text/javascript");
 echo "\n/* lib/js/utils.js */\n";
 include '../lib/js/utils.js';
 
+echo "\n/* lib/js/jscoord-1.1.1.js */\n";
+include '../lib/js/jscoord-1.1.1.js';
+
 echo "\n/* application.js */\n";
 include 'application.js';
 

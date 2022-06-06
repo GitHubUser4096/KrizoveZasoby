@@ -391,3 +391,89 @@
 .productItem .optionBtn:hover {
   background: var(--foreground-highlight);
 }
+
+.charityRequestItem .options {
+  padding: 10px;
+}
+
+.charityRequestItem .optionBtn {
+  border: none;
+  background: var(--foreground);
+  font-size: 20px;
+  box-shadow: 0 0 5px black;
+  padding: 5px;
+  margin: 5px;
+}
+
+.charityRequestItem .optionBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.charityRequestItem .discardBtn {
+  background: red;
+  color: white;
+}
+
+.charityRequestItem .discardBtn:hover {
+  background: #F55;
+}
+
+.charityRequestItem .acceptBtn {
+  background: #0F0;
+  color: black;
+}
+
+.charityRequestItem .acceptBtn:hover {
+  background: #9F9;
+}
+
+.charityRequestItem .charity {
+  padding: 10px;
+}
+
+.charityRequestItem .charityName {
+  font-weight: bold;
+}
+
+.charityRequestItem .charityContacts {
+  margin-left: 10px;
+}
+
+.charityRequestItem .charityPlaces {
+  margin-left: 10px;
+}
+
+
+
+.activeCharityItem .options {
+  padding: 10px;
+}
+
+.activeCharityItem .optionBtn {
+  border: none;
+  background: var(--foreground);
+  font-size: 20px;
+  box-shadow: 0 0 5px black;
+  padding: 5px;
+  margin: 5px;
+}
+
+.activeCharityItem .optionBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.activeCharityItem .charity {
+  padding: 10px;
+}
+
+.activeCharityItem .charityName {
+  font-weight: bold;
+}
+
+.activeCharityItem .charityContacts {
+  margin-left: 10px;
+}
+
+.activeCharityItem .charityPlaces {
+  margin-left: 10px;
+}

@@ -24,14 +24,13 @@ verifyBag($bagId, $db);
 
 $items = $db->query("select * from Item where bagId=? and not used", $bagId);
 
-// TODO should this check be on backend?
 if(count($items)>0){
   header('HTTP/1.1 400 Bad request');
-  echo 'Bag is not empty!';
+  echo 'Taška není prázdná!';
   exit;
 }
 
-$db->execute("delete from Item where bagId=?", $bagId); // TODO unnecessary with check above?
+// $db->execute("delete from Item where bagId=?", $bagId);
 $db->execute("delete from Bag where id=?", $bagId);
 
 ?>

@@ -32,8 +32,8 @@ if(isSet($_GET['logout'])){
 
     <div id="sidebar" class="side sidebar">
       <div class="sidebarButtons">
-        <button class="sideBtn signupBtn" id="signupBtn">Registrovat</button>
         <button class="sideBtn loginBtn" id="loginBtn">Moje Zásoby</button>
+        <button class="sideBtn signupBtn" id="signupBtn">Registrovat</button>
       </div>
     </div>
 

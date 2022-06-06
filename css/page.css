@@ -63,10 +63,26 @@ body {
   font-size: 20px;
   border: none;
   background: var(--foreground);
+  text-align: left;
+  vertical-align: top;
+  padding: 0 10px 0 10px;
 }
 
 .menuItemBtn:hover {
   background: var(--foreground-highlight);
+}
+
+.menuItemBtn img {
+  height: 30px;
+  padding-top: 5px;
+  float: right;
+}
+
+.menuItemBtn span {
+  display: inline-block;
+  vertical-align: top;
+  line-height: 40px;
+  height: 40px;
 }
 
 .menuBtn {

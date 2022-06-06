@@ -1,0 +1,39 @@
+
+.donateBagDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.donateBagDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 250px);
+  top: calc(50% - 115px);
+  width: 500px;
+  height: 230px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.donateBagDialog .row {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.donateBagDialog .optionBtn {
+  background: var(--foreground);
+  border: none;
+  width: 100%;
+  height: 60px;
+  font-size: 22px;
+  box-shadow: 0 0 5px black;
+}
+
+.donateBagDialog .optionBtn:hover {
+  background: var(--foreground-highlight);
+}

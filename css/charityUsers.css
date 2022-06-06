@@ -1,0 +1,81 @@
+
+.charityUsersDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.charityUsersDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 250px);
+  top: calc(50% - 250px);
+  width: 500px;
+  height: 500px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.charityUsersDialog .formSubmit {
+  margin: 20px;
+  bottom: 0;
+  width: calc(100% - 40px);
+  position: absolute;
+}
+
+.charityUsersDialog .userList {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 139px);
+  overflow-y: auto;
+}
+
+.charityUsersDialog .userItem .username {
+  display: inline-block;
+  font-size: 22px;
+  width: 360px;
+  padding: 5px;
+}
+
+.charityUsersDialog .userItem .removeBtn {
+  display: inline-block;
+  font-size: 22px;
+  right: 0;
+  border: none;
+  background: red;
+  color: white;
+}
+
+.charityUsersDialog .userItem .removeBtn:hover {
+  background: #F55;
+}
+
+.charityUsersDialog .addUserBtn {
+  width: calc(100% - 20px);
+  margin: 10px;
+  font-size: 22px;
+  border: none;
+  background: var(--foreground);
+  box-shadow: 0 0 5px black;
+  padding: 5px;
+  padding-bottom: 9px;
+}
+
+.charityUsersDialog .addUserBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.charityUsersDialog .newUserInput {
+  width: calc(100% - 20px);
+  margin: 10px;
+  font-size: 22px;
+  box-sizing: border-box;
+  outline: none;
+  border: none;
+  background: none;
+  box-shadow: 0 0 5px black;
+  border-bottom: 4px solid var(--foreground);
+  padding: 5px;
+}

@@ -113,6 +113,37 @@ create table ResetPasswordRequests(
   foreign key (userId) references User(id)
 );
 
+create table Charity(
+  id int primary key auto_increment,
+  orgId varchar(32) not null unique,
+  name varchar(128) not null unique,
+  contacts varchar(256) not null,
+  isApproved boolean not null default 0
+);
+
+create table CharityPlace(
+  id int primary key auto_increment,
+  charityId int not null,
+  street varchar(64) not null,
+  place varchar(64) not null,
+  postCode varchar(32) not null,
+  note varchar(256),
+  openHours varchar(256),
+  contacts varchar(256),
+  latitude decimal(9, 6),
+  longitude decimal(9, 6),
+  foreign key (charityId) references Charity(id)
+);
+
+create table CharityUser(
+  id int primary key auto_increment,
+  charityId int not null,
+  userId int not null,
+  isManager boolean not null default 0,
+  foreign key (charityId) references Charity(id),
+  foreign key (userId) references User(id)
+);
+
 --- Update to V0.4 ---
 alter table Bag drop column handedOut;
 alter table Bag drop column handedOutDate;
@@ -160,6 +191,38 @@ create table ProductEditSuggestion(
   foreign key (typeId) references ProductType(id),
   foreign key (packageTypeId) references PackageType(id),
   foreign key (editedBy) references User(id)
+);
+
+--- Update to 0.6 ---
+create table Charity(
+  id int primary key auto_increment,
+  orgId varchar(32) not null unique,
+  name varchar(128) not null unique,
+  contacts varchar(256) not null,
+  isApproved boolean not null default 0
+);
+
+create table CharityPlace(
+  id int primary key auto_increment,
+  charityId int not null,
+  street varchar(64) not null,
+  place varchar(64) not null,
+  postCode varchar(32) not null,
+  note varchar(256),
+  openHours varchar(256),
+  contacts varchar(256),
+  latitude decimal(9, 6),
+  longitude decimal(9, 6),
+  foreign key (charityId) references Charity(id)
+);
+
+create table CharityUser(
+  id int primary key auto_increment,
+  charityId int not null,
+  userId int not null,
+  isManager boolean not null default 0,
+  foreign key (charityId) references Charity(id),
+  foreign key (userId) references User(id)
 );
 
 --- Tables - OLD DATABASE ---

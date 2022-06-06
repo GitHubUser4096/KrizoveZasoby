@@ -146,6 +146,7 @@ async function loadEditSuggestions(){
     }
 
     div.elements.suspendUserBtn.onclick = async function(){
+      // TODO make sure user cannot suspend themselves!
       div.elements.suspendUserBtn.blur();
       showLoading();
       try {
@@ -337,10 +338,179 @@ async function loadUsers(){
 
 }
 
+async function loadCharityRequests(){
+
+  showLoading();
+
+  let divs = [];
+  let charities = JSON.parse(await GET('api/charity/getCharityRequests.php'));
+
+  for(let charity of charities){
+
+    let div = await LayoutManager.getLayout('layouts/charityRequest.html');
+    div.className = 'itemContainer charityRequestItem';
+
+    div.elements.name.innerText = charity.name;
+    div.elements.orgId.innerText = charity.orgId;
+    div.elements.contacts.innerText = charity.contacts;
+    div.elements.user.innerText = charity.user.email;
+    
+    for(let place of charity.places) {
+      let placeDiv = document.createElement('div');
+      placeDiv.innerText = place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'\n'+
+          place.openHours+'\n'+
+          (place.contacts??'');
+      div.elements.places.appendChild(placeDiv);
+      div.elements.places.appendChild(document.createElement('hr'));
+    }
+
+    div.elements.acceptBtn.onclick = async function(){
+      div.elements.acceptBtn.blur();
+      showLoading();
+      try {
+        await POST('api/charity/acceptCharityRequest.php?charityId='+charity.id);
+      } catch(e){
+        console.error(e);
+        alert('Akci nelze provést - neočekávaná chyba');
+      }
+      await loadCharityRequests();
+      hideLoading();
+    }
+
+    div.elements.discardBtn.onclick = async function(){
+      div.elements.discardBtn.blur();
+      showLoading();
+      try {
+        await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
+      } catch(e){
+        console.error(e);
+        alert('Akci nelze provést - neočekávaná chyba');
+      }
+      await loadCharityRequests();
+      hideLoading();
+    }
+
+    div.elements.suspendUserBtn.onclick = async function(){
+      // TODO make sure user cannot suspend themselves!
+      div.elements.suspendUserBtn.blur();
+      showLoading();
+      try {
+        await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
+        await POST('api/user/suspendUser.php?userId='+charity.user.id);
+      } catch(e){
+        console.error(e);
+        alert('Akci nelze provést - neočekávaná chyba');
+      }
+      await loadCharityRequests();
+      hideLoading();
+    }
+
+    divs.push(div);
+
+  }
+
+  itemListContainer.innerText = '';
+
+  for(let div of divs){
+    itemListContainer.appendChild(div);
+  }
+
+  hideLoading();
+
+}
+
+async function loadCharities() {
+
+  showLoading();
+
+  let divs = [];
+  let charities = JSON.parse(await GET('api/charity/getActiveCharities.php'));
+
+  for(let charity of charities){
+
+    let div = await LayoutManager.getLayout('layouts/activeCharity.html');
+    div.className = 'itemContainer activeCharityItem';
+
+    div.elements.name.innerText = charity.name;
+    div.elements.orgId.innerText = charity.orgId;
+    div.elements.contacts.innerText = charity.contacts;
+    div.elements.user.innerText = charity.user.email;
+    
+    for(let place of charity.places) {
+      let placeDiv = document.createElement('div');
+      placeDiv.innerText = place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'\n'+
+          place.openHours+'\n'+
+          (place.contacts??'');
+      div.elements.places.appendChild(placeDiv);
+      div.elements.places.appendChild(document.createElement('hr'));
+    }
+
+    div.elements.editBtn.onclick = async function(){
+      showLoading();
+      await showDialog('registerCharity', charity);
+      hideLoading();
+    }
+
+    // div.elements.acceptBtn.onclick = async function(){
+    //   div.elements.acceptBtn.blur();
+    //   showLoading();
+    //   try {
+    //     await POST('api/charity/acceptCharityRequest.php?charityId='+charity.id);
+    //   } catch(e){
+    //     console.error(e);
+    //     alert('Akci nelze provést - neočekávaná chyba');
+    //   }
+    //   await loadCharityRequests();
+    //   hideLoading();
+    // }
+
+    // div.elements.discardBtn.onclick = async function(){
+    //   div.elements.discardBtn.blur();
+    //   showLoading();
+    //   try {
+    //     await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
+    //   } catch(e){
+    //     console.error(e);
+    //     alert('Akci nelze provést - neočekávaná chyba');
+    //   }
+    //   await loadCharityRequests();
+    //   hideLoading();
+    // }
+
+    // div.elements.suspendUserBtn.onclick = async function(){
+    //   // TODO make sure user cannot suspend themselves!
+    //   div.elements.suspendUserBtn.blur();
+    //   showLoading();
+    //   try {
+    //     await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
+    //     await POST('api/user/suspendUser.php?userId='+charity.user.id);
+    //   } catch(e){
+    //     console.error(e);
+    //     alert('Akci nelze provést - neočekávaná chyba');
+    //   }
+    //   await loadCharityRequests();
+    //   hideLoading();
+    // }
+
+    divs.push(div);
+
+  }
+
+  itemListContainer.innerText = '';
+
+  for(let div of divs){
+    itemListContainer.appendChild(div);
+  }
+
+  hideLoading();
+
+}
+
 function addActionBtn(text, onSelect){
   let btn = document.createElement('button');
   btn.className = 'actionBtn';
   btn.innerText = text;
+  btn.title = text;
   btn.onSelect = async function(){
     for(let b of actionBtns){
       if(b==btn){
@@ -378,6 +548,10 @@ window.onload = async function(){
   registerDialog('settings', async function(){
     return await createSettingsDialog();
   }, 'js/settings.js', 'css/settings.css');
+
+  registerDialog('registerCharity', async function(args){
+    return await createRegisterCharityDialog(...args);
+  }, 'js/registerCharity.js', 'css/registerCharity.css');
   
   initMenu('management');
 
@@ -385,14 +559,26 @@ window.onload = async function(){
     history.back();
   }
 
-  addActionBtn('Návrhy změn', loadEditSuggestions);
-  addActionBtn('Produkty', loadProducts);
+  if(checkRole('editor')){
+    addActionBtn('Návrhy změn produktů', loadEditSuggestions);
+    addActionBtn('Všechny produkty', loadProducts);
+  }
+
+  if(checkRole('admin')){
+    addActionBtn('Registrace charit', loadCharityRequests);
+  }
+
+  let charities = JSON.parse(await GET('api/charity/getActiveCharities.php'));
+
+  if(checkRole('admin') || charities.length>0){
+    addActionBtn('Správa charit', loadCharities);
+  }
 
   if(checkRole('admin')){
     addActionBtn('Uživatelé', loadUsers);
   }
 
-  actionBtns[0].onSelect();
+  if(actionBtns.length>0) actionBtns[0].onSelect();
 
   // await loadEditSuggestions();
 

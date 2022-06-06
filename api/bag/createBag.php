@@ -11,7 +11,7 @@ $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 /**
 Create Bag
 Method: POST
-Post: name*
+Post: name*, description
 Returns: id (json)
 **/
 

@@ -1,0 +1,204 @@
+
+.registerCharityDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.registerCharityDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 350px);
+  top: calc(50% - 300px);
+  width: 700px;
+  height: 600px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.registerCharityDialog .formContent {
+  position: absolute;
+  width: 100%;
+  overflow-y: auto;
+  height: calc(100% - 46px);
+}
+
+.registerCharityDialog .formSubmit {
+  margin: 20px;
+  /* bottom: 0; */
+  width: calc(100% - 40px);
+  /* position: absolute; */
+}
+
+.registerCharityDialog .errorMsg {
+  position: absolute;
+  z-index: 10;
+}
+
+.registerCharityDialog .row {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.registerCharityDialog .rowLabel {
+  font-size: 22px;
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.registerCharityDialog .rowContent {
+  display: block;
+}
+
+.registerCharityDialog .input {
+  width: 100%;
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: 0 0 5px black;
+  border-bottom: solid 4px var(--foreground);
+  font-size: 20px;
+  padding: 5px;
+}
+
+.registerCharityDialog .contactsInput {
+  resize: none;
+  height: 86px;
+}
+
+.registerCharityDialog .input.multiline {
+  resize: none;
+  height: 86px;
+}
+
+/* .registerCharityDialog .openHours {
+  resize: none;
+  height: 83px;
+  font-family: Arial;
+} */
+
+/* .registerCharityDialog .contactsDiv {
+  position: relative;
+}
+
+.registerCharityDialog .contactTypeSelect {
+  border: none;
+  background: none;
+  font-size: 22px;
+  outline: none;
+  width: 200px;
+}
+
+.registerCharityDialog .contactInput {
+  display: inline-block;
+  margin-left: 10px;
+  width: calc(100% - 270px);
+}
+
+.registerCharityDialog .removeContactBtn {
+  position: absolute;
+  right: 0;
+  margin-top: 5px;
+}
+
+.registerCharityDialog .addContactBtn {
+  width: 100%;
+  margin: 10px 0 10px 0;
+  font-size: 22px;
+  border: none;
+  background: none;
+}
+
+.registerCharityDialog .addPlaceBtn {
+  width: 100%;
+  margin: 10px 0 10px 0;
+  font-size: 22px;
+  border: none;
+  background: none;
+} */
+
+.registerCharityDialog .placesDiv {
+  /* background: white;
+  height: 200px; */
+  position: relative;
+  height: 730px;
+  box-shadow: 0 0 5px black;
+}
+
+.registerCharityDialog .placeTabs {
+  position: absolute;
+  width: 30%;
+  height: 100%;
+  box-shadow: 0 0 5px black;
+}
+
+.registerCharityDialog .placeTabBtn {
+  display: block;
+  width: calc(100% - 20px);
+  font-size: 22px;
+  margin: 10px;
+  border: none;
+  box-shadow: 0 0 5px black;
+  background: none;
+}
+
+.registerCharityDialog .placeTabBtn.selected {
+  background: var(--foreground);
+  font-weight: bold;
+}
+
+.registerCharityDialog .placeTabBtn.selected::after {
+  content: ' >';
+}
+
+.registerCharityDialog .placeTabBtn:hover {
+  background: var(--item-background);
+}
+
+.registerCharityDialog .placeTabBtn.selected:hover {
+  background: var(--foreground-highlight);
+}
+
+.registerCharityDialog .addPlaceBtn {
+  display: block;
+  width: calc(100% - 20px);
+  font-size: 22px;
+  margin: 10px;
+  border: none;
+  box-shadow: 0 0 5px black;
+  background: var(--foreground);
+}
+
+.registerCharityDialog .addPlaceBtn:hover {
+  background: var(--foreground-highlight);
+}
+
+.registerCharityDialog .placeContent {
+  position: absolute;
+  right: 0;
+  width: 70%;
+  height: 100%;
+}
+
+.registerCharityDialog .placeName {
+  font-size: 22px;
+}
+
+.registerCharityDialog .removePlaceBtn {
+  position: absolute;
+  right: 0;
+}
+
+.registerCharityDialog .placeRow {
+  padding: 10px;
+}
+
+.registerCharityDialog .placeRowLabel {
+  font-size: 22px;
+}

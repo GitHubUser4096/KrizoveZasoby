@@ -359,6 +359,18 @@ window.onload = async function(){
     return await createSettingsDialog();
   }, 'js/settings.js', 'css/settings.css');
 
+  registerDialog('registerCharity', async function(){
+    return await createRegisterCharityDialog();
+  }, 'js/registerCharity.js', 'css/registerCharity.css');
+
+  registerDialog('findCharity', async function(){
+    return await createFindCharityDialog();
+  }, 'js/findCharity.js', 'css/findCharity.css');
+
+  registerDialog('donateBag', async function(){
+    return await createDonateBagDialog();
+  }, 'js/donateBag.js', 'css/donateBag.css');
+
   // TODO get rid of these (this pattern is not really followed anyway)
   // let btn_addItem = document.querySelector('#btn_addItem');
   // let div_bagInfoTitle = document.querySelector('#div_bagInfoTitle');
@@ -524,10 +536,13 @@ window.onload = async function(){
       alert('Taška je prázdná!');
       return;
     }
-    if(!confirm('Označit tašku '+selectedBag.name+' jako odevzdanou?\n(Odevzdané tašky můžete zobrazit/obnovit v menu -> odevzdané tašky)')) return;
+    // if(!confirm('Označit tašku '+selectedBag.name+' jako odevzdanou?\n(Odevzdané tašky můžete zobrazit/obnovit v menu -> odevzdané tašky)')) return;
+    // showLoading();
+    // await POST('api/bag/donateBag.php?bagId='+selectedBag.id);
+    // refresh();
     showLoading();
-    await POST('api/bag/donateBag.php?bagId='+selectedBag.id);
-    refresh();
+    await showDialog('donateBag');
+    hideLoading();
   }
 
   // TODO can this be written more nicely?

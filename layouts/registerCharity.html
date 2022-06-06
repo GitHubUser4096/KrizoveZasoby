@@ -1,0 +1,36 @@
+<div class="dialogBox">
+  <form layout-id="form" layout-error="error" class="addBagForm">
+    <div class="formTitle">
+      <span class="formTitleText">Registrovat charitu</span>
+      <button dialog-close class="formClose" type="button" name="close">X</button>
+    </div>
+    <div layout-id="error" class="popupMsg errorMsg formError"></div>
+    <div class="formContent">
+      <div class="row">
+        <span class="rowLabel">Název: <span title="Povinné pole">*</span></span>
+        <span class="rowContent"><input class="input" required maxlength="128" layout-id="name" layout-display="název"></input></span>
+      </div>
+      <div class="row">
+        <span class="rowLabel">Identifikační číslo: <span title="Povinné pole">*</span></span>
+        <span class="rowContent"><input class="input" required maxlength="32" layout-id="orgId" layout-display="identifikační číslo"></input></span>
+      </div>
+      <div class="row">
+        <span class="rowLabel">Kontakty: <span title="Povinné pole">*</span></span>
+        <span class="rowContent"><textarea class="input contactsInput" required maxlength="256" layout-id="contacts" layout-display="kontakty"></textarea></span>
+      </div>
+      <div class="row">
+        <div class="rowLabel">Místa: <span title="Povinné pole">*</span> <span tooltip="Místa pro odevzdávání tašek">(?)</span></div>
+        <div class="placesDiv">
+          <div class="placeTabs">
+            <div layout-id="placeTabs"></div>
+            <div><button class="addPlaceBtn" type="button" layout-id="addPlaceBtn">+</button></div>
+          </div>
+          <div class="placeContent" layout-id="placeContent"></div>
+        </div>
+      </div>
+      <div>
+        <button class="formSubmit" type="submit">Registrovat</button>
+      </div>
+    </div>
+  </form>
+</div>

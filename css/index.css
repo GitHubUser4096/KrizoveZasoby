@@ -78,7 +78,7 @@ body {
 }
 
 .signupBtn {
-  height: 120px;
+  height: 100px;
   background: var(--foreground);
   color: var(--foreground-text);
 }
@@ -88,12 +88,15 @@ body {
 }
 
 .loginBtn {
-  height: 60px;
-  background: #555;
+  height: 100px;
+  background: var(--foreground);
+  color: var(--foreground-text);
+  /* background: #555; */
 }
 
 .loginBtn:hover {
-  background: #666;
+  background: var(--foreground-highlight);
+  /* background: #666; */
 }
 
 .loginForm {

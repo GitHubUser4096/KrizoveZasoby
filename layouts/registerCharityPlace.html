@@ -1,0 +1,30 @@
+<div>
+  <span class="placeName" layout-id="placeName">Místo</span><button class="squareBtn removePlaceBtn" type="button" layout-id="removeBtn">X</button>
+</div>
+<div class="placeRow">
+  <div class="placeRowLabel">Adresa:</div>
+  <div class="placeRow">
+    <span class="placeRowLabel">Ulice: <span title="Povinné pole">*</span> <span tooltip="Název ulice a číslo popisné">(?)</span></span>
+    <span class=""><input class="input" required maxlength="64" layout-id="street" layout-display="ulice"></input></span>
+  </div>
+  <div class="placeRow">
+    <span class="placeRowLabel">Místo: <span title="Povinné pole">*</span> <span tooltip="Název sídelního útvaru (město, obec, vesnice, ...)">(?)</span></span>
+    <span class=""><input class="input" required maxlength="64" layout-id="place" layout-display="místo"></input></span>
+  </div>
+  <div class="placeRow">
+    <span class="placeRowLabel">PSČ: <span title="Povinné pole">*</span></span>
+    <span class=""><input class="input" required maxlength="32" layout-id="postCode" layout-display="PSČ"></input></span>
+  </div>
+  <div class="placeRow">
+    <span class="placeRowLabel">Poznámka: <span tooltip="Podrobnější popis místa">(?)</span></span>
+    <span class=""><textarea class="input multiline" maxlength="256" layout-id="note" layout-display="poznámka"></textarea></span>
+  </div>
+</div>
+<div class="placeRow">
+  <span class="placeRowLabel">Otevírací doba: <span title="Povinné pole">*</span></span>
+  <span class=""><textarea class="input multiline" required maxlength="256" layout-id="openHours" layout-display="otevírací doba"></textarea></span>
+</div>
+<div class="placeRow">
+  <span class="placeRowLabel">Kontakty: <span tooltip="Kontakty na toto místo - pokud nevyplníte, budou použity kontakty na charitu.">(?)</span></span>
+  <span class=""><textarea class="input multiline" maxlength="256" layout-id="contacts" layout-display="kontakty"></textarea></span>
+</div>

@@ -78,7 +78,7 @@ function getItemsFromBag($bagId, $db){
   $warnTime = strtotime($config['warnTime'])-time();
   $recommendedTime = strtotime($config['recommendedTime'])-time();
 
-  $items = $db->query("select * from Item where bagId=? order by expiration", $bagId);
+  $items = $db->query("select * from Item where bagId=? order by used, expiration", $bagId);
 
   for($i = 0; $i<count($items); $i++){
 

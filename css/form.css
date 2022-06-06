@@ -180,3 +180,18 @@
 .squareBtn img {
   width: 100%;
 }
+
+.formBtn {
+  background: var(--foreground);
+  color: var(--foreground-text);
+  border: none;
+  outline: none;
+  box-shadow: 0 0 8px black;
+  font-size: 22px;
+  margin: 10px;
+  padding: 10px;
+}
+
+.formBtn:hover {
+  background: var(--foreground-highlight);
+}

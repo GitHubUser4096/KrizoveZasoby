@@ -1,0 +1,146 @@
+
+.findCharityDialog {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, .2);
+}
+
+.findCharityDialog .dialogBox {
+  position: absolute;
+  left: calc(50% - 500px);
+  top: calc(50% - 300px);
+  width: 1000px;
+  height: 600px;
+  box-shadow: 0 0 5px black;
+  background: #9ad3cd;
+}
+
+.findCharityDialog .leftPane {
+  position: absolute;
+  width: 50%;
+  height: calc(100% - 46px);
+  top: 46px;
+}
+
+.findCharityDialog .listTopBar {
+  position: absolute;
+  width: 100%;
+  height: 50px;
+}
+
+.findCharityDialog .charityList {
+  position: absolute;
+  width: 100%;
+  height: calc(100% - 50px);
+  bottom: 0;
+  overflow-y: scroll;
+  scroll-behavior: smooth;
+}
+
+.findCharityDialog .rightPane {
+  position: absolute;
+  width: 50%;
+  right: 0;
+  height: calc(100% - 46px);
+  top: 46px;
+}
+
+.findCharityDialog .charityItem {
+  margin: 10px;
+  box-shadow: 0 0 5px black;
+}
+
+.findCharityDialog .charityName {
+  margin: 10px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.findCharityDialog .charityProp {
+  margin: 10px;
+  font-size: 20px;
+}
+
+.findCharityDialog .charityPropValue {
+  margin: 10px;
+  font-size: 18px;
+}
+
+#map {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+/* TODO globalize this? */
+.findCharityDialog button img {
+  width: 100%;
+  height: 100%;
+}
+
+.findCharityDialog .searchBar {
+  position: relative;
+  margin: 10px;
+  margin-right: 25px;
+  height: 40px;
+  box-shadow: 0 0 5px black;
+}
+
+.findCharityDialog .searchBar input {
+  position: absolute;
+  width: calc(100% - 80px);
+  vertical-align: top;
+  height: 40px;
+  padding: 8px;
+  border: none;
+  box-sizing: border-box;
+  background: none;
+  outline: none;
+  font-size: 18px;
+}
+
+.findCharityDialog .searchBar button {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  padding: 5px;
+  border: none;
+  float: right;
+  background: none;
+}
+
+.findCharityDialog .searchBar button:hover img {
+  filter: opacity(.5);
+}
+
+.findCharityDialog .searchBar button:active img {
+  filter: opacity(.7);
+}
+
+.findCharityDialog .searchBtn {
+  right: 40px;
+}
+
+.findCharityDialog .locateBtn {
+  right: 0;
+}
+
+.showOnMapBtn {
+  vertical-align: bottom;
+  padding: 0;
+  border: none;
+  width: 30px;
+  height: 30px;
+  background: none;
+}
+
+.showOnMapBtn:hover img {
+  filter: opacity(.5);
+}
+
+.showOnMapBtn:active img {
+  filter: opacity(.7);
+}

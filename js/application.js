@@ -82,8 +82,8 @@ async function showDialog(name, ...args){
   if(dialogs[name]) return;
 
   let dialogDef = dialogDefs[name];
-  await requireJS(dialogDef.script);
-  await requireCSS(dialogDef.stylesheet);
+  if(dialogDef.script) await requireJS(dialogDef.script);
+  if(dialogDef.stylesheet) await requireCSS(dialogDef.stylesheet);
   let dialog = await dialogDef.create(args);
   document.body.appendChild(dialog);
   dialogs[name] = dialog;
@@ -100,7 +100,13 @@ async function showDialog(name, ...args){
     }
   }
 
-  if(dialog.onInit) dialog.onInit();
+  // if(dialog.onInit) dialog.onInit(); // TODO make this async?
+  if(dialog.onInit){
+    showLoading();
+    if(dialog.onInit.constructor.name=='AsyncFunction') await dialog.onInit();
+    else dialog.onInit();
+    hideLoading();
+  }
 
 }
 
