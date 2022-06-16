@@ -8,6 +8,12 @@ require_once '../internal/common.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
+/*
+ * Returns info about a specified charity
+ * Method: GET
+ * Returns: charity info (json)
+ */
+
 checkAuth();
 
 $charityId = getParam('charityId');

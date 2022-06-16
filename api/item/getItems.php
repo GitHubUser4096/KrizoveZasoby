@@ -14,10 +14,10 @@ require_once '../internal/product.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-List items in a bag
-Method: GET
-Get: bagId*
-Returns: list of items (json)
+* List items in a bag
+* Method: GET
+* Get: bagId*
+* Returns: list of items (json)
 **/
 
 checkAuth();

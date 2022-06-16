@@ -11,10 +11,10 @@ require_once '../internal/item.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Move Item to a different bag
-Method: POST
-Get: itemId*
-Post: bagId*, moveCount*
+* Move Item to a different bag
+* Method: POST
+* Get: itemId*
+* Post: bagId*, moveCount*
 **/
 
 checkAuth();

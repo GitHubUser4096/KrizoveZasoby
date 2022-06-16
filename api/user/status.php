@@ -11,9 +11,9 @@ require_once '../internal/common.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Shows the users profile status
-Method: GET
-Returns: status, message (json)
+* Shows the users profile status
+* Method: GET
+* Returns: status, message (json)
 **/
 
 checkAuth();

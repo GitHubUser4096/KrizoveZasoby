@@ -62,19 +62,19 @@ if(strtotime('now')>$expires){
   exit;
 }
 
-// check new password
+// check new (TODO globalize)
 if(strlen(trim($_POST['password']))<=4){
   header('HTTP/1.1 400 Bad request');
   echo 'Nové heslo musí být delší než 4 znaky.';
   exit;
 }
 
-// update password
+// update password (TODO globalize)
 $passwordHash = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
 $db->execute("update User set password=? where id=?", $passwordHash, $request['userId']);
 
-// delete DB entry
+// delete request DB entry
 $db->execute("delete from ResetPasswordRequests where id=?", $request['id']);
 
 // log the user in

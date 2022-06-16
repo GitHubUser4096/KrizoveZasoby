@@ -1,9 +1,5 @@
 <?php
 
-/**
-This file changes one or more specific user configuration values (itemDisplay or sort)
-**/
-
 session_start();
 
 require_once '../../lib/php/db.php';
@@ -12,6 +8,10 @@ require_once '../internal/getConfig.php';
 require_once '../internal/common.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
+
+/**
+* Changes one or more specific user configuration values (itemDisplay or sort)
+**/
 
 checkAuth();
 checkPost();

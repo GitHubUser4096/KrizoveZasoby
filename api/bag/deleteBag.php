@@ -10,10 +10,10 @@ require_once '../internal/bag.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Delete Bag
-Method: POST
-Get: bagId*
-**/
+* Delete Bag
+* Method: POST
+* Get: bagId*
+*/
 
 checkAuth();
 checkPost();
@@ -30,7 +30,6 @@ if(count($items)>0){
   exit;
 }
 
-// $db->execute("delete from Item where bagId=?", $bagId);
 $db->execute("delete from Bag where id=?", $bagId);
 
 ?>

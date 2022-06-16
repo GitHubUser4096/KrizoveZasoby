@@ -125,8 +125,9 @@ async function loadEditSuggestions(){
       try {
         await POST('api/product/acceptEditSuggestion.php?editId='+edit.id);
       } catch(e){
-        console.error(e);
-        alert('Akci nelze provést - neočekávaná chyba');
+        // console.error(e);
+        // alert('Akci nelze provést - neočekávaná chyba');
+        alert('Akci nelze provést: '+e.message);
       }
       await loadEditSuggestions();
       hideLoading();

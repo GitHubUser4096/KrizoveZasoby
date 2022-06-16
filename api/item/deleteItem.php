@@ -10,9 +10,9 @@ require_once '../internal/item.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Delete Item
-Method: POST
-Get: itemId
+* Delete Item
+* Method: POST
+* Get: itemId
 **/
 
 checkAuth();

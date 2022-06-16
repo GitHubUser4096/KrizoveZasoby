@@ -40,7 +40,7 @@ $userId = $users[0]['id'];
 // generate code
 
 // brute forcing 1 code per 1ms - worst case should take 102304247919 years (secure enough) - TODO are my calculations right?
-// TODO is this generation predictable in some way?
+// TODO is this generation predictable in some way? (should not be)
 $code = random_bytes(9); // start with 9 random bytes (aligns to 12 base64 characters) ('cryptographically secure' according to php manual)
 // $code = hash('md5', $code); // hash it to make it a hex string of fixed length
 // $code = substr($code, 0, 9); // get only 9 characters from it (9 aligns nicely for base64, output is 12 chars which should be a reasonable length)
@@ -54,7 +54,7 @@ $code = str_replace('+', 'B', $code);
 
 $expires = strtotime('+1 day');
 
-// TODO DO NOT USE THIS! (except for debug), THIS PAGE **MUST NOT** RETURN THE CODE!
+// TODO DO NOT USE THIS! (except for debug), THIS PAGE **MUST NEVER** REVEAL THE CODE!
 // echo json_encode(['code'=>$code, 'expires'=>date('Y-m-d H:i:s', $expires)]);
 // return;
 
@@ -76,7 +76,7 @@ $str .= '<div>Kód vyprší: '.date('Y-m-d H:i:s', $expires).'</div>';
 
 // TODO this is a possible vulnerability - sending an e-mail is slow
 // anyone can easily find whether the mail was sent (and an account exists) based on response delay
-// TODO figure out a background task solution that works both on localhost and hosting
+// TODO figure out a platform-independent background task solution (working both on localhost and hosting)
 
 try {
 

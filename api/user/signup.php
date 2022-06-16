@@ -30,6 +30,12 @@ if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
   exit;
 }
 
+if(strlen($_POST['email'])>64){
+  header('HTTP/1.1 400 Bad request');
+  echo 'E-mail je příliš dlouhý!';
+  exit;
+}
+
 $users = $db->query("select * from User where email=?", $_POST['email']);
 
 if(count($users)>0){
@@ -62,6 +68,11 @@ $user = [
 
 $_SESSION['user'] = $user;
 
-echo json_encode(['success'=>true]);
+echo json_encode([
+  'success'=>true,
+  'id'=>$users[0]['id'],
+  'email'=>$users[0]['email'],
+  'userRole'=>$users[0]['userRole']
+]);
 
 ?>

@@ -23,11 +23,17 @@ if($_SESSION['user']['id']!=$oldProduct['createdBy'] && !getRole('editor')){
 }
 
 $code = validate(['name'=>'code', 'required'=>true, 'maxLength'=>64]);
+
+$products = $db->query("select * from Product where code=?", $code);
+if(count($products)>0 && $products[0]['id']!=$productId){
+  fail('400 Bad request', 'Produkt se stejným kódem již existuje!');
+}
+
 $brand = validate(['name'=>'brand', 'required'=>true, 'maxLength'=>64]);
 $type = validate(['name'=>'type', 'required'=>true, 'maxLength'=>64]);
 $shortDesc = validate(['name'=>'shortDesc', 'required'=>true, 'maxLength'=>128]);
-$amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1]); // TODO max
-$packageType = validate(['name'=>'packageType', 'maxLength'=>128]);
+$amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1, 'max'=>99999]);
+$packageType = validate(['name'=>'packageType', 'maxLength'=>64]);
 $amountUnit = validate(['name'=>'amountUnit', 'required'=>true, 'enum'=>['g', 'ml']]);
 $description = validate(['name'=>'description', 'maxLength'=>1024]);
 
@@ -57,6 +63,9 @@ if($packageType){
 }
 
 $imgName = (isSet($_POST['imgName']) && $_POST['imgName']) ? $_POST['imgName'] : null;
+if($imgName && strlen($imgName)>64){
+  fail('400 Bad request', 'imgName too long');
+}
 
 $db->execute("update Product set brandId=?, typeId=?, shortDesc=?, code=?, imgName=?, packageTypeId=?, description=?, amountValue=?, amountUnit=? where id=?",
     $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $productId);

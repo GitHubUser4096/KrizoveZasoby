@@ -11,6 +11,8 @@ $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 checkAuth();
 
+// TODO anyone logged in can see all products - IS THIS OK?
+
 $products = listProducts($db);
 $res = [];
 

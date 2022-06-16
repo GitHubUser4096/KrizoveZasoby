@@ -12,10 +12,10 @@ require_once '../internal/bag.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Get Bag Info
-Method: GET
-Get: bagId*
-Returns: useRecommended, useBefore, id, name, description (json)
+* Get Bag Info
+* Method: GET
+* Get: bagId*
+* Returns: useRecommended, useBefore, id, name, description (json)
 **/
 
 checkAuth();

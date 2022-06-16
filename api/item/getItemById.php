@@ -14,10 +14,10 @@ require_once '../internal/product.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Returns item by id as json
-Method: GET
-Get: itemId*
-Returns: item (json)
+* Returns item by id as json
+* Method: GET
+* Get: itemId*
+* Returns: item (json)
 **/
 
 checkAuth();

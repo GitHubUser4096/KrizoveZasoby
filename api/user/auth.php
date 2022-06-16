@@ -9,6 +9,7 @@ $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 if($_SERVER['REQUEST_METHOD']==='POST'){
 
+  // TODO use common fail()?
   if(!isSet($_POST['email'])){
     header('HTTP/1.1 400 Bad request');
     echo 'Prosím zadejte e-mail!';
@@ -35,7 +36,11 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     exit;
   }
 
-  // TODO make sure user is not disabled (sorry, I know it sounds bad)
+  if($users[0]['userRole']=='disabled'){
+    header('HTTP/1.1 400 Bad request');
+    echo 'Účet je zablokován!';
+    exit;
+  }
 
   // dealing with sensitive data, make sure only necessary info is sent
   $user = [
@@ -64,10 +69,7 @@ if(isSet($_SESSION['user'])){
   return;
 }
 
-echo json_encode(['loggedIn'=>false]); // TODO should this return loggedIn=false or HTTP error? - keep it this way to avoid reauth request when pressing login
-
-// header('HTTP/1.1 401 Unauthorized');
-// echo 'Not authorized!';
-// exit;
+// return loggedIn=false instead of HTTP error to avoid reauth request on frontend
+echo json_encode(['loggedIn'=>false]);
 
 ?>

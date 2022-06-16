@@ -541,6 +541,7 @@ window.onload = async function(){
     // await POST('api/bag/donateBag.php?bagId='+selectedBag.id);
     // refresh();
     showLoading();
+    await checkAuth();
     await showDialog('donateBag');
     hideLoading();
   }
@@ -558,15 +559,16 @@ window.onload = async function(){
     bagInfoForm.bagName.blur();
 
     showLoading();
-    checkAuth();
+    await checkAuth();
     let name = bagInfoForm.bagName.value.trim();
 
     if(!name) {
       bagInfoForm.bagName.value = selectedBag.name;
+      hideLoading();
       return;
     }
 
-    // TODO keep this for the server?
+    // TODO keep this for the server? - keep it this way to have a correct message?
     let donated = JSON.parse(await GET('api/bag/listDonated.php'));
     hideLoading();
 
@@ -579,6 +581,7 @@ window.onload = async function(){
     if(allBags.findIndex(b=>(b.name.toLowerCase()==name.toLowerCase() && b.id!=selectedBag.id))>=0){
       alert('Taška se stejným názvem již existuje.');
       bagInfoForm.bagName.value = selectedBag.name;
+      hideLoading();
       return;
     }
 
@@ -593,22 +596,27 @@ window.onload = async function(){
     //   return;
     // }
     
-    if(selectedBagId) { // <--- TODO why?
-      showLoading();
-      try{
-        await POST('api/bag/updateInfo.php?bagId='+selectedBagId, {'name':name,'description':bagInfoForm.bagNotes.value});
-      } catch(e){
-        bagInfoForm.bagName.value = selectedBag.name;
-        bagInfoForm.bagNotes.value = selectedBag.description;
-        console.log(e);
-        alert(e.message);
-        hideLoading();
-        return;
-      }
-      hideLoading();
-    }
+    // if(!selectedBagId) {
+    //   bagInfoForm.bagName.value = selectedBag.name;
+    //   bagInfoForm.bagNotes.value = selectedBag.description;
+    //   hideLoading();
+    //   return;
+    // }
 
-    bagButtons.find((b)=>b.bagId==selectedBag.id).innerText = name;
+    showLoading();
+    try{
+      await POST('api/bag/updateInfo.php?bagId='+selectedBagId, {'name':name,'description':bagInfoForm.bagNotes.value});
+    } catch(e){
+      bagInfoForm.bagName.value = selectedBag.name;
+      bagInfoForm.bagNotes.value = selectedBag.description;
+      console.log(e);
+      alert(e.message);
+      hideLoading();
+      return;
+    }
+    hideLoading();
+
+    // bagButtons.find((b)=>b.bagId==selectedBag.id).innerText = name;
 
     await refresh();
     // await loadBags(); // doing this does not reload the bag info, changing it again does not reset it correctly

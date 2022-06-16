@@ -28,7 +28,15 @@ $yesterday = strtotime('yesterday midnight');
 
 foreach($users as $user){
 
+  if(NOTIFICATION_DEBUG) echo '<h2>Oznámení pro uživatele '.$user['email'].'</h2>';
+
   $config = getUserConfig($user['id'], $db);
+
+  if(!$config['sendNotifs']){
+    if(NOTIFICATION_DEBUG) echo 'Oznámení jsou vypnuté<hr>';
+    continue;
+  }
+
   $criticalDiff = strtotime($config['criticalTime'])-time();
   $warnDiff = strtotime($config['warnTime'])-time();
   $recommendedDiff = strtotime($config['recommendedTime'])-time();
@@ -83,8 +91,6 @@ foreach($users as $user){
     }
 
   }
-
-  if(NOTIFICATION_DEBUG) echo '<h2>Oznámení pro uživatele '.$user['email'].'</h2>';
 
   if(count($changedItems)==0){
     if(NOTIFICATION_DEBUG) echo 'Žádné oznámení nebude vygenerováno<hr>';

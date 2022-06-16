@@ -34,7 +34,10 @@
         <div class="popupMsg infoMsg appSettingsInfo"></div>
         <form layout-error="appSettingsError" class="settingsForm">
           <span class="sectionName">Nastavení Webu</span>
-          <span class="subSectionName">Stav položek:</span>
+          <span class="subSectionName">
+            Stav položek:
+            <span class="hint" tooltip="Upozornění na nadcházející vypršení&#10;(dny/týdny před vypršením)">(?)</span>
+          </span>
           <div class="formRow">
             <div class="timeDiffTitle critical">Kritický stav:</div>
             <div class="timeDiffInput criticalInput">
@@ -71,6 +74,17 @@
               <option value="Y-m-d">YYYY-MM-DD</option>
               <option value="d. m. Y">DD. MM. YYYY</option>
             </select>
+          </div>
+          <span class="subSectionName">
+            Oznámení:
+            <span class="hint" tooltip="Informace o změnách stavu položek budou odesílány&#10;na váš e-mail">(?)</span>
+          </span>
+          <div class="formRow">
+            <label class="checkboxLabel">
+              Odesílat oznámení
+              <input name="sendNotifs" class="checkboxSetting" type="checkbox"></input>
+            </label>
+            <!-- <div>Oznámení o stavu položek budou odesílány na váš e-mail</div> -->
           </div>
           <button class="formSubmit" type="submit">Uložit nastavení</button>
         </form>

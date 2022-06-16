@@ -14,10 +14,11 @@ require_once '../internal/product.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Edit Item
-Method: POST
-Get: itemId*
-Post: count*, expiration*
+* Edit Item
+* Method: POST
+* Get: itemId*
+* Post: count*, expiration
+* Returns: edited item (json)
 **/
 
 checkAuth();

@@ -11,7 +11,14 @@ $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 checkAuth();
 
-$products = searchProducts($_GET['search'], $db);
+$search = getParam('search');
+
+if(!strlen($search)){
+  echo json_encode([]);
+  return;
+}
+
+$products = searchProducts($search, $db);
 
 echo json_encode($products);
 

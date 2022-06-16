@@ -199,7 +199,7 @@ async function initMenu(page){
 
     addMenuBtn('Moje tašky', function(){
       location.href = 'profile.php';
-    }, 'res/noImage.png');
+    }, 'res/bag.png');
 
   }
 

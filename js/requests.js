@@ -71,7 +71,7 @@ function POST(request, data){
 
 			let tmpArray = [];
 			for(let key in data){
-				if(data[key]) tmpArray.push(encodeURIComponent(key)+'='+encodeURIComponent(data[key]));
+				if(data[key]!=null) tmpArray.push(encodeURIComponent(key)+'='+encodeURIComponent(data[key]));
 				else tmpArray.push(encodeURIComponent(key)+'=');
 			}
 			dataStr = tmpArray.join('&');

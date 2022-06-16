@@ -8,7 +8,12 @@ require_once '../internal/common.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
-// returns whether the signed-in user is a manager of the specified charity
+/**
+ * Returns whether the signed-in user is a manager of the specified charity
+ * Method: GET
+ * Get: charityId
+ * Returns: isManager (true|false)
+ */
 
 checkAuth();
 

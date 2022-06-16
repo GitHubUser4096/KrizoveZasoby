@@ -9,6 +9,13 @@ require_once '../internal/product.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
+/**
+ * Create a product
+ * Method: POST
+ * Post: code*, brand*, type*, shortDesc*, amountValue, amountUnit*, description, imgName
+ * Returns: created product (json)
+ */
+
 checkAuth();
 checkPost();
 checkRole('contributor');
@@ -17,17 +24,14 @@ $code = validate(['name'=>'code', 'required'=>true, 'maxLength'=>64]);
 $brand = validate(['name'=>'brand', 'required'=>true, 'maxLength'=>64]);
 $type = validate(['name'=>'type', 'required'=>true, 'maxLength'=>64]);
 $shortDesc = validate(['name'=>'shortDesc', 'required'=>true, 'maxLength'=>128]);
-$amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1]); // TODO max
-$packageType = validate(['name'=>'packageType', 'maxLength'=>128]);
+$amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1, 'max'=>99999]);
+$packageType = validate(['name'=>'packageType', 'maxLength'=>64]);
 $amountUnit = validate(['name'=>'amountUnit', 'required'=>true, 'enum'=>['g', 'ml']]);
 $description = validate(['name'=>'description', 'maxLength'=>1024]);
 
 $products = $db->query("select * from Product where code=?", $code);
-
 if(count($products)>0){
-  header('HTTP/1.1 400 Bad request');
-  echo 'Produkt již existuje.';
-  exit;
+  fail('400 Bad request', 'Produkt již existuje.');
 }
 
 $brands = $db->query("select * from Brand where name=?", $brand);
@@ -56,6 +60,10 @@ if($packageType){
 }
 
 $imgName = (isSet($_POST['imgName']) && $_POST['imgName']) ? $_POST['imgName'] : null;
+
+if($imgName && strlen($imgName)>64){
+  fail('400 Bad request', 'imgName too long');
+}
 
 $prodId = $db->insert("insert into Product(brandId, typeId, shortDesc, code, imgName, packageTypeId, description, amountValue, amountUnit, createdBy) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
     $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $_SESSION['user']['id']);

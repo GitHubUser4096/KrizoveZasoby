@@ -10,11 +10,10 @@ require_once '../internal/bag.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Update Bag Info
-Method: POST
-Get: bagId*
-Post: name*, description
-Returns: id (json)
+* Update Bag Info
+* Method: POST
+* Get: bagId*
+* Post: name*, description
 **/
 
 checkAuth();

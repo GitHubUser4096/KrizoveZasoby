@@ -9,24 +9,17 @@ require_once '../internal/product.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
+/**
+ * Finds a product by it's code
+ * Method: GET
+ * Get: code*
+ * Returns: the product (json)
+ */
+
 checkAuth();
-
-// if(!isSet($_GET['code'])){
-//   fail('400 Bad request', 'Missing parameter code');
-// }
-
-// $code = $_GET['code'];
 
 $code = getParam('code');
 
 echo json_encode(getProductByCode($code, $db));
-
-// $products = $db->query("select * from Product where code=?", $code);
-
-// if(count($products)==0){
-//   echo json_encode(null);
-// } else {
-//   echo json_encode($products[0]);
-// }
 
 ?>

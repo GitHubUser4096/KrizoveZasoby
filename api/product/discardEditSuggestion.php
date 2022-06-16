@@ -15,6 +15,12 @@ checkRole('editor');
 
 $editId = getParam('editId');
 
+$suggestions = $db->query("select * from ProductEditSuggestion where id=?", $editId);
+
+if(count($suggestions)==0){
+  fail('404 Not found', 'Suggestion does not exist!');
+}
+
 $db->execute("delete from ProductEditSuggestion where id=?", $editId);
 
 ?>

@@ -15,13 +15,19 @@ checkRole('editor');
 
 $editId = getParam('editId');
 
-$edit = $db->query("select
+$edits = $db->query("select
       productId, ProductEditSuggestion.id, changedBrandId, Brand.id as 'brandId', changedTypeId, ProductType.id as 'typeId', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.id as 'packageTypeId', changedImgName, imgName, changedDescription, description
     from ProductEditSuggestion
       left join Brand on Brand.id=brandId
       left join PackageType on PackageType.id=packageTypeId
       left join ProductType on ProductType.id=typeId
-    where ProductEditSuggestion.id=?", $editId)[0];
+    where ProductEditSuggestion.id=?", $editId);
+
+if(count($edits)==0){
+  fail('404 Not found', 'suggestion does not exist!');
+}
+
+$edit = $edits[0];
 
 // TODO can this be optimized / written better?
 
@@ -38,6 +44,10 @@ if($edit['changedShortDesc']){
 }
 
 if($edit['changedCode']){
+  $products = $db->query("select * from Product where code=?", $edit['code']);
+  if(count($products)>0 && $products[0]['id']!=$edit['productId']){
+    fail('400 Bad request', 'Produkt se stejným kódem již existuje!');
+  }
   $db->execute("update Product set code=? where id=?", $edit['code'], $edit['productId']);
 }
 

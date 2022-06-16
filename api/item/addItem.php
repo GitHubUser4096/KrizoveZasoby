@@ -14,11 +14,11 @@ require_once '../internal/product.php';
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
 /**
-Add Item
-Method: POST
-Get: bagId*
-Post: productId*, count*, expiration
-Returns: item (json)
+* Add Item
+* Method: POST
+* Get: bagId*
+* Post: productId*, count*, expiration
+* Returns: item (json)
 **/
 
 checkAuth();

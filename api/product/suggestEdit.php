@@ -30,6 +30,10 @@ $changedImgName = false;
 if(isSet($_POST['code'])){
   $changedCode = true;
   $code = validate(['name'=>'code', 'required'=>true, 'maxLength'=>64]);
+  $products = $db->query("select * from Product where code=?", $code);
+  if(count($products)>0 && $products[0]['id']!=$productId){
+    fail('400 Bad request', 'Produkt se stejným kódem již existuje!');
+  }
 }
 
 if(isSet($_POST['brand'])){
@@ -49,12 +53,12 @@ if(isSet($_POST['shortDesc'])){
 
 if(isSet($_POST['amountValue'])){
   $changedAmountValue = true;
-  $amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1]); // TODO max
+  $amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1, 'max'=>99999]);
 }
 
 if(isSet($_POST['packageType'])){
   $changedPackageType = true;
-  $packageType = validate(['name'=>'packageType', 'maxLength'=>128]);
+  $packageType = validate(['name'=>'packageType', 'maxLength'=>64]);
 }
 
 if(isSet($_POST['amountUnit'])){
@@ -70,6 +74,9 @@ if(isSet($_POST['description'])){
 if(isSet($_POST['imgName'])){
   $changedImgName = true;
   $imgName = $_POST['imgName'];
+  if($imgName && strlen($imgName)>64){
+    fail('400 Bad request', 'imgName too long');
+  }
 }
 
 
@@ -157,6 +164,7 @@ if($changedAmountUnit){
 //     $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $editId);
 
 $product = getProductById($productId, $db);
+$product['editId'] = $editId;
 
 echo json_encode($product);
 

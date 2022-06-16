@@ -89,8 +89,7 @@ function validate($input){
         fail('400 Bad request', $input['name'].' has to be at most '.$input['max']);
       }
     } else if($input['type']=='date'){
-      // TODO if date is in some weird format (ex. '2000-01' or 'today'), strtotime accepts it but DB does not
-      if(!strtotime($value)){
+      if(date('Y-m-d', strtotime($value))!=$value){
         fail('400 Bad request', $input['name'].' is not a valid date');
       }
       if(strtotime($value)<strtotime('1901-01-01') || strtotime($value)>=strtotime('3001-01-01')){

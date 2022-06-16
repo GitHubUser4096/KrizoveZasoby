@@ -11,15 +11,13 @@ $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 checkAuth();
 checkPost();
 
-// TODO common verify - make new password verify function?
-
-// TODO verify (including min length, max(?) length)
 if(!isSet($_POST['currentPassword'])){
   header('HTTP/1.1 400 Bad request');
   echo 'Current password is not defined.';
   exit;
 }
 
+// TODO common verify - make new password verify function? (including min length, max(?) length)
 if(!isSet($_POST['newPassword'])){
   header('HTTP/1.1 400 Bad request');
   echo 'New password is not defined.';
@@ -40,6 +38,7 @@ if(strlen(trim($_POST['newPassword']))<=4){
   exit;
 }
 
+// TODO make common update password function?
 $passwordHash = password_hash($_POST['newPassword'], PASSWORD_DEFAULT);
 
 $db->execute("update User set password=? where id=?", $passwordHash, $_SESSION['user']['id']);

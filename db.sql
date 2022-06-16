@@ -101,6 +101,7 @@ create table Config(
   warnTime varchar(16) default '1 weeks',
   recommendedTime varchar(16) default '3 weeks',
   dateFormat varchar(16) default 'Y-m-d',
+  sendNotifs boolean not null default 1,
   itemDisplay enum('brandFirst', 'typeFirst') default 'brandFirst',
   sort enum('date', 'name') default 'date'
 );
@@ -224,6 +225,9 @@ create table CharityUser(
   foreign key (charityId) references Charity(id),
   foreign key (userId) references User(id)
 );
+
+--- Update to 0.7 ---
+alter table Config add column sendNotifs boolean not null default 1;
 
 --- Tables - OLD DATABASE ---
 

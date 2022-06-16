@@ -16,11 +16,17 @@ if($_SERVER['REQUEST_METHOD']!=='POST'){
   exit;
 }
 
-// TODO any other image checks needed?
+// TODO check file size - what should the limit be?
 
 if(!isSet($_FILES['file']['tmp_name'])){
   header('HTTP/1.1 400 Bad request');
   echo 'No file uploaded or file too large.';
+  exit;
+}
+
+if(!$_FILES['file']['tmp_name']){
+  header('HTTP/1.1 400 Bad request');
+  echo 'Missing filename.';
   exit;
 }
 
@@ -32,11 +38,13 @@ if(!getimagesize($_FILES['file']['tmp_name'])){
 
 $pathInfo = pathinfo($_FILES['file']['name']);
 
-if(!in_array(strtolower($pathInfo['extension']), ['jpg', 'jpeg', 'png', 'gif'])){
+if(!isSet($pathInfo['extension']) || !in_array(strtolower($pathInfo['extension']), ['jpg', 'jpeg', 'png', 'gif'])){
   header('HTTP/1.1 400 Bad request');
   echo 'Invalid file extension.';
   exit;
 }
+
+// TODO use username in filename? (to ensure more uniqueness - especially for camera photos)
 
 $filename = substr(preg_replace("/[^A-Za-z0-9_-]/", '', $pathInfo['filename']), 0, 32).'_'.uniqid().'.'.$pathInfo['extension'];
 $path = '../../images/'.$filename;

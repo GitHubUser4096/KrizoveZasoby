@@ -1,9 +1,5 @@
 <?php
 
-/**
-This file saves user settings from the settings dialog
-**/
-
 session_start();
 
 require_once '../../lib/php/db.php';
@@ -13,10 +9,16 @@ require_once '../internal/common.php';
 
 $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
+/**
+* Save user settings (from the settings dialog)
+**/
+
 checkAuth();
 checkPost();
 
 // TODO use common validation? - format is specific and cannot be checked by validate()
+
+// TODO use common fail()?
 
 // date format
 
@@ -31,6 +33,16 @@ if($_POST['dateFormat']!='Y-m-d' && $_POST['dateFormat']!='d. m. Y'){
   echo 'Invalid value dateFormat.';
   exit;
 }
+
+// send notifs
+
+if(!isSet($_POST['sendNotifs'])){
+  header('HTTP/1.1 400 Bad request');
+  echo 'Missing value sendNotifs.';
+  exit;
+}
+
+$sendNotifs = $_POST['sendNotifs']?true:false;
 
 // states
 
@@ -74,6 +86,29 @@ if(strlen($_POST['recommendedTime'])>16){
 
 // make sure values can be parsed as time
 
+function checkTime($name, $value){
+  $parts = explode(' ', $value);
+  if(count($parts)!=2){
+    header('HTTP/1.1 400 Bad request');
+    echo 'Invalid format: '.$name;
+    exit;
+  }
+  if(strval(intval($parts[0]))!=$parts[0]){
+    header('HTTP/1.1 400 Bad request');
+    echo 'Invalid format: '.$name;
+    exit;
+  }
+  if(!in_array($parts[1], ['days', 'weeks'])){
+    header('HTTP/1.1 400 Bad request');
+    echo 'Invalid format: '.$name;
+    exit;
+  }
+}
+
+checkTime('criticalTime', $_POST['criticalTime']);
+checkTime('warnTime', $_POST['warnTime']);
+checkTime('recommendedTime', $_POST['recommendedTime']);
+
 $criticalTime = strtotime($_POST['criticalTime']);
 $warnTime = strtotime($_POST['warnTime']);
 $recommendedTime = strtotime($_POST['recommendedTime']);
@@ -98,8 +133,6 @@ if(!$recommendedTime){
 }
 
 // make sure values are positive
-
-// TODO values can still theoretically be absolute (can this be prevented?)
 
 if($criticalTime<=$now){
   header('HTTP/1.1 400 Bad request');
@@ -139,7 +172,7 @@ if($warnTime>=$recommendedTime){
   exit;
 }
 
-$db->execute("update Config set criticalTime=?, warnTime=?, recommendedTime=?, dateFormat=? where userId=?",
-    $_POST['criticalTime'], $_POST['warnTime'], $_POST['recommendedTime'], $_POST['dateFormat'], $_SESSION['user']['id']);
+$db->execute("update Config set criticalTime=?, warnTime=?, recommendedTime=?, dateFormat=?, sendNotifs=? where userId=?",
+    $_POST['criticalTime'], $_POST['warnTime'], $_POST['recommendedTime'], $_POST['dateFormat'], $sendNotifs, $_SESSION['user']['id']);
 
 ?>

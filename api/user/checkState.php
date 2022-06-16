@@ -98,41 +98,4 @@ echo json_encode([
   'recommendedBags'=>$recommendedCount,
 ]);
 
-// if(NOTIFICATION_DEBUG) echo '<h2>Oznámení pro uživatele '.$user['email'].'</h2>';
-
-// if(count($changedItems)==0){
-//   if(NOTIFICATION_DEBUG) echo 'Žádné oznámení nebude vygenerováno<hr>';
-//   continue;
-// }
-
-// $str = '';
-
-// $spanStyle = 'display: inline-block; padding: 5px; margin: 2px;';
-// $expStyle = $spanStyle.' background: red; color: white;';
-// $critStyle = $spanStyle.' background: #F70; color: white;';
-// $warnStyle = $spanStyle.' background: #FF0;';
-// $recStyle = $spanStyle.' background: #CF0;';
-
-// $styles = ['expired'=>$expStyle, 'critical'=>$critStyle, 'warn'=>$warnStyle, 'recommended'=>$recStyle];
-
-// $str .= '<h2>Tyto položky vyžadují vaší pozornost:</h2>';
-// $str .= '<ul>';
-
-// foreach($changedItems as $item){
-//   $str .= '<li><span style="'.$styles[$item['state']].'">';
-//   if($item['expTime']<$today) $str .= 'Položka <b>'.$item['item'].' x'.$item['count'].'</b> v tašce <b>'.$item['bag'].' vypršela!</b>';
-//   else $str .= 'Položka <b>'.$item['item'].' x'.$item['count'].'</b> v tašce <b>'.$item['bag'].'</b> vyprší <b>'.formatDateDiff($today, $item['expTime']).'</b>';
-//   $str .= '</span></li>';
-// }
-
-// $str .= '</ul>';
-// $str .= "<h3>Stav vašich zásob:</h3>";
-
-// if($expiredCount) $str .= '<div><span style="'.$expStyle.'">Vypršené položky: celkem <b>'.$expiredCount.'</b> v taškách <b>'.implode(', ', $expiredBags).'</b></span></div>';
-// if($criticalCount) $str .= '<div><span style="'.$critStyle.'">Položky v kritickém stavu: celkem <b>'.$criticalCount.'</b> v taškách <b>'.implode(', ', $criticalBags).'</b></span></div>';
-// if($warnCount) $str .= '<div><span style="'.$warnStyle.'">Položky s varováním: celkem <b>'.$warnCount.'</b> v taškách <b>'.implode(', ', $warnBags).'</b></span></div>';
-// if($recommendedCount) $str .= '<div><span style="'.$recStyle.'">Položky s doporučeným odevzdáním: celkem <b>'.$recommendedCount.'</b> v taškách <b>'.implode(', ', $recommendedBags).'</b></span></div>';
-
-// $str .= '<p><a target="blank" href="http://'.$_SERVER['HTTP_HOST'].'/profile.php">Otevřít moje zásoby</a></p>';
-
 ?>

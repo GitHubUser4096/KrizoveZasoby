@@ -19,6 +19,7 @@ async function createSettingsDialog(){
   function showAppSettingsInfo(msg){
     appSettingsInfo.innerText = msg;
     appSettingsInfo.classList.add('show');
+    appSettingsInfo.scrollIntoView();
   }
 
   passwordForm.submitForm = async function(){
@@ -100,6 +101,7 @@ async function createSettingsDialog(){
     let criticalUnit = settingsForm.criticalUnit.value;
     let warnUnit = settingsForm.warnUnit.value;
     let recommendedUnit = settingsForm.recommendedUnit.value;
+    let sendNotifs = settingsForm.sendNotifs.checked?1:0;
 
     if(!dateFormat) {
       throw {
@@ -163,6 +165,7 @@ async function createSettingsDialog(){
       'warnTime':warnTime,
       'recommendedTime':recommendedTime,
       'dateFormat':dateFormat,
+      'sendNotifs':sendNotifs,
     });
 
     showAppSettingsInfo('Nastavení uloženo!');
@@ -236,6 +239,8 @@ async function createSettingsDialog(){
   if(settings.dateFormat){
     settingsForm.dateFormat.value = settings.dateFormat;
   }
+
+  settingsForm.sendNotifs.checked = !!settings.sendNotifs;
 
   return div;
 

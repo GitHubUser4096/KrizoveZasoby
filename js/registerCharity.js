@@ -15,40 +15,38 @@ async function createRegisterCharityDialog(charity){
   let div = await LayoutManager.getLayout('layouts/registerCharity.html');
   div.className = 'registerCharityDialog';
 
-  div.onInit = function(){
+  div.onInit = async function(){
 
     // addContact();
 
-    (async function(){
+    if(charity){
 
-      if(charity){
-        
-        div.elements.name.value = charity.name;
-        div.elements.orgId.value = charity.orgId;
-        div.elements.contacts.value = charity.contacts;
-  
-        for(let place of charity.places){
-  
-          let placeDiv = await addPlace();
-  
-          placeDiv.id = place.id;
-          placeDiv.elements.street.value = place.street;
-          placeDiv.elements.place.value = place.place;
-          placeDiv.elements.postCode.value = place.postCode;
-          placeDiv.elements.note.value = place.note;
-          placeDiv.elements.openHours.value = place.openHours;
-          placeDiv.elements.contacts.value = place.contacts;
+      div.elements.title.innerText = 'Upravit charitu';
+      
+      div.elements.name.value = charity.name;
+      div.elements.orgId.value = charity.orgId;
+      div.elements.contacts.value = charity.contacts;
 
-          placeDiv.updateName();
-  
-        }
-  
-      } else {
-        addPlace();
+      for(let place of charity.places){
+
+        let placeDiv = await addPlace();
+
+        placeDiv.id = place.id;
+        placeDiv.elements.street.value = place.street;
+        placeDiv.elements.place.value = place.place;
+        placeDiv.elements.postCode.value = place.postCode;
+        placeDiv.elements.note.value = place.note;
+        placeDiv.elements.openHours.value = place.openHours;
+        placeDiv.elements.contacts.value = place.contacts;
+
+        placeDiv.updateName();
+
       }
 
-    })();
-    
+    } else {
+      addPlace();
+    }
+
   }
 
   div.elements.form.submitForm = async function(){

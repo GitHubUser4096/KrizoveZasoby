@@ -124,3 +124,14 @@
 .settingsDialog .tabMenuBtn.selected::after {
   content: ' >';
 }
+
+.settingsDialog .checkboxLabel {
+  width: 100%;
+  font-size: 22px;
+}
+
+.settingsDialog .checkboxSetting {
+  float: right;
+  width: 20px;
+  height: 20px;
+}
