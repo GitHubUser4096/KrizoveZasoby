@@ -26,7 +26,7 @@ checkPost();
 
 $bagId = getParam('bagId');
 
-$count = validate(['name'=>'count', 'required'=>true, 'type'=>'int', 'min'=>1, 'max'=>99999]);
+$count = validate(['name'=>'count', 'required'=>true, 'type'=>'int', 'min'=>1, 'max'=>99]);
 
 $expiration = validate(['name'=>'expiration', 'type'=>'date']);
 

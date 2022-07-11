@@ -2,7 +2,7 @@
 
 session_start();
 
-// TODO common checks
+// TODO common checks?
 
 if(!isSet($_SESSION['user'])){
   header('HTTP/1.1 403 Forbidden');
@@ -16,8 +16,6 @@ if($_SERVER['REQUEST_METHOD']!=='POST'){
   exit;
 }
 
-// TODO check file size - what should the limit be?
-
 if(!isSet($_FILES['file']['tmp_name'])){
   header('HTTP/1.1 400 Bad request');
   echo 'No file uploaded or file too large.';
@@ -30,11 +28,35 @@ if(!$_FILES['file']['tmp_name']){
   exit;
 }
 
-if(!getimagesize($_FILES['file']['tmp_name'])){
+$size = getimagesize($_FILES['file']['tmp_name']);
+
+if(!$size){
   header('HTTP/1.1 400 Bad request');
   echo 'Invalid image.';
   exit;
 }
+
+$x = 0;
+$y = 0;
+$width = $size[0];
+$height = $size[1];
+
+if($width>$height){
+  $x = ($width-$height)/2;
+  $width = $height;
+} else {
+  $y = ($height-$width)/2;
+  $height = $width;
+}
+
+$newWidth = 640;
+$newHeight = 640;
+
+$src = imagecreatefromstring(file_get_contents($_FILES['file']['tmp_name']));
+$dst = imagecreatetruecolor($newWidth, $newHeight);
+$white = imagecolorallocate($dst, 255, 255, 255);
+imagefill($dst, 0, 0, $white);
+imagecopyresampled($dst, $src, 0, 0, $x, $y, $newWidth, $newHeight, $width, $height);
 
 $pathInfo = pathinfo($_FILES['file']['name']);
 
@@ -44,9 +66,13 @@ if(!isSet($pathInfo['extension']) || !in_array(strtolower($pathInfo['extension']
   exit;
 }
 
-// TODO use username in filename? (to ensure more uniqueness - especially for camera photos)
+$userName = $_SESSION['user']['email'];
+$atPos = strpos($userName, '@');
+if($atPos>0){
+  $userName = substr($userName, 0, $atPos);
+}
 
-$filename = substr(preg_replace("/[^A-Za-z0-9_-]/", '', $pathInfo['filename']), 0, 32).'_'.uniqid().'.'.$pathInfo['extension'];
+$filename = substr(preg_replace("/[^A-Za-z0-9_-]/", '', $userName.'_'.$pathInfo['filename']), 0, 32).'_'.uniqid().'.'.$pathInfo['extension'];
 $path = '../../images/'.$filename;
 
 if(file_exists($path)){
@@ -55,8 +81,8 @@ if(file_exists($path)){
   exit;
 }
 
-$uploaded = move_uploaded_file($_FILES['file']['tmp_name'], $path);
-if(!$uploaded){
+$saved = imagepng($dst, $path);
+if(!$saved) {
   header('HTTP/1.1 500 Internal server error');
   echo 'Failed to upload.';
   exit;

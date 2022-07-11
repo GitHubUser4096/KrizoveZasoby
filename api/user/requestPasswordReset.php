@@ -41,18 +41,16 @@ $userId = $users[0]['id'];
 
 // brute forcing 1 code per 1ms - worst case should take 102304247919 years (secure enough) - TODO are my calculations right?
 // TODO is this generation predictable in some way? (should not be)
+
 $code = random_bytes(9); // start with 9 random bytes (aligns to 12 base64 characters) ('cryptographically secure' according to php manual)
-// $code = hash('md5', $code); // hash it to make it a hex string of fixed length
-// $code = substr($code, 0, 9); // get only 9 characters from it (9 aligns nicely for base64, output is 12 chars which should be a reasonable length)
-// $code = bin2hex($code);
 $code = base64_encode($code); // encode it to base64 to make it human-readable
-// $code = substr($code, 0, 12);
 // slash and plus (possible base64 values) can mess with URLs, change them to something else
 // since we don't need to decode it back, we can choose anything
 $code = str_replace('/', 'A', $code);
 $code = str_replace('+', 'B', $code);
 
-$expires = strtotime('+1 day');
+// TODO when should it expire?
+$expires = strtotime('+1 hour');
 
 // TODO DO NOT USE THIS! (except for debug), THIS PAGE **MUST NEVER** REVEAL THE CODE!
 // echo json_encode(['code'=>$code, 'expires'=>date('Y-m-d H:i:s', $expires)]);
@@ -68,11 +66,13 @@ $db->insert("insert into ResetPasswordRequests(userId, code, expires) values(?, 
 // Kód zadejte na stránce, kde jste požádali o obnovení hesla (?) nebo <<< zde (link) >>>
 // Kód je platný do: [expires]
 // Pokud jste nepožádali o obnovení hesla ...?
-$str = '<div>Obnovení hesla:</div>';
-$str .= '<div>Kód: '.$code.'</div>';
 $url = $_SERVER['HTTP_HOST'].'/index.php?resetPassword&email='.$_POST['email'].'&code='.$code;
-$str .= '<div>Odkaz: <a href="'.$url.'">'.$url.'</div>';
-$str .= '<div>Kód vyprší: '.date('Y-m-d H:i:s', $expires).'</div>';
+
+$str = '<div>Tento email jste obdržel(a), protože jste ve webové aplikaci Krizové zásoby požádal(a) o obnovení hesla. Pokud jste o obnovení hesla nepožádal(a), považujte prosím tento email za bezpředmětný.</div>';
+$str .= '<div style="padding: 25px; font-size: 32px;">Kód: '.$code.'</div>';
+$str .= '<div>Zadejte kód na stránce, kde jste požádal(a) o obnovení hesla, nebo heslo obnovte zde:</div>';
+$str .= '<div><a href="'.$url.'">'.$url.'</div>';
+$str .= '<br><div>Kód vyprší: '.date('d. m. Y H:i:s', $expires).'</div>';
 
 // TODO this is a possible vulnerability - sending an e-mail is slow
 // anyone can easily find whether the mail was sent (and an account exists) based on response delay

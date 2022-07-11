@@ -1,13 +1,11 @@
 <?php
 
-/*session_start();
+session_start();
 
-if(isSet($_GET['logout'])){
-  session_destroy();
-  session_regenerate_id();
-  header('Location: index.php');
+if(isSet($_SESSION['user'])){
+  header('Location: profile.php');
   return;
-}*/
+}
 
 ?>
 <!DOCTYPE html>
@@ -15,6 +13,7 @@ if(isSet($_GET['logout'])){
   <head>
     <meta charset="utf-8">
     <title>Krizové Zásoby</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="res/icon.png">
     <link rel="stylesheet" href="css/general.css">
     <link rel="stylesheet" href="css/index.css">
@@ -26,47 +25,75 @@ if(isSet($_GET['logout'])){
     <div class="background"></div>
 
     <div class="main">
-      <h1 class="title">Krizové Zásoby</h1>
-      <p class="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Maecenas volutpat blandit aliquam etiam erat velit scelerisque. Elementum facilisis leo vel fringilla est ullamcorper eget nulla facilisi. Urna neque viverra justo nec. Venenatis a condimentum vitae sapien pellentesque habitant morbi tristique senectus. In ante metus dictum at tempor commodo ullamcorper a lacus. Sed turpis tincidunt id aliquet. Aliquam nulla facilisi cras fermentum odio eu feugiat pretium nibh. Orci nulla pellentesque dignissim enim. Nunc mi ipsum faucibus vitae aliquet nec ullamcorper sit. Mauris ultrices eros in cursus. Cras tincidunt lobortis feugiat vivamus at augue. Sed blandit libero volutpat sed cras ornare arcu. Et magnis dis parturient montes nascetur ridiculus.</p>
+      <div class="title">
+        <img width="60px" style="vertical-align: top;" src="res/icon.png"></img>
+        Krizové Zásoby
+      </div>
+      <div class="mainText">
+        <div class="subtitle">
+          Web se kterým se chráníte a zároveň s ním můžete dělat dobré skutky.
+        </div>
+        <div class="description">
+          Web, se kterým máte pořádek ve vašich domácích zásobách. Pokud se blíží překročení termínu spotřeby, upozorní vás na to a pokud chcete, nabídne vám, jaké charitě zásoby odevzdat dříve, než projdou.
+        </div>
+        <div class="description">
+          Je dobrý nápad mít doma základní zásoby jídla a základních potřeb. Není to pravděpodobné, ale nelze ani vyloučit situace jako dlouhodobý výpadek elektrického proudu (blackout) či pandemie - a s tím spojená dočasná nemožnost základní potřeby nakoupit.
+          Web Krizové Zásoby Vám umožní zaregistrovat si doma pro případ nouze uložené základní potřeby a bude vás včas varovat, pokud se blíží vypršení jejich doporučené spotřeby či záruky.
+        </div>
+        <div class="description">
+          Je dobrý nápad pomáhat. Web vám nabídne charity, kde můžete odevzdat zásoby, na jejichž vypršení vás upozorňuje.
+        </div>
+      </div>
+      <div class="copyright">
+        © EntsCZ 2022
+      </div>
+      <div id="cookieMsg" class="cookies">
+        Tento web používá soubory cookies. Pokračováním souhlasíte s použitím cookies.
+        <span id="closeCookieMsg" class="cookiesClose">X</span>
+      </div>
     </div>
 
-    <div id="sidebar" class="side sidebar">
+    <!-- <div id="sidebar" class="side sidebar">
       <div class="sidebarButtons">
         <button class="sideBtn loginBtn" id="loginBtn">Moje Zásoby</button>
-        <button class="sideBtn signupBtn" id="signupBtn">Registrovat</button>
+        <button class="signupBtn" id="signupBtn">Registrovat</button>
       </div>
-    </div>
+    </div> -->
 
     <div id="loginDialog" class="side loginForm">
-      <div class="formBox">
-        <form name="loginForm" id="loginForm">
-          <div class="formTitle">
-            <button type="button" class="formClose" id="loginForm_close">&lt;</button>
-            <span class="formTitleText">Přihlásit se</span>
-          </div>
-          <div class="loginMsg" id="loginMsg"></div>
-          <label class="formRow">
-            E-mail: <input class="formInput" name="email"></input>
-          </label>
-          <label class="formRow">
-            Heslo: <input class="formInput" name="password" type="password"></input>
-          </label>
-          <div class="formRow">
-            <button class="forgotPassword" name="forgotPassword" type="button">Zapomenuté heslo</button>
-          </div>
-          <button type="submit" class="formSubmit">Přihlásit se</button>
-        </form>
-      </div>
+      <form name="loginForm" id="loginForm">
+        <div class="formTitle">Přihlásit se</div>
+        <div class="msgContainer">
+          <div class="msgBox" id="loginMsg"></div>
+        </div>
+        <label class="formRow">
+          E-mail: <input class="formInput" name="email"></input>
+        </label>
+        <label class="formRow">
+          Heslo: <input class="formInput" name="password" type="password"></input>
+        </label>
+        <div class="formRow">
+          <button class="loginLink" name="forgotPassword" type="button">Zapomenuté heslo</button>
+        </div>
+        <div class="formRow">
+          <button class="loginLink" name="signup" type="button">Zaregistrovat se</button>
+        </div>
+        <button type="submit" class="formSubmit">Přihlásit se</button>
+      </form>
     </div>
 
-    <div id="forgotPasswordDialog" class="side loginForm">
+    <div id="forgotPasswordDialog" class="side forgotPasswordForm">
       <div class="formBox">
         <form name="forgotPasswordForm" id="forgotPasswordForm">
           <div class="formTitle">
-            <button type="button" class="formClose" id="forgotPasswordForm_close">&lt;</button>
-            <span class="formTitleText">Zapomenuté heslo</span>
+            <button type="button" class="formClose" id="forgotPasswordForm_close">
+              <img src="res/back_arrow.png"></img>
+            </button>
+            <span class="formTitleText">Obnovit heslo</span>
           </div>
-          <div class="loginMsg" id="forgotPasswordMsg"></div>
+          <div class="msgContainer">
+            <div class="msgBox" id="forgotPasswordMsg"></div>
+          </div>
           <div class="formRow">
             Na váš e-mail bude odeslán kód pro obnovení hesla.
           </div>
@@ -78,14 +105,18 @@ if(isSet($_GET['logout'])){
       </div>
     </div>
 
-    <div id="resetPasswordDialog" class="side loginForm">
+    <div id="resetPasswordDialog" class="side resetPasswordForm">
       <div class="formBox">
         <form name="resetPasswordForm" id="resetPasswordForm">
           <div class="formTitle">
-            <button type="button" class="formClose" id="resetPasswordForm_close">&lt;</button>
+            <button type="button" class="formClose" id="resetPasswordForm_close">
+              <img src="res/back_arrow.png"></img>
+            </button>
             <span class="formTitleText">Obnovit heslo</span>
           </div>
-          <div class="loginMsg" id="resetPasswordMsg"></div>
+          <div class="msgContainer">
+            <div class="msgBox" id="resetPasswordMsg"></div>
+          </div>
           <div class="formRow">
             <!-- Na váš e-mail byl odeslán kód pro obnovení hesla. -->
             <!-- Zadejte kód, který byl odeslán na váš e-mail a nastavte nové heslo. -->
@@ -112,10 +143,14 @@ if(isSet($_GET['logout'])){
       <div class="formBox">
         <form name="signupForm" id="signupForm">
           <div class="formTitle">
-            <button type="button" class="formClose" id="signupForm_close">&lt;</button>
+            <button type="button" class="formClose" id="signupForm_close">
+              <img src="res/back_arrow.png"></img>
+            </button>
             <span class="formTitleText">Registrovat</span>
           </div>
-          <div class="loginMsg" id="signupMsg"></div>
+          <div class="msgContainer">
+            <div class="msgBox" id="signupMsg"></div>
+          </div>
           <label class="formRow">
             E-mail: <input class="formInput" name="email" autocomplete="off"></input>
           </label>
@@ -128,6 +163,13 @@ if(isSet($_GET['logout'])){
           <button type="submit" class="formSubmit">Registrovat</button>
         </form>
       </div>
+    </div>
+    
+    <div class="mobileScreen">
+      <div class="mobileTitle">Krizové zásoby</div>
+      <!-- <div class="mobileDesc">Prosím použijte mobilní aplikaci!</div> -->
+      <div class="mobileDesc">Na mobilním zařízení se lépe pracuje s mobilní aplikací.</div>
+      <a href="download/KrizoveZasoby_app_1.0.0.apk"><div class="mobileDlBtn"><span class="mobileDlLabel">Stáhnout</span><img class="mobileDlImg" src="res/download.png"></img></div></a>
     </div>
 
   </body>

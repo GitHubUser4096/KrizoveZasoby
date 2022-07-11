@@ -1,5 +1,5 @@
 
-// TODO name is not accurate anymore
+// TODO name is not accurate - dialog is used for both adding and editing products
 async function createAddProductDialog(addItemDialog, editingProduct){
 
   /** CREATE DIALOG **/
@@ -10,8 +10,6 @@ async function createAddProductDialog(addItemDialog, editingProduct){
   let canEdit = editingProduct ? (editingProduct.createdBy==auth.user.id || checkRole('editor')) : false;
 
   /** QUERY ELEMENTS **/
-
-  // TODO get rid of these ?
 
   let form = div.querySelector('.form');
 
@@ -123,11 +121,11 @@ async function createAddProductDialog(addItemDialog, editingProduct){
   form.submitForm = async function(){
 
     // TODO make names more consistent
-    let brand = form.getValue(div.elements.brand);
-    let productType = form.getValue(div.elements.productType);
+    let brand = toFirstUpper(form.getValue(div.elements.brand));
+    let productType = toFirstUpper(form.getValue(div.elements.productType));
     let amountValue = form.getValue(div.elements.amountValue);
     let amountUnit = div.elements.amountUnit.value;
-    let shortDesc = form.getValue(div.elements.shortDesc);
+    let shortDesc = toFirstUpper(form.getValue(div.elements.shortDesc));
     let productCode = form.getValue(div.elements.productCode);
     let packageType = form.getValue(div.elements.packageType);
     let description = form.getValue(div.elements.description);

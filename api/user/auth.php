@@ -49,6 +49,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     'userRole'=>$users[0]['userRole']
   ];
 
+  // regenerate session id to prevent cookie stealing
+  session_regenerate_id(true);
   $_SESSION['user'] = $user;
 
   echo json_encode(['loggedIn'=>true, 'user'=>$user]);

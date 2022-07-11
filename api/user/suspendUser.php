@@ -14,6 +14,10 @@ checkRole('editor');
 
 $userId = getParam('userId');
 
+if($userId==$_SESSION['user']['id']){
+  fail('400 Bad request', 'Suspending yourself is not allowed!');
+}
+
 $users = $db->query("select * from User where id=?", $userId);
 if(count($users)==0){
   fail('400 Bad request', 'User does not exist');

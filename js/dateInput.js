@@ -10,11 +10,6 @@ async function createDateInput(){
 
   day.oninput = function(e){
     div.classList.remove('invalid');
-    // if(!checkDay()) day.classList.add('invalid');
-    // else day.classList.remove('invalid');
-    // if(day.value.toString().length>2){
-    //   day.value = day.value.substring(0, 2);
-    // }
     if(day.value.toString().length>=2){
       month.focus();
       month.select();
@@ -23,8 +18,6 @@ async function createDateInput(){
 
   month.oninput = function(e){
     div.classList.remove('invalid');
-    // if(!checkMonth()) month.classList.add('invalid');
-    // else month.classList.remove('invalid');
     if(month.value.toString().length>=2){
       year.focus();
       year.select();
@@ -33,8 +26,6 @@ async function createDateInput(){
 
   year.oninput = function(e){
     div.classList.remove('invalid');
-    // if(!checkYear()) year.classList.add('invalid');
-    // else year.classList.remove('invalid');
   }
 
   div.setInvalid = function(){
@@ -65,27 +56,6 @@ async function createDateInput(){
     }
     return dateObj;
   }
-
-  // function checkDay(){
-  //   if(!day.value) return true;
-  //   if(parseInt(day.value)!=day.value) return false;
-  //   if(day.value && (day.value<1 || day.value>31)) return false;
-  //   return true;
-  // }
-
-  // function checkMonth(){
-  //   if(!month.value) return true;
-  //   if(parseInt(month.value)!=month.value) return false;
-  //   if(month.value<1 || month.value>12) return false;
-  //   return true;
-  // }
-
-  // function checkYear(){
-  //   if(!year.value) return true;
-  //   if(parseInt(year.value)!=year.value) return false;
-  //   if(year.value<1901 || year.value>3000) return false;
-  //   return true;
-  // }
 
   div.getError = function(){
 

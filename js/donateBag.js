@@ -20,8 +20,6 @@ async function createDonateBagDialog(){
 
   }
 
-  
-
   return div;
 
 }

@@ -35,7 +35,7 @@ if(!isSet($_SESSION['user'])){
     <div class="background"></div>
 
     <div class="titlebar">
-      <a href="index.php"><img src="res/logo.png"></img></a>
+      <a href="profile.php"><img src="res/logo.png"></img></a>
       <span class="userMenu">
         <div class="userNameField" id="userNameField"></div>
         <button class="menuBtn" id="menuBtn"><img src="res/menu.png"></img></button>
@@ -61,15 +61,10 @@ if(!isSet($_SESSION['user'])){
       <div class="bags">
         <div class="bagsTitle">Tašky:</div>
         <div id="div_bagList" class="bagList"></div>
-        <!-- <div class="newBagBtnDiv" id="newBagDiv">
-          <input class="newBagInput" id="newBagInput" placeholder="Zadejte název"></input>
-          <button class="newBagBtn" id="newBagBtn">+</button>
-        </div> -->
         <div class="bottomBtnBox addBag">
           <button class="bottomBtn addBagBtn" id="btn_addBag">Přidat tašku</button>
         </div>
       </div>
-      <!-- <div class="tempNewBag"></div> -->
       <div class="currentBag">
         <div class="items">
           <div class="lists">
@@ -115,12 +110,11 @@ if(!isSet($_SESSION['user'])){
         </div>
       </div>
     </div>
-
-    <div class="menu" id="menu">
-      <!-- <div><button id="logoutBtn" class="menuItemBtn">Odhlásit se</button></div>
-      <div><button id="donatedBagsBtn" class="menuItemBtn">Odevzdané Tašky</button></div>
-      <div><button id="settingsBtn" class="menuItemBtn">Nastavení</button></div> -->
+    <div class="offlineOverlay" id="offlineOverlay">
+      <div class="offlineBox"><img src="res/warning.png"></img> Chyba připojení</div>
     </div>
+
+    <div class="menu" id="menu"></div>
 
   </body>
 </html>

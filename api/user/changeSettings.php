@@ -42,7 +42,7 @@ if(!isSet($_POST['sendNotifs'])){
   exit;
 }
 
-$sendNotifs = $_POST['sendNotifs']?true:false;
+$sendNotifs = $_POST['sendNotifs'] ? 1 : 0;
 
 // states
 
@@ -156,19 +156,22 @@ if($recommendedTime<=$now){
 
 if($criticalTime>=$warnTime){
   header('HTTP/1.1 400 Bad request');
-  echo 'criticalTime must be less than warnTime';
+  echo 'Kritický stav musí být menší než stav varování!';
+  // echo 'criticalTime must be less than warnTime';
   exit;
 }
 
 if($criticalTime>=$recommendedTime){
   header('HTTP/1.1 400 Bad request');
-  echo 'criticalTime must be less than recommendedTime';
+  echo 'Kritický stav musí být menší než doporučené odevzdání!';
+  // echo 'criticalTime must be less than recommendedTime';
   exit;
 }
 
 if($warnTime>=$recommendedTime){
   header('HTTP/1.1 400 Bad request');
-  echo 'warnTime must be less than recommendedTime';
+  echo 'Stav varování musí být menší než doporučené odevzdání!';
+  // echo 'warnTime must be less than recommendedTime';
   exit;
 }
 

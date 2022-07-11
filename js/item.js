@@ -1,7 +1,6 @@
 
 async function createItem(item){
 
-  // let div = document.createElement('div');
   let div = await LayoutManager.getLayout('layouts/item.html');
   div.className = 'itemContainer';
 
@@ -13,11 +12,7 @@ async function createItem(item){
     div.classList.add('productEditable');
   }
 
-  // div.classList.add(item.state);
-
-  // div.innerHTML = await RequestCache.get('layouts/item.html');
-
-  // TODO what to do with these? (layout-id?)
+  // TODO use layout-id?
 
   let itemBrief = div.querySelector('.itemBrief');
   let itemBriefName = div.querySelector('.itemBriefName');
@@ -78,7 +73,6 @@ async function createItem(item){
   itemEditBtn.onclick = async function(e){
     showLoading();
     await checkAuth();
-    // await showEditItemDialog(div.item);
     await showDialog('editItem', div.item);
     hideLoading();
   }
@@ -104,7 +98,6 @@ async function createItem(item){
     }
     showLoading();
     await checkAuth();
-    // await showMoveItemDialog(item);
     await showDialog('moveItem', item);
     hideLoading();
   }
@@ -202,7 +195,7 @@ async function createItem(item){
   itemDetailsShortDesc.innerText = item.product.shortDesc;
   itemDetailsShortDesc.title = item.product.shortDesc;
   itemDetailsPackage.innerText = item.product.packageType;
-  itemDetailsPackage.title = item.product.packageType;
+  itemDetailsPackage.title = item.product.packageType??'';
   if(item.product.imgName) itemDetailsImg.style.backgroundImage = 'url(images/'+item.product.imgName+')';
   else itemDetailsImg.style.backgroundImage = 'url(res/noImage.png)';
 
@@ -250,7 +243,7 @@ async function createItem(item){
 
   div.getDisplayName = function(){
     let res = '';
-    if(config.itemDisplay=='typeFirst'){
+    if(itemDisplay=='typeFirst'){
       res = div.item.product.type+' • '+div.item.product.brand;
     } else {
       res = div.item.product.brand+' • '+div.item.product.type;

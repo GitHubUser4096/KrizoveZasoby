@@ -131,7 +131,7 @@ let LayoutManager = new (function(){
           } catch(e){
             if(element.onSubmitFail) element.onSubmitFail(e);
             element.showError(e.message, e.element);
-            console.error(e);
+            console.error('Error thrown in form:', e);
           }
           element.submitted = false;
           hideLoading();

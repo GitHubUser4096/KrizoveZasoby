@@ -19,26 +19,32 @@ window.onload = function(){
     resetPasswordForm.code.value = params.get('code')??'';
   }
 
-  loginBtn.onclick = async function(){
+  // loginBtn.onclick = async function(){
     
-    sidebar.style.display = 'none';
+  //   sidebar.style.display = 'none';
 
-    let auth = JSON.parse(await GET('api/user/auth.php'));
+  //   let auth;
+  //   try {
+  //     auth = JSON.parse(await GET('api/user/auth.php'));
+  //   } catch(e){
+  //     alert(e.message);
+  //     sidebar.style.display = 'block';
+  //   }
 
-    if(auth.loggedIn){
-      location.href = 'profile.php';
-      return;
-    }
+  //   if(auth.loggedIn){
+  //     location.href = 'profile.php';
+  //     return;
+  //   }
 
-    loginDialog.style.display = 'block';
+  //   loginDialog.style.display = 'block';
 
-  }
+  // }
 
-  loginForm_close.onclick = function(){
-    loginDialog.style.display = 'none';
-    sidebar.style.display = 'block';
-    window.history.replaceState('', '', '?');
-  }
+  // loginForm_close.onclick = function(){
+  //   loginDialog.style.display = 'none';
+  //   sidebar.style.display = 'block';
+  //   window.history.replaceState('', '', '?');
+  // }
 
   loginForm.oninput = function(e){
     e.target.classList.remove('error');
@@ -58,6 +64,11 @@ window.onload = function(){
   loginForm.forgotPassword.onclick = function(){
     loginDialog.style.display = 'none';
     forgotPasswordDialog.style.display = 'block';
+  }
+
+  loginForm.signup.onclick = function(){
+    loginDialog.style.display = 'none';
+    signupDialog.style.display = 'block';
   }
 
   forgotPasswordForm_close.onclick = function(){
@@ -93,24 +104,22 @@ window.onload = function(){
     // forgotPasswordMsg.style.display = 'block';
     // forgotPasswordMsg.innerText = 'Počkejte prosím...';
 
-    try {
+    (async function(){
+      try {
+        await POST('api/user/requestPasswordReset.php', {
+          email: forgotPasswordForm.email.value,
+        });
+      } catch(e){
+        alert(e.message);
+        forgotPasswordDialog.style.display = 'block';
+        resetPasswordDialog.style.display = 'none';
+      }
+    })();
 
-      POST('api/user/requestPasswordReset.php', {
-        email: forgotPasswordForm.email.value,
-      });
+    resetPasswordForm.email.value = forgotPasswordForm.email.value;
 
-      resetPasswordForm.email.value = forgotPasswordForm.email.value;
-
-      forgotPasswordDialog.style.display = 'none';
-      resetPasswordDialog.style.display = 'block';
-
-    } catch(ex){
-      forgotPasswordForm.submitted = false;
-      forgotPasswordMsg.style.background = 'red';
-      forgotPasswordMsg.style.color = 'white';
-      forgotPasswordMsg.style.display = 'block';
-      forgotPasswordMsg.innerText = ex.message;
-    }
+    forgotPasswordDialog.style.display = 'none';
+    resetPasswordDialog.style.display = 'block';
 
   }
 
@@ -355,14 +364,19 @@ window.onload = function(){
 
   }
 
-  signupBtn.onclick = function(){
-    sidebar.style.display = 'none';
-    signupDialog.style.display = 'block';
-  }
+  // signupBtn.onclick = function(){
+  //   sidebar.style.display = 'none';
+  //   signupDialog.style.display = 'block';
+  // }
 
   signupForm_close.onclick = function(){
     signupDialog.style.display = 'none';
-    sidebar.style.display = 'block';
+    // sidebar.style.display = 'block';
+    loginDialog.style.display = 'block';
+  }
+
+  closeCookieMsg.onclick = function(){
+    cookieMsg.style.display = 'none';
   }
 
 }

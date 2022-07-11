@@ -168,7 +168,7 @@ async function createAddItemDialog(){
 
     let products = JSON.parse(await GET('api/product/searchProducts.php?search='+encodeURIComponent(form.productName.value)));
 
-    if(!form.productName.value) {
+    if(form.productName.value.length<3) {
       hideSuggestions();
       return;
     }
@@ -222,7 +222,7 @@ async function createAddItemDialog(){
   }
 
   form.productName.onclick = function(){
-    if(!form.productName.value) return;
+    if(form.productName.value.length<3) return;
     showLoadingSuggestions();
     loadSuggestions();
   }
@@ -234,7 +234,7 @@ async function createAddItemDialog(){
 
     if(searchTimeout) clearTimeout(searchTimeout);
 
-    if(!form.productName.value) {
+    if(form.productName.value.length<3) {
       hideSuggestions();
       return;
     }

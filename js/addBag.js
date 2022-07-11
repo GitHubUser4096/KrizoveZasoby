@@ -10,19 +10,8 @@ async function createAddBagDialog(){
 
   div.elements.form.submitForm = async function(){
 
-    // let count = form.getValue(div.elements.count);
-    // let expiration = form.getValue(div.elements.expiration);
-
     let bagName = toFirstUpper(div.elements.form.getValue(div.elements.bagName));
     let description = div.elements.form.getValue(div.elements.description);
-
-    // let existingItem = itemDivs.find(i=>(i.item.productId==productId && (i.item.expiration??'')==(expiration??'') && !i.used));
-    // if(existingItem){
-    //   if(!confirm('Položka již existuje. Spojit položky?')) {
-    //     hideLoading();
-    //     return;
-    //   }
-    // }
 
     let bag = JSON.parse(await POST('api/bag/createBag.php', {
       'name':bagName,
@@ -31,7 +20,6 @@ async function createAddBagDialog(){
 
     div.hide();
 
-    // await refresh();
     await loadBags();
     await loadBag(bag.id);
 

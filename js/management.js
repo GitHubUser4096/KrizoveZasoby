@@ -10,12 +10,6 @@ async function loadEditSuggestions(){
 
   showLoading();
 
-  // rather useless - either remove or change to a non-scrolling title
-  // let info = document.createElement('div');
-  // info.className = 'hintLabel';
-  // info.innerText = 'Navrhované změny:';
-  // itemListContainer.appendChild(info);
-
   let edits = JSON.parse(await GET('api/product/listEditSuggestions.php'));
   let divs = [];
 
@@ -67,7 +61,6 @@ async function loadEditSuggestions(){
       amountUnitSpan.innerText = edit.oldAmountUnit;
     }
 
-    // div.elements.newTitle.innerText = edit.brand+' • '+edit.type+' • '+edit.amountValue+' '+edit.amountUnit;
     div.elements.newTitle.appendChild(brandSpan);
     div.elements.newTitle.appendChild(document.createTextNode(' • '));
     div.elements.newTitle.appendChild(typeSpan);
@@ -122,11 +115,10 @@ async function loadEditSuggestions(){
     div.elements.acceptBtn.onclick = async function(){
       div.elements.acceptBtn.blur();
       showLoading();
+      await checkAuth();
       try {
         await POST('api/product/acceptEditSuggestion.php?editId='+edit.id);
       } catch(e){
-        // console.error(e);
-        // alert('Akci nelze provést - neočekávaná chyba');
         alert('Akci nelze provést: '+e.message);
       }
       await loadEditSuggestions();
@@ -136,6 +128,7 @@ async function loadEditSuggestions(){
     div.elements.discardBtn.onclick = async function(){
       div.elements.discardBtn.blur();
       showLoading();
+      await checkAuth();
       try {
         await POST('api/product/discardEditSuggestion.php?editId='+edit.id);
       } catch(e){
@@ -147,9 +140,9 @@ async function loadEditSuggestions(){
     }
 
     div.elements.suspendUserBtn.onclick = async function(){
-      // TODO make sure user cannot suspend themselves!
       div.elements.suspendUserBtn.blur();
       showLoading();
+      await checkAuth();
       try {
         await POST('api/product/discardEditSuggestion.php?editId='+edit.id);
         await POST('api/user/suspendUser.php?userId='+edit.editedBy.id);
@@ -180,10 +173,6 @@ async function loadEditSuggestions(){
 
   hideLoading();
 
-  // let div = await LayoutManager.getLayout('layouts/editSuggestion.html');
-  // div.className = 'itemContainer editSuggestionItem';
-  // itemListContainer.appendChild(div);
-
 }
 
 // TODO this should be paged or loaded dynamically
@@ -195,25 +184,10 @@ async function loadProducts(){
   let divs = [];
   let products = JSON.parse(await GET('api/product/listProducts.php'));
 
-  // let divs = [];
-  // for(let product of products){
-  //   let div = await LayoutManager.getLayout('layouts/product.html');
-  //   div.className = 'itemContainer productItem';
-  //   divs.push(div);
-  // }
-
-  // let info = document.createElement('div');
-  // info.className = 'hintLabel';
-  // info.innerText = 'Všechny produkty:';
-  // itemListContainer.appendChild(info);
-
-  // let i = 0;
   for(let product of products){
 
     let div = await LayoutManager.getLayout('layouts/product.html');
     div.className = 'itemContainer productItem';
-    // let div = divs[i];
-    // i++;
 
     div.elements.productTitle.innerText = div.elements.productTitle.title =
         product.brand+' • '+product.type+(product.amountValue ? (' • '+product.amountValue+' '+product.amountUnit) : '');
@@ -232,9 +206,6 @@ async function loadProducts(){
       await showDialog('addProduct', null, product);
       hideLoading();
     }
-
-    // let div = document.createElement('div');
-    // div.innerText = product.shortDesc;
 
     divs.push(div);
 
@@ -275,65 +246,30 @@ async function loadUsers(){
     div.elements.roleSelect.value = user.userRole;
 
     div.elements.roleSelect.onchange = async function(){
-      // console.log(user.id, div.elements.roleSelect.value);
       showLoading();
       let userRole = div.elements.roleSelect.value;
       try {
+        await checkAuth();
         await POST('api/user/updateRole.php?userId='+user.id, {
           userRole: userRole,
         });
       } catch(e){
         console.error(e);
-        alert('Akci nelze provést - neočekávaná chyba');
+        alert(e.message);
       }
       hideLoading();
       loadUsers();
     }
 
-    // div.innerText = user.email;
-
-    // itemListContainer.appendChild(div);
     divs.push(div);
 
   }
 
   itemListContainer.innerText = '';
 
-  // let info = document.createElement('div');
-  // info.className = 'hintLabel';
-  // info.innerText = 'Uživatelé:';
-  // itemListContainer.appendChild(info);
-
   for(let div of divs){
     itemListContainer.appendChild(div);
   }
-
-  // for(let user of users){
-
-  //   if(user.id==auth.user.id) continue;
-
-  //   let div = await LayoutManager.getLayout('layouts/user.html');
-  //   div.className = 'itemContainer userItem';
-
-  //   div.elements.email.innerText = user.email;
-  //   div.elements.roleSelect.value = user.userRole;
-
-  //   div.elements.roleSelect.onchange = async function(){
-  //     // console.log(user.id, div.elements.roleSelect.value);
-  //     showLoading();
-  //     let userRole = div.elements.roleSelect.value;
-  //     await POST('api/user/updateRole.php?userId='+user.id, {
-  //       userRole: userRole,
-  //     });
-  //     hideLoading();
-  //     loadUsers();
-  //   }
-
-  //   // div.innerText = user.email;
-
-  //   itemListContainer.appendChild(div);
-
-  // }
 
   hideLoading();
 
@@ -368,6 +304,7 @@ async function loadCharityRequests(){
     div.elements.acceptBtn.onclick = async function(){
       div.elements.acceptBtn.blur();
       showLoading();
+      await checkAuth();
       try {
         await POST('api/charity/acceptCharityRequest.php?charityId='+charity.id);
       } catch(e){
@@ -381,6 +318,7 @@ async function loadCharityRequests(){
     div.elements.discardBtn.onclick = async function(){
       div.elements.discardBtn.blur();
       showLoading();
+      await checkAuth();
       try {
         await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
       } catch(e){
@@ -392,9 +330,9 @@ async function loadCharityRequests(){
     }
 
     div.elements.suspendUserBtn.onclick = async function(){
-      // TODO make sure user cannot suspend themselves!
       div.elements.suspendUserBtn.blur();
       showLoading();
+      await checkAuth();
       try {
         await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
         await POST('api/user/suspendUser.php?userId='+charity.user.id);
@@ -448,50 +386,10 @@ async function loadCharities() {
 
     div.elements.editBtn.onclick = async function(){
       showLoading();
+      await checkAuth();
       await showDialog('registerCharity', charity);
       hideLoading();
     }
-
-    // div.elements.acceptBtn.onclick = async function(){
-    //   div.elements.acceptBtn.blur();
-    //   showLoading();
-    //   try {
-    //     await POST('api/charity/acceptCharityRequest.php?charityId='+charity.id);
-    //   } catch(e){
-    //     console.error(e);
-    //     alert('Akci nelze provést - neočekávaná chyba');
-    //   }
-    //   await loadCharityRequests();
-    //   hideLoading();
-    // }
-
-    // div.elements.discardBtn.onclick = async function(){
-    //   div.elements.discardBtn.blur();
-    //   showLoading();
-    //   try {
-    //     await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
-    //   } catch(e){
-    //     console.error(e);
-    //     alert('Akci nelze provést - neočekávaná chyba');
-    //   }
-    //   await loadCharityRequests();
-    //   hideLoading();
-    // }
-
-    // div.elements.suspendUserBtn.onclick = async function(){
-    //   // TODO make sure user cannot suspend themselves!
-    //   div.elements.suspendUserBtn.blur();
-    //   showLoading();
-    //   try {
-    //     await POST('api/charity/discardCharityRequest.php?charityId='+charity.id);
-    //     await POST('api/user/suspendUser.php?userId='+charity.user.id);
-    //   } catch(e){
-    //     console.error(e);
-    //     alert('Akci nelze provést - neočekávaná chyba');
-    //   }
-    //   await loadCharityRequests();
-    //   hideLoading();
-    // }
 
     divs.push(div);
 
@@ -557,7 +455,8 @@ window.onload = async function(){
   initMenu('management');
 
   statusBarBackBtn.onclick = function(){
-    history.back();
+    // history.back();
+    location.href = 'profile.php';
   }
 
   if(checkRole('editor')){
@@ -580,8 +479,6 @@ window.onload = async function(){
   }
 
   if(actionBtns.length>0) actionBtns[0].onSelect();
-
-  // await loadEditSuggestions();
 
   hideLoading();
 

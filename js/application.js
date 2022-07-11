@@ -1,11 +1,17 @@
 /** General application stuff, not directly related to any particular page **/
 
+/** list of available dialogs */
 let dialogDefs = {};
-let dialogs = []; // list of all open dialogs
-let tooltip; // currently shown tooltip
-let loading; // loading overlay
-let scripts = []; // included scripts
-let stylesheets = []; // included stylesheets
+/** list of all open dialogs */
+let dialogs = [];
+/** currently shown tooltip */
+let tooltip;
+/** loading overlay */
+let loading;
+/** included scripts */
+let scripts = [];
+/** included stylesheets */
+let stylesheets = [];
 /** authentication data **/
 let auth;
 
@@ -39,6 +45,20 @@ function hideLoading(){
   if(!loading) return;
   document.body.removeChild(loading);
   loading = null;
+}
+
+function showOffline(){
+  if(offlineOverlay) return;
+  offlineOverlay = document.createElement('div');
+  offlineOverlay.className = 'offlineOverlay';
+  offlineOverlay.innerHTML = '<div class="offlineBox"><img src="res/warning.gif"></img> Offline</div>';
+  document.body.appendChild(offlineOverlay);
+}
+
+function hideOffline(){
+  if(!offlineOverlay) return;
+  document.body.removeChild(offlineOverlay);
+  offlineOverlay = null;
 }
 
 function showTooltip(x, y, msg){
@@ -100,7 +120,6 @@ async function showDialog(name, ...args){
     }
   }
 
-  // if(dialog.onInit) dialog.onInit(); // TODO make this async?
   if(dialog.onInit){
     showLoading();
     if(dialog.onInit.constructor.name=='AsyncFunction') await dialog.onInit();
@@ -117,10 +136,10 @@ function requireJS(src){
       return;
     }
     console.log('loading', src);
-    scripts.push(src);
     let script = document.createElement('script');
     script.src = src;
     script.onload = function(){
+      scripts.push(src);
       resolve();
     }
     script.onerror = function(){
@@ -137,11 +156,11 @@ function requireCSS(src){
       return;
     }
     console.log('loading', src);
-    stylesheets.push(src);
     let stylesheet = document.createElement('link');
     stylesheet.rel = 'stylesheet';
     stylesheet.href = src;
     stylesheet.onload = function(){
+      stylesheets.push(src);
       resolve();
     }
     stylesheet.onerror = function(){
@@ -155,14 +174,3 @@ function requireCSS(src){
 window.onfocus = async function(){
   await checkAuth();
 }
-
-// window.ononline = async function(){
-//   console.log('connection restored - refreshing');
-//   offline = false;
-//   if(focused){
-//     await checkAuth();
-//     await refresh();
-//   } else {
-//     connectionRestored = true;
-//   }
-// }

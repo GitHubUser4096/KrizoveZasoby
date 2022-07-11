@@ -1,8 +1,6 @@
 
-// TODO name is not accurate?
+// TODO name is not accurate - used both for registering and editing charities
 async function createRegisterCharityDialog(charity){
-
-  // TODO title and buttons still say register even if editing
 
   let placeCounter = 1;
 
@@ -16,8 +14,6 @@ async function createRegisterCharityDialog(charity){
   div.className = 'registerCharityDialog';
 
   div.onInit = async function(){
-
-    // addContact();
 
     if(charity){
 
@@ -51,32 +47,14 @@ async function createRegisterCharityDialog(charity){
 
   div.elements.form.submitForm = async function(){
 
-    // console.log(getPlaces());
-
     let name = div.elements.form.getValue(div.elements.name);
     let orgId = div.elements.form.getValue(div.elements.orgId);
     let contacts = div.elements.form.getValue(div.elements.contacts);
     let places = await getPlaces();
-    // let contacts = getContacts();
 
     if(places===false) return;
 
     if(!places.length) throw new Error('Prosím přidejte alespoň jedno místo!');
-    // if(!contacts.length) throw new Error('Prosím přidejte alespoň jeden kontakt!');
-
-    // let openHours = div.elements.form.getValue(div.elements.openHours);
-
-    // console.log(places);
-    // console.log(contacts);
-
-    // await POST('api/charity/registerCharity.php', {
-    //   data: JSON.stringify({
-    //     name: name,
-    //     places: places,
-    //     contacts: contacts,
-    //     openHours: openHours,
-    //   }),
-    // });
 
     if(charity){
       await POST('api/charity/registerCharity.php?charityId='+charity.id, {
@@ -177,9 +155,6 @@ async function createRegisterCharityDialog(charity){
 
     div.elements.placeTabs.appendChild(tabBtn);
 
-    // div.elements.placeContent.innerText = '';
-    // div.elements.placeContent.appendChild(placeDiv);
-
     tabBtn.select();
 
     return placeDiv;
@@ -235,111 +210,6 @@ async function createRegisterCharityDialog(charity){
   div.elements.addPlaceBtn.onclick = async function(){
     await addPlace();
   }
-
-  // div.elements.addPlaceBtn.onclick = async function(){
-  //   await addPlace();
-  // }
-
-  // async function addPlace(){
-
-  //   let place = await LayoutManager.getLayout('layouts/registerCharityPlace.html');
-
-  //   place.elements.removeBtn.onclick = function(){
-  //     div.elements.placeList.removeChild(place);
-  //   }
-
-  //   div.elements.placeList.appendChild(place);
-
-  // }
-
-  // function getPlaces(){
-
-  //   let places = [];
-
-  //   for(let e of div.elements.placeList.children){
-
-  //     let street = div.elements.form.getValue(e.elements.street);
-  //     let place = div.elements.form.getValue(e.elements.place);
-  //     let postCode = div.elements.form.getValue(e.elements.postCode);
-  //     let note = div.elements.form.getValue(e.elements.note);
-
-  //     places.push({
-  //       street: street,
-  //       place: place,
-  //       postCode: postCode,
-  //       note: note,
-  //     });
-
-  //   }
-
-  //   return places;
-
-  // }
-
-  // div.elements.addContactBtn.onclick = async function(){
-
-  //   // let contact = document.createElement('div');
-  //   // let select = document.createElement('select');
-  //   // select.className = 'contactTypeSelect';
-  //   // let emailOption = document.createElement('option');
-  //   // emailOption.innerText = 'E-mail:';
-  //   // let phoneOption = document.createElement('option');
-  //   // phoneOption.innerText = 'Telefon:';
-  //   // let webOption = document.createElement('option');
-  //   // webOption.innerText = 'Web:';
-  //   // select.appendChild(emailOption);
-  //   // select.appendChild(phoneOption);
-  //   // select.appendChild(webOption);
-  //   // contact.appendChild(select);
-  //   // let input = document.createElement('input');
-  //   // input.className = 'formInput contactInput';
-  //   // contact.appendChild(input);
-  //   // let removeBtn = document.createElement('button');
-  //   // removeBtn.className = 'squareBtn removeContactBtn';
-  //   // removeBtn.innerText = 'X';
-  //   // removeBtn.type = 'button';
-  //   // removeBtn.onclick = function(){
-  //   //   div.elements.contactList.removeChild(contact);
-  //   // }
-  //   // contact.appendChild(removeBtn);
-
-  //   // div.elements.contactList.appendChild(contact);
-
-  //   await addContact();
-
-  // }
-
-  // async function addContact(){
-
-  //   let contact = await LayoutManager.getLayout('layouts/registerCharityContact.html');
-
-  //   contact.elements.removeBtn.onclick = function(){
-  //     div.elements.contactList.removeChild(contact);
-  //   }
-
-  //   div.elements.contactList.appendChild(contact);
-
-  // }
-
-  // function getContacts(){
-
-  //   let contacts = [];
-
-  //   for(let e of div.elements.contactList.children){
-
-  //     let type = e.elements.typeSelect.value;
-  //     let contact = div.elements.form.getValue(e.elements.contactInput);
-
-  //     contacts.push({
-  //       type: type,
-  //       value: contact,
-  //     });
-
-  //   }
-
-  //   return contacts;
-
-  // }
 
   return div;
 

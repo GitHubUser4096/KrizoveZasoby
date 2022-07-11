@@ -75,12 +75,6 @@ async function createSettingsDialog(){
 
   }
 
-  // passwordForm.onSubmitFail = function(){
-  //   passwordForm.currentPassword.value = '';
-  //   passwordForm.newPassword.value = '';
-  //   passwordForm.confirmPassword.value = '';
-  // }
-
   function toDays(str){
     if(str=='days'){
       return 1;

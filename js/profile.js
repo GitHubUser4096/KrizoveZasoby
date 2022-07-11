@@ -14,18 +14,8 @@ let bagButtons = [];
 let itemDivs = [];
 /** user configuration **/
 let config;
-
-// let loadBags;
-// let loadBag; // function to load all items from the current bag
-// let refresh; // function to refresh everything (bags and items)
-// let addItem;
-// let removeItem;
-// let sortItems;
-// let refreshItems; // function to refresh currently cached items
-
-
-// TODO what is this?
-// let addedBag = false;
+let itemDisplay;
+let itemSort;
 
 /** adds a button to the list of bags **/
 function addBagButton(id, name, state){
@@ -89,8 +79,6 @@ async function loadBags(){
 /** updates the user configuration **/
 async function fetchConfig(){
   config = JSON.parse(await GET('api/user/getSettings.php'));
-  nameDisplayOptions.value = config.itemDisplay;
-  sortOptions.value = config.sort;
 }
 
 /** updates the item list (with the currently cached items) - updates display and sort, updates hints **/
@@ -151,10 +139,18 @@ function removeItem(itemDiv){
 /** sorts items in cache **/
 function sortItems(){
 
-  if(config.sort=='name'){
+  if(itemSort=='name'){
     itemDivs.sort((d1, d2)=>d1.getDisplayName().localeCompare(d2.getDisplayName()));
   } else {
-    itemDivs.sort((d1, d2)=>(new Date(d1.item.expiration)-new Date(d2.item.expiration)));
+    itemDivs.sort((d1, d2)=>{
+      // if only one item has a date, put it before the other one (items with a date will be above those without)
+      let exp1 = d1.item.expiration ? d1.item.expiration : "";
+      let exp2 = d2.item.expiration ? d2.item.expiration : "";
+      if(Math.sign(exp1.length)!=Math.sign(exp2.length)){
+        return exp1.length ? -1 : 1;
+      }
+      return new Date(d1.item.expiration)-new Date(d2.item.expiration);
+    });
   }
 
 }
@@ -190,7 +186,6 @@ async function loadBag(id){
   let allItems = JSON.parse(await GET('api/item/getItems.php?bagId='+id));
 
   itemDivs = [];
-  // itemListContainer.innerText = ''; // TODO unnecessary? (done in refreshItems)
 
   let numUnused = 0;
   let expandedItem;
@@ -252,55 +247,8 @@ async function refresh(){
 
 }
 
-/** creates a bag online - verifies name, creates the bag, refreshes bag list and switches into the bag **/
-// async function addBag(name){
-
-//   name = name.substring(0, 1).toUpperCase()+name.substring(1).toLowerCase();
-
-//   if(!await checkAuth()) return;
-
-//   let donated = JSON.parse(await GET('api/bag/listDonated.php'));
-
-//   if(donated.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
-//     alert('Taška se stejným názvem je mezi odevzdanými taškami.');
-//     return;
-//   }
-
-//   if(allBags.findIndex(b=>b.name.toLowerCase()==name.toLowerCase())>=0) {
-//     alert('Taška se stejným názvem již existuje.');
-//     return;
-//   }
-
-//   if(name.length>64){
-//     alert('Název tašky je příliš dlouhý.');
-//     return;
-//   }
-
-//   let bag = JSON.parse(await POST('api/bag/createBag.php', {'name':name}));
-//   if(!bag.id){
-//     alert('Nelze přidat tašku');
-//     return;
-//   }
-//   await loadBags();
-//   await loadBag(bag.id);
-
-//   return true;
-
-// }
-
 // TODO used only in init - move to init submit?
 async function addBag(name, description){
-
-  // this is done by maxlength attrib
-  // if(name.length>64){
-  //   alert('Název tašky je příliš dlouhý!');
-  //   return;
-  // }
-
-  // if(description.length>1024){
-  //   alert('Popis tašky je příliš dlouhý!');
-  //   return;
-  // }
 
   try {
 
@@ -371,29 +319,20 @@ window.onload = async function(){
     return await createDonateBagDialog();
   }, 'js/donateBag.js', 'css/donateBag.css');
 
-  // TODO get rid of these (this pattern is not really followed anyway)
-  // let btn_addItem = document.querySelector('#btn_addItem');
-  // let div_bagInfoTitle = document.querySelector('#div_bagInfoTitle');
-  // let input_bagDates = document.querySelector('#input_bagDates');
-  // let input_bagNotes = document.querySelector('#input_bagNotes');
-  // let currentBagDiv = document.querySelector('.currentBag');
-  // let tempNewBagDiv = document.querySelector('.tempNewBag');
-
   initMenu('profile');
 
-  // name and sort change listeners - update the state online and locally
-  // (don't wait for online update - to improve performance, out of sync state does not matter too much here)
+  // name and sort change listeners
 
   nameDisplayOptions.onchange = async function(){
-    POST('api/user/setConfig.php', {'itemDisplay':nameDisplayOptions.value});
-    config['itemDisplay'] = nameDisplayOptions.value;
+    itemDisplay = nameDisplayOptions.value;
+    localStorage.setItem('itemDisplay', itemDisplay);
     sortItems();
     refreshItems();
   }
 
   sortOptions.onchange = async function(){
-    POST('api/user/setConfig.php', {'sort':sortOptions.value});
-    config['sort'] = sortOptions.value;
+    itemSort = sortOptions.value;
+    localStorage.setItem('itemSort', itemSort);
     sortItems();
     refreshItems();
   }
@@ -416,93 +355,7 @@ window.onload = async function(){
     }
     await addBag(name, description);
     hideLoading();
-    // await refresh(); // refresh to hide the init screen - TODO init screen should be hidden here directly (?) - bag has to be loaded anyway
   }
-
-  // TODO is the new adding bag good? can this be deleted? \/
-
-  // new bag replaced by a regular dialog - keep it that way? (code below should be deleted if we agree on the new design)
-
-  // creating a new bag
-
-  // // cancel entering new bag name if esc is pressed on it
-  // newBagInput.onkeydown = function(e){
-  //   if(e.code=='Escape'){
-  //     newBagInput.value = '';
-  //     // newBagInput.style.display = 'none';
-  //     // newBagBtn.style.display = 'inline-block';
-  //     // newBagDiv.classList.remove('enterName');
-  //     newBagInput.blur(); // TODO is blur sufficient? will it always call onblur?
-  //     // refresh();
-  //   }
-  // }
-
-  // // TODO weird behavior when: name entered, blurred (creates the bag), clicked, blurred - does not leave new bag state
-  // // TODO repeatedly quickly pressing the button and escape breaks it
-
-  // // TODO bag gets created whenever input goes out of focus, even when for example leaving the browser window - is this the desired behavior?
-  // newBagInput.onchange = async function(){
-  //   let name = newBagInput.value.trim();
-  //   if(!name) return;
-  //   // addedBag = true;
-  //   showLoading();
-  //   addedBag = await addBag(name);
-  //   // newBagInput.value = '';
-  //   newBagInput.blur();
-  //   hideLoading();
-  //   // newBagDiv.classList.remove('enterName');
-  //   // newBagInput.style.display = 'none';
-  //   // newBagBtn.style.display = 'inline-block';
-  // }
-
-  // // if new bag input loses focus, cancel entering bag name
-  // newBagInput.onblur = function(){
-  //   // newBagInput.style.display = 'none';
-  //   // newBagBtn.style.display = 'inline-block';
-  //   newBagDiv.classList.remove('enterName');
-  //   newBagInput.value = '';
-  //   // itemDiv.style.display = 'block';
-  //   // bagInfo.style.display = 'block';
-  //   currentBagDiv.style.display = 'block';
-  //   tempNewBagDiv.style.display = 'none';
-  //   if(!addedBag){
-  //     for(let btn of bagButtons){
-  //       if(btn.bagId==selectedBagId) btn.classList.add('selected');
-  //     }
-  //     // refresh();
-  //     // refreshItems();
-  //   }
-  //   addedBag = false;
-  //   newBagBtn.style.display = 'block';
-  //   setTimeout(function(){
-  //     newBagInput.style.display = 'none';
-  //   }, 150);
-  // }
-
-  // // new bag button clicked - change state to entering new bag name
-  // // TODO keeping everything but temporarily changing the content feels dodgy - is there a better way?
-  // newBagBtn.onclick = function(){
-  //   for(let btn of bagButtons){
-  //     btn.classList.remove('selected');
-  //   }
-  //   // itemDiv.style.display = 'none';
-  //   // bagInfo.style.display = 'none';
-  //   currentBagDiv.style.display = 'none';
-  //   tempNewBagDiv.style.display = 'block';
-  //   // div_bagDates.innerText = 'Doporučené: \nNejpozději: ';
-  //   // bagInfoForm.bagName.value = '';
-  //   // bagInfoForm.bagNotes.value = '';
-  //   // newBagInput.style.display = 'block';
-  //   // newBagBtn.style.display = 'none';
-  //   newBagDiv.classList.add('enterName');
-  //   // itemListContainer.innerHTML = '<div class="hintLabel emptyHint">Zadejte název tašky</div>';
-  //   // newBagInput.focus();
-  //   newBagInput.style.display = 'block';
-  //   setTimeout(function(){
-  //     newBagBtn.style.display = 'none';
-  //     newBagInput.focus();
-  //   }, 150);
-  // }
 
   btn_addBag.onclick = async function(){
     showLoading();
@@ -515,10 +368,6 @@ window.onload = async function(){
   btn_addItem.onclick = async function(){
     showLoading();
     await checkAuth();
-    // dialog_addItem.style.display = 'block';
-    // await requireJS('js/addItem.js');
-    // await requireCSS('css/addItem.css');
-    // await showAddItemDialog();
     await showDialog('addItem');
     hideLoading();
   }
@@ -526,20 +375,10 @@ window.onload = async function(){
   // setting the bag as donated
   donateBtn.onclick = async function(){
     donateBtn.blur();
-    // if(!await checkAuth()) return;
-    // let allItems = JSON.parse(await GET('api/bag/getItems.php?bagId='+selectedBag.id));
-    // if(!allItems.find(i=>!i.used)) {
-    //   alert('Taška je prázdná!');
-    //   return;
-    // }
     if(!itemDivs.find(i=>!i.item.used)) {
       alert('Taška je prázdná!');
       return;
     }
-    // if(!confirm('Označit tašku '+selectedBag.name+' jako odevzdanou?\n(Odevzdané tašky můžete zobrazit/obnovit v menu -> odevzdané tašky)')) return;
-    // showLoading();
-    // await POST('api/bag/donateBag.php?bagId='+selectedBag.id);
-    // refresh();
     showLoading();
     await checkAuth();
     await showDialog('donateBag');
@@ -560,7 +399,7 @@ window.onload = async function(){
 
     showLoading();
     await checkAuth();
-    let name = bagInfoForm.bagName.value.trim();
+    let name = toFirstUpper(bagInfoForm.bagName.value.trim());
 
     if(!name) {
       bagInfoForm.bagName.value = selectedBag.name;
@@ -568,7 +407,6 @@ window.onload = async function(){
       return;
     }
 
-    // TODO keep this for the server? - keep it this way to have a correct message?
     let donated = JSON.parse(await GET('api/bag/listDonated.php'));
     hideLoading();
 
@@ -585,24 +423,6 @@ window.onload = async function(){
       return;
     }
 
-    // if(name.length>64){
-    //   alert('Název je příliš dlouhý.');
-    //   bagInfoForm.bagName.value = selectedBag.name;
-    //   return;
-    // }
-    // if(bagInfoForm.bagNotes.value.length>1024){
-    //   alert('Popis je příliš dlouhý.');
-    //   bagInfoForm.bagNotes.value = selectedBag.description;
-    //   return;
-    // }
-    
-    // if(!selectedBagId) {
-    //   bagInfoForm.bagName.value = selectedBag.name;
-    //   bagInfoForm.bagNotes.value = selectedBag.description;
-    //   hideLoading();
-    //   return;
-    // }
-
     showLoading();
     try{
       await POST('api/bag/updateInfo.php?bagId='+selectedBagId, {'name':name,'description':bagInfoForm.bagNotes.value});
@@ -616,24 +436,9 @@ window.onload = async function(){
     }
     hideLoading();
 
-    // bagButtons.find((b)=>b.bagId==selectedBag.id).innerText = name;
-
     await refresh();
-    // await loadBags(); // doing this does not reload the bag info, changing it again does not reset it correctly
 
   }
-
-  // TODO custom tooltip has to be aligned better
-  // bagInfoForm.deleteBag.onmouseover = function(e){
-  //   if(bagInfoForm.deleteBag.classList.contains('disabled')){
-  //     let rect = bagInfoForm.bagName.getBoundingClientRect();
-  //     showTooltip(rect.left, rect.top+rect.height, 'Nelze smazat plnou tašku!');
-  //   }
-  // }
-
-  // bagInfoForm.deleteBag.onmouseout = function(e){
-  //   hideTooltip();
-  // }
 
   // deleting bag
 
@@ -642,15 +447,19 @@ window.onload = async function(){
     if(bagInfoForm.deleteBag.classList.contains('disabled')) {
       return;
     }
-    // if(!await checkAuth()) return;
     if(!confirm('Smazat tašku '+selectedBag.name+'?')) return;
-    // window.history.replaceState('', '', '?');
     showLoading();
     await POST('api/bag/deleteBag.php?bagId='+selectedBag.id);
     await refresh();
   }
 
   // init
+
+  itemDisplay = localStorage.getItem('itemDisplay') ?? 'brandFirst';
+  itemSort = localStorage.getItem('itemSort') ?? 'date';
+
+  nameDisplayOptions.value = itemDisplay;
+  sortOptions.value = itemSort;
 
   await fetchConfig();
   await loadBags();
