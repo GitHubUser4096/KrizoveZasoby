@@ -135,10 +135,16 @@
 }
 
 .bagsTitle {
+  /* padding-bottom: 0; */
+}
+
+.bagsTitleText {
+  display: inline-block;
+  width: 100%;
   font-size: 16px;
   padding: 10px;
-  /* padding-bottom: 0; */
   text-align: center;
+  box-sizing: border-box;
 }
 
 .bagBtn {
@@ -487,4 +493,150 @@
 
 .empty {
   color: gray;
+}
+
+.bottomBtnBox.saveBagInfo {
+  position: absolute;
+  bottom: 0;
+  display: none;
+}
+
+.mobileControls {
+  display: none;
+  height: 40px;
+  overflow: hidden;
+  margin-bottom: 10px;
+}
+
+.mobileBagsBtn {
+  height: 40px;
+  width: calc(100% - 50px);
+  float: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobileBagsBtn img {
+  width: 40px;
+  vertical-align: top;
+}
+
+.mobileBagsBtn span {
+  line-height: 40px;
+  font-size: 20px;
+}
+
+.mobileBagInfoBtn {
+  width: 40px;
+  height: 40px;
+  float: right;
+}
+
+.mobileBagInfoBtn img {
+  width: 40px;
+}
+
+.bagInfoBox {
+  position: absolute;
+  top: 0;
+  bottom: 80px;
+  width: 100%;
+  overflow-y: auto;
+}
+
+.bagsBackBtn {
+  display: none;
+  padding: 0;
+  border: none;
+  background: none;
+  vertical-align: top;
+}
+
+.bagsBackBtn img {
+  width: 40px;
+}
+
+.bagInfoBackBtn {
+  display: none;
+  padding: 0;
+  border: none;
+  background: none;
+  vertical-align: top;
+}
+
+.bagInfoBackBtn img {
+  width: 40px;
+}
+
+@media only screen and (max-width: 1200px) {
+  :root {
+    --bagInfo-width: 300px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .main {
+    top: var(--titlebar-height);
+  }
+  /* .bags {
+    display: none;
+  } */
+  .currentBag {
+    left: 0;
+    width: 100%;
+  }
+  .items {
+    width: 100%;
+    left: 0;
+  }
+  /* .bagInfo {
+    display: none;
+  } */
+  .statusbar {
+    display: none;
+  }
+  .mobileHidden {
+    display: none;
+  }
+  .bags {
+    width: 100%;
+  }
+  .bagInfo {
+    width: 100%;
+  }
+  /* .bottomBtnBox.donate {
+    bottom: 75px;
+  }
+  .bottomBtnBox.saveBagInfo {
+    display: block;
+  } */
+  .mobileControls {
+    display: block;
+  }
+  .listContent {
+    height: calc(100% - 24px - 50px);
+  }
+  /* .bagInfoBox {
+    bottom: 155px;
+  } */
+  .bagsTitle {
+    padding: 10px 10px 0 10px;
+  }
+  .bagsBackBtn {
+    display: inline-block;
+  }
+  .bagsTitleText {
+    width: calc(100% - 80px);
+    font-size: 20px;
+  }
+  .bagInfoBackBtn {
+    display: inline-block;
+  }
+  .bagInfoName {
+    width: calc(100% - 95px);
+  }
+  .bagList {
+    height: calc(100% - 128px);
+  }
 }

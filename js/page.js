@@ -72,7 +72,7 @@ async function initMenu(page){
       hideLoading();
     }, 'res/bag.png');
 
-    addMenuBtn('Regsitrovat charitu', async function(){
+    addMenuBtn('Registrovat charitu', async function(){
       menu.style.display = 'none';
       showLoading();
       await checkAuth();

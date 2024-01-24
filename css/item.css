@@ -325,3 +325,72 @@
   -webkit-appearance: none;
   margin: 0;
 }
+
+@media only screen and (max-width: 600px) {
+  .itemContainer {
+    height: 62px;
+  }
+  .itemBriefCount {
+    left: 3px;
+    height: 50px;
+    line-height: 50px;
+  }
+  .itemBriefTitle {
+    left: 56px;
+    width: calc(100% - 59px);
+  }
+  .itemBriefExpDate {
+    left: 56px;
+    top: 43px;
+    font-size: 16px;
+    width: calc(100% - 59px);
+    text-align: left;
+  }
+  .itemBriefExpIn {
+    display: none;
+  }
+  .itemDetailsImg {
+    display: none;
+  }
+  .itemDetailsMenu {
+    left: 3px;
+  }
+  .itemDetailsCount {
+    left: 3px;
+    height: 50px;
+    line-height: 50px;
+  }
+  .itemDetailsTitle {
+    left: 56px;
+    width: calc(100% - 59px);
+  }
+  .itemDetailsExpDate {
+    left: 56px;
+    top: 43px;
+    font-size: 16px;
+    width: calc(100% - 59px);
+    text-align: left;
+  }
+  .itemDetailsExpIn {
+    display: none;
+  }
+  .itemDetailsPackage {
+    display: none;
+  }
+  .itemUseMenu {
+    left: 3px;
+  }
+  .itemMenuBtn {
+    margin: 5px;
+  }
+  .itemUseCountInput {
+    margin: 5px;
+    width: 40px;
+  }
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .itemDetailsEditProduct {
+    display: block;
+  }
+}

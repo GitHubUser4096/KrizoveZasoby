@@ -81,6 +81,9 @@ async function createFindCharityDialog(){
 
     let divs = [];
 
+    let minCoords = null;
+    let maxCoords = null;
+
     for(let place of places){
 
       let charityDiv = await LayoutManager.getLayout('layouts/charityListItem.html');
@@ -90,9 +93,24 @@ async function createFindCharityDialog(){
       charityDiv.elements.name.innerText = place.charity.name+' - '+place.street+', '+place.place;
       charityDiv.elements.address.innerText = place.street+', '+place.place+', '+place.postCode+'\n'+(place.notes??'');
       charityDiv.elements.openHours.innerText = place.openHours;
-      charityDiv.elements.contacts.innerText = (place.contacts?(place.contacts+'\n'):'')+place.charity.contacts;
+      // charityDiv.elements.contacts.innerText = (place.contacts?(place.contacts+'\n'):'')+place.charity.contacts;
+      
+      if(place.charity.contactWeb) charityDiv.elements.contacts.innerHTML += '<div>Web: <a target="_blank" href="'+place.charity.contactWeb+'">'+place.charity.contactWeb+'</a></div>';
+      if(place.charity.contactMail) charityDiv.elements.contacts.innerHTML += '<div>E-mail: <a href="mailto:'+place.charity.contactMail+'">'+place.charity.contactMail+'</a></div>';
+      if(place.charity.contactPhone) charityDiv.elements.contacts.innerHTML += '<div>Telefon: <a href="tel:'+place.charity.contactPhone+'">'+place.charity.contactPhone+'</a></div>';
+      if(place.contactWeb) charityDiv.elements.contacts.innerHTML += '<div>Web: <a target="_blank" href="'+place.contactWeb+'">'+place.contactWeb+'</a></div>';
+      if(place.contactMail) charityDiv.elements.contacts.innerHTML += '<div>E-mail: <a href="mailto:'+place.contactMail+'">'+place.contactMail+'</a></div>';
+      if(place.contactPhone) charityDiv.elements.contacts.innerHTML += '<div>Telefon: <a href="tel:'+place.contactPhone+'">'+place.contactPhone+'</a></div>';
 
       if(place.latitude && place.longitude){
+
+        if(minCoords == null) minCoords = [place.latitude, place.longitude];
+        if(maxCoords == null) maxCoords = [place.latitude, place.longitude];
+
+        if(place.latitude < minCoords[0])  minCoords[0] = place.latitude;
+        if(place.longitude < minCoords[1]) minCoords[1] = place.longitude;
+        if(place.latitude > maxCoords[0]) maxCoords[0] = place.latitude;
+        if(place.longitude > maxCoords[1]) maxCoords[1] = place.longitude;
 
         place.marker = L.marker([place.latitude, place.longitude]).addTo(map);
         place.marker.bindPopup(escapeHTML(place.charity.name+' - '+place.street+', '+place.place));
@@ -101,7 +119,8 @@ async function createFindCharityDialog(){
         });
 
         charityDiv.elements.showOnMapBtn.onclick = function(){
-          map.setView([place.latitude, place.longitude], 16);
+          // map.setView([place.latitude, place.longitude], 16);
+          map.flyTo([place.latitude, place.longitude], 16);
         }
 
       } else {
@@ -110,6 +129,10 @@ async function createFindCharityDialog(){
 
       divs.push(charityDiv);
 
+    }
+
+    if(minCoords != null && maxCoords != null) {
+      map.fitBounds([minCoords, maxCoords]);
     }
 
     div.elements.charityList.innerText = '';

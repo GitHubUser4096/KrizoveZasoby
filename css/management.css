@@ -82,6 +82,7 @@
   right: 0;
   top: 0;
   height: 100%;
+  /* overflow-x: auto; */
 }
 
 .items {
@@ -92,6 +93,7 @@
   height: 100%;
   padding: 10px;
   height: calc(100% - 20px);
+  min-width: 600px;
 }
 
 .listContent {
@@ -476,4 +478,8 @@
 
 .activeCharityItem .charityPlaces {
   margin-left: 10px;
+}
+
+.main {
+  overflow-x: auto;
 }

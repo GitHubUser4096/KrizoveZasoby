@@ -29,7 +29,11 @@ if(!isSet($_SESSION['user'])){
     <div class="background"></div>
 
     <div class="titlebar">
-      <a href="profile.php"><img src="res/logo.png"></img></a>
+      <!-- <a href="profile.php"><img src="res/logo.png"></img></a> -->
+      <a class="titleLink" href="profile.php">
+        <img class="titleImg" src="res/icon.png"></img>
+        <span class="titleText">Krizové Zásoby</span>
+      </a>
       <span class="userMenu">
         <div class="userNameField" id="userNameField"></div>
         <button class="menuBtn" id="menuBtn"><img src="res/menu.png"></img></button>

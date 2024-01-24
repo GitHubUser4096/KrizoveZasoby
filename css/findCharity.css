@@ -144,3 +144,30 @@
 .showOnMapBtn:active img {
   filter: opacity(.7);
 }
+
+@media only screen and (max-width: 1000px) {
+  .findCharityDialog .dialogBox {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media only screen and (max-height: 600px) {
+  .findCharityDialog .dialogBox {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+  .findCharityDialog .leftPane {
+    width: 100%;
+  }
+  .findCharityDialog .rightPane {
+    display: none;
+  }
+}

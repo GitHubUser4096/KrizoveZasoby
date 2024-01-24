@@ -235,6 +235,12 @@ async function loadBag(id){
     bagInfoForm.deleteBag.classList.remove('disabled');
   }
 
+  div_bags.classList.add('mobileHidden');
+  div_currentBag.classList.remove('mobileHidden');
+  div_bagInfo.classList.add('mobileHidden');
+  div_items.classList.remove('mobileHidden');
+  mobileBagName.innerText = 'Taška: '+selectedBag.name;
+
   hideLoading();
 
 }
@@ -438,6 +444,31 @@ window.onload = async function(){
 
     await refresh();
 
+  }
+
+  mobileBagsBtn.onclick = function(){
+    div_bags.classList.remove('mobileHidden');
+    div_currentBag.classList.add('mobileHidden');
+  }
+
+  mobileBagInfoBtn.onclick = function(){
+    div_bagInfo.classList.remove('mobileHidden');
+    div_items.classList.add('mobileHidden');
+  }
+
+  // saveBagInfoBtn.onclick = function(){
+  //   div_bagInfo.classList.add('mobileHidden');
+  //   div_items.classList.remove('mobileHidden');
+  // }
+
+  bagInfoBackBtn.onclick = function(){
+    div_bagInfo.classList.add('mobileHidden');
+    div_items.classList.remove('mobileHidden');
+  }
+
+  bagsBackBtn.onclick = function(){
+    div_bags.classList.add('mobileHidden');
+    div_currentBag.classList.remove('mobileHidden');
   }
 
   // deleting bag

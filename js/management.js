@@ -289,14 +289,20 @@ async function loadCharityRequests(){
 
     div.elements.name.innerText = charity.name;
     div.elements.orgId.innerText = charity.orgId;
-    div.elements.contacts.innerText = charity.contacts;
+    // div.elements.contacts.innerText = charity.contacts;
     div.elements.user.innerText = charity.user.email;
+
+    if(charity.contactWeb) div.elements.contacts.innerHTML += '<div>Web: <a target="_blank" href="'+charity.contactWeb+'">'+charity.contactWeb+'</a></div>';
+    if(charity.contactMail) div.elements.contacts.innerHTML += '<div>E-mail: <a href="mailto:'+charity.contactMail+'">'+charity.contactMail+'</a></div>';
+    if(charity.contactPhone) div.elements.contacts.innerHTML += '<div>Telefon: <a href="tel:'+charity.contactPhone+'">'+charity.contactPhone+'</a></div>';
     
     for(let place of charity.places) {
       let placeDiv = document.createElement('div');
-      placeDiv.innerText = place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'\n'+
-          place.openHours+'\n'+
-          (place.contacts??'');
+      placeDiv.innerHTML = '<div>'+place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'</div>'+
+          '<div>'+place.openHours+'</div>';
+      if(place.contactWeb) placeDiv.innerHTML += '<div>Web: <a target="_blank" href="'+place.contactWeb+'">'+place.contactWeb+'</a></div>';
+      if(place.contactMail) placeDiv.innerHTML += '<div>E-mail: <a href="mailto:'+place.contactMail+'">'+place.contactMail+'</a></div>';
+      if(place.contactPhone) placeDiv.innerHTML += '<div>Telefon: <a href="tel:'+place.contactPhone+'">'+place.contactPhone+'</a></div>';
       div.elements.places.appendChild(placeDiv);
       div.elements.places.appendChild(document.createElement('hr'));
     }
@@ -372,14 +378,23 @@ async function loadCharities() {
 
     div.elements.name.innerText = charity.name;
     div.elements.orgId.innerText = charity.orgId;
-    div.elements.contacts.innerText = charity.contacts;
+    // div.elements.contacts.innerText = charity.contacts;
     div.elements.user.innerText = charity.user.email;
+
+    if(charity.contactWeb) div.elements.contacts.innerHTML += '<div>Web: <a target="_blank" href="'+charity.contactWeb+'">'+charity.contactWeb+'</a></div>';
+    if(charity.contactMail) div.elements.contacts.innerHTML += '<div>E-mail: <a href="mailto:'+charity.contactMail+'">'+charity.contactMail+'</a></div>';
+    if(charity.contactPhone) div.elements.contacts.innerHTML += '<div>Telefon: <a href="tel:'+charity.contactPhone+'">'+charity.contactPhone+'</a></div>';
     
     for(let place of charity.places) {
       let placeDiv = document.createElement('div');
-      placeDiv.innerText = place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'\n'+
-          place.openHours+'\n'+
-          (place.contacts??'');
+      // placeDiv.innerText = place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'\n'+
+      //     place.openHours+'\n'+
+      //     (place.contacts??'');
+      placeDiv.innerHTML = '<div>'+place.street+', '+place.place+', '+place.postCode+' '+(place.note??'')+'</div>'+
+          '<div>'+place.openHours+'</div>';
+      if(place.contactWeb) placeDiv.innerHTML += '<div>Web: <a target="_blank" href="'+place.contactWeb+'">'+place.contactWeb+'</a></div>';
+      if(place.contactMail) placeDiv.innerHTML += '<div>E-mail: <a href="mailto:'+place.contactMail+'">'+place.contactMail+'</a></div>';
+      if(place.contactPhone) placeDiv.innerHTML += '<div>Telefon: <a href="tel:'+place.contactPhone+'">'+place.contactPhone+'</a></div>';
       div.elements.places.appendChild(placeDiv);
       div.elements.places.appendChild(document.createElement('hr'));
     }

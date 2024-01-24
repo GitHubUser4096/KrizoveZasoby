@@ -8,8 +8,8 @@ window.onload = function(){
   let params = new URLSearchParams(location.search);
 
   if(params.has('reauth')){
-    sidebar.style.display = 'none';
-    loginDialog.style.display = 'block';
+    // sidebar.style.display = 'none';
+    // loginDialog.style.display = 'block';
     loginMsg.style.display = 'block';
     loginMsg.innerText = 'Prosím přihlašte se znovu pro pokračování';
   } else if(params.has('resetPassword')){
@@ -19,32 +19,38 @@ window.onload = function(){
     resetPasswordForm.code.value = params.get('code')??'';
   }
 
-  // loginBtn.onclick = async function(){
+  loginBtn.onclick = async function(){
     
-  //   sidebar.style.display = 'none';
+    // sidebar.style.display = 'none';
 
-  //   let auth;
-  //   try {
-  //     auth = JSON.parse(await GET('api/user/auth.php'));
-  //   } catch(e){
-  //     alert(e.message);
-  //     sidebar.style.display = 'block';
-  //   }
+    // let auth;
+    // try {
+    //   auth = JSON.parse(await GET('api/user/auth.php'));
+    // } catch(e){
+    //   alert(e.message);
+    //   sidebar.style.display = 'block';
+    // }
 
-  //   if(auth.loggedIn){
-  //     location.href = 'profile.php';
-  //     return;
-  //   }
+    // if(auth.loggedIn){
+    //   location.href = 'profile.php';
+    //   return;
+    // }
 
-  //   loginDialog.style.display = 'block';
+    // main.style.display = 'none';
+    main.classList.add('mobileHidden');
+    // loginDialog.style.display = 'block';
+    loginDialog.classList.remove('mobileHidden');
 
-  // }
+  }
 
-  // loginForm_close.onclick = function(){
-  //   loginDialog.style.display = 'none';
-  //   sidebar.style.display = 'block';
-  //   window.history.replaceState('', '', '?');
-  // }
+  loginForm_close.onclick = function(){
+    // loginDialog.style.display = 'none';
+    // sidebar.style.display = 'block';
+    // window.history.replaceState('', '', '?');
+    loginDialog.classList.add('mobileHidden');
+    main.classList.remove('mobileHidden');
+    loginDialog.style.display = null;
+  }
 
   loginForm.oninput = function(e){
     e.target.classList.remove('error');
@@ -64,11 +70,13 @@ window.onload = function(){
   loginForm.forgotPassword.onclick = function(){
     loginDialog.style.display = 'none';
     forgotPasswordDialog.style.display = 'block';
+    main.classList.add('mobileHidden');
   }
 
   loginForm.signup.onclick = function(){
     loginDialog.style.display = 'none';
     signupDialog.style.display = 'block';
+    main.classList.add('mobileHidden');
   }
 
   forgotPasswordForm_close.onclick = function(){
@@ -377,6 +385,14 @@ window.onload = function(){
 
   closeCookieMsg.onclick = function(){
     cookieMsg.style.display = 'none';
+  }
+
+  if(navigator.userAgent.toLowerCase().indexOf('android')>=0){
+    mobileScreen.style.display = 'block';
+  }
+
+  mobileClose.onclick = function(){
+    mobileScreen.style.display = 'none';
   }
 
 }

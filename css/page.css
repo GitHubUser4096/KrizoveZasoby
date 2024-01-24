@@ -36,6 +36,22 @@ body {
   height: var(--titlebar-height);
 }
 
+.titleLink {
+  text-decoration: none;
+  color: black;
+}
+
+.titleImg {
+  width: var(--titlebar-height);
+  vertical-align: top;
+}
+
+.titleText {
+  line-height: var(--titlebar-height);
+  font-size: 32px;
+  font-weight: bold;
+}
+
 .userMenu {
   float: right;
 }
@@ -104,10 +120,14 @@ body {
   left: 0;
   top: var(--titlebar-height);
   width: 100%;
-  height: calc(var(--statusbar-height) - 10px);
-  padding: 5px;
+  height: var(--statusbar-height);
+  line-height: var(--statusbar-height);
+  padding: 0 10px;
+  /* margin: auto; */
+  /* padding: 5px; */
   font-size: 24px;
   background: #ace0e2;
+  box-sizing: border-box;
 }
 
 .statusbar.hidden {
@@ -173,4 +193,13 @@ body {
   width: 300px;
   height: 50px;
   font-size: 24px;
+}
+
+@media only screen and (max-width: 600px) {
+  .titleImg {
+    display: none;
+  }
+  .userNameField {
+    display: none;
+  }
 }

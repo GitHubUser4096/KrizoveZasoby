@@ -35,3 +35,12 @@
 .moveItemDialog .row {
   margin: 20px;
 }
+
+@media only screen and (max-width: 400px) {
+  .moveItemDialog .dialogBox {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

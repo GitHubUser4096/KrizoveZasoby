@@ -7,8 +7,9 @@ use EmergencySupplies;
 create table User(
   id int primary key auto_increment,
   email varchar(64) not null unique,
-  password varchar(255) not null,
-  userRole enum('disabled', 'viewer', 'contributor', 'editor', 'admin') default ('contributor')
+  password varchar(255),
+  userRole enum('disabled', 'viewer', 'contributor', 'editor', 'admin') default ('contributor'),
+  googleLogin boolean not null default 0
 );
 
 create table Bag(
@@ -118,7 +119,9 @@ create table Charity(
   id int primary key auto_increment,
   orgId varchar(32) not null unique,
   name varchar(128) not null unique,
-  contacts varchar(256) not null,
+  contactWeb varchar(32),
+  contactMail varchar(32),
+  contactPhone varchar(32),
   isApproved boolean not null default 0
 );
 
@@ -130,7 +133,9 @@ create table CharityPlace(
   postCode varchar(32) not null,
   note varchar(256),
   openHours varchar(256),
-  contacts varchar(256),
+  contactWeb varchar(32),
+  contactMail varchar(32),
+  contactPhone varchar(32),
   latitude decimal(9, 6),
   longitude decimal(9, 6),
   foreign key (charityId) references Charity(id)
@@ -228,6 +233,21 @@ create table CharityUser(
 
 --- Update to 0.7 ---
 alter table Config add column sendNotifs boolean not null default 1;
+
+--- Update to 1.1 ---
+alter table User modify column password varchar(255);
+alter table User add column googleLogin boolean not null default 0;
+
+--- Update to 1.2 ---
+alter table Charity drop column contacts;
+alter table Charity add column contactWeb varchar(32);
+alter table Charity add column contactMail varchar(32);
+alter table Charity add column contactPhone varchar(32);
+
+alter table CharityPlace drop column contacts;
+alter table CharityPlace add column contactWeb varchar(32);
+alter table CharityPlace add column contactMail varchar(32);
+alter table CharityPlace add column contactPhone varchar(32);
 
 --- Tables - OLD DATABASE ---
 

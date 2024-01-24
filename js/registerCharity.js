@@ -21,7 +21,10 @@ async function createRegisterCharityDialog(charity){
       
       div.elements.name.value = charity.name;
       div.elements.orgId.value = charity.orgId;
-      div.elements.contacts.value = charity.contacts;
+      // div.elements.contacts.value = charity.contacts;
+      div.elements.contactWeb.value = charity.contactWeb;
+      div.elements.contactMail.value = charity.contactMail;
+      div.elements.contactPhone.value = charity.contactPhone;
 
       for(let place of charity.places){
 
@@ -33,7 +36,10 @@ async function createRegisterCharityDialog(charity){
         placeDiv.elements.postCode.value = place.postCode;
         placeDiv.elements.note.value = place.note;
         placeDiv.elements.openHours.value = place.openHours;
-        placeDiv.elements.contacts.value = place.contacts;
+        // placeDiv.elements.contacts.value = place.contacts;
+        placeDiv.elements.contactWeb.value = place.contactWeb;
+        placeDiv.elements.contactMail.value = place.contactMail;
+        placeDiv.elements.contactPhone.value = place.contactPhone;
 
         placeDiv.updateName();
 
@@ -49,11 +55,15 @@ async function createRegisterCharityDialog(charity){
 
     let name = div.elements.form.getValue(div.elements.name);
     let orgId = div.elements.form.getValue(div.elements.orgId);
-    let contacts = div.elements.form.getValue(div.elements.contacts);
+    // let contacts = div.elements.form.getValue(div.elements.contacts);
+    let contactWeb = div.elements.form.getValue(div.elements.contactWeb);
+    let contactMail = div.elements.form.getValue(div.elements.contactMail);
+    let contactPhone = div.elements.form.getValue(div.elements.contactPhone);
+
+    if(!contactWeb && !contactMail && !contactPhone) throw new Error('Prosím vyplňte alespoň jeden kontakt!');
+
     let places = await getPlaces();
-
     if(places===false) return;
-
     if(!places.length) throw new Error('Prosím přidejte alespoň jedno místo!');
 
     if(charity){
@@ -61,7 +71,10 @@ async function createRegisterCharityDialog(charity){
         data: JSON.stringify({
           name: name,
           orgId: orgId,
-          contacts: contacts,
+          // contacts: contacts,
+          contactWeb: contactWeb,
+          contactMail: contactMail,
+          contactPhone: contactPhone,
           places: places,
         }),
       });
@@ -70,7 +83,10 @@ async function createRegisterCharityDialog(charity){
         data: JSON.stringify({
           name: name,
           orgId: orgId,
-          contacts: contacts,
+          // contacts: contacts,
+          contactWeb: contactWeb,
+          contactMail: contactMail,
+          contactPhone: contactPhone,
           places: places,
         }),
       });
@@ -172,7 +188,10 @@ async function createRegisterCharityDialog(charity){
       let postCode = div.elements.form.getValue(placeTab.placeDiv.elements.postCode);
       let note = div.elements.form.getValue(placeTab.placeDiv.elements.note);
       let openHours = div.elements.form.getValue(placeTab.placeDiv.elements.openHours);
-      let contacts = div.elements.form.getValue(placeTab.placeDiv.elements.contacts);
+      // let contacts = div.elements.form.getValue(placeTab.placeDiv.elements.contacts);
+      let contactWeb = div.elements.form.getValue(placeTab.placeDiv.elements.contactWeb);
+      let contactMail = div.elements.form.getValue(placeTab.placeDiv.elements.contactMail);
+      let contactPhone = div.elements.form.getValue(placeTab.placeDiv.elements.contactPhone);
 
       let geocode = JSON.parse(await GET('https://nominatim.openstreetmap.org/search?q='+encodeURIComponent(street+', '+postCode+', Česká Republika')+'&format=json&limit=1'));
 
@@ -192,7 +211,10 @@ async function createRegisterCharityDialog(charity){
         postCode: postCode,
         note: note,
         openHours: openHours,
-        contacts: contacts,
+        // contacts: contacts,
+        contactWeb: contactWeb,
+        contactMail: contactMail,
+        contactPhone: contactPhone,
         latitude: latitude,
         longitude: longitude,
       };

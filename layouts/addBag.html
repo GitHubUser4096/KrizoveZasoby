@@ -4,14 +4,16 @@
       <span class="formTitleText">Přidat Tašku</span>
       <button dialog-close class="formClose" type="button" name="close">X</button>
     </div>
-    <div layout-id="error" class="popupMsg errorMsg formError"></div>
-    <div class="row">
-      <span class="rowLabel">Název: <span title="Povinné pole">*</span></span>
-      <span class="rowContent"><input class="input" required maxlength="64" layout-id="bagName" layout-display="název"></input></span>
-    </div>
-    <div class="row">
-      <span class="rowLabel">Popis:</span>
-      <span class="rowContent"><textarea class="input bagDescription" maxlength="64" layout-id="description" layout-display="popis"></textarea></span>
+    <div class="formContent">
+      <div layout-id="error" class="popupMsg errorMsg formError"></div>
+      <div class="row">
+        <span class="rowLabel">Název: <span title="Povinné pole">*</span></span>
+        <span class="rowContent"><input class="input" required maxlength="64" layout-id="bagName" layout-display="název"></input></span>
+      </div>
+      <div class="row">
+        <span class="rowLabel">Popis:</span>
+        <span class="rowContent"><textarea class="input bagDescription" maxlength="64" layout-id="description" layout-display="popis"></textarea></span>
+      </div>
     </div>
     <div>
       <button class="formSubmit" type="submit">Přidat</button>

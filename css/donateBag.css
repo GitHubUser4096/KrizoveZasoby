@@ -37,3 +37,12 @@
 .donateBagDialog .optionBtn:hover {
   background: var(--foreground-highlight);
 }
+
+@media only screen and (max-width: 600px) {
+  .donateBagDialog .dialogBox {
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+  }
+}

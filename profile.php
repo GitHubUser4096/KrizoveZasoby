@@ -35,7 +35,11 @@ if(!isSet($_SESSION['user'])){
     <div class="background"></div>
 
     <div class="titlebar">
-      <a href="profile.php"><img src="res/logo.png"></img></a>
+      <a class="titleLink" href="profile.php">
+        <!-- <img src="res/logo.png"></img> -->
+        <img class="titleImg" src="res/icon.png"></img>
+        <span class="titleText">Krizové Zásoby</span>
+      </a>
       <span class="userMenu">
         <div class="userNameField" id="userNameField"></div>
         <button class="menuBtn" id="menuBtn"><img src="res/menu.png"></img></button>
@@ -58,16 +62,28 @@ if(!isSet($_SESSION['user'])){
       </form>
     </div>
     <div id="main" class="main">
-      <div class="bags">
-        <div class="bagsTitle">Tašky:</div>
+      <div id="div_bags" class="bags mobileHidden">
+        <div class="bagsTitle">
+          <button id="bagsBackBtn" class="bagsBackBtn"><img src="res/back.png"></img></button>
+          <span class="bagsTitleText">Tašky:</span>
+        </div>
         <div id="div_bagList" class="bagList"></div>
         <div class="bottomBtnBox addBag">
           <button class="bottomBtn addBagBtn" id="btn_addBag">Přidat tašku</button>
         </div>
       </div>
-      <div class="currentBag">
-        <div class="items">
+      <div id="div_currentBag" class="currentBag">
+        <div id="div_items" class="items">
           <div class="lists">
+            <div class="mobileControls">
+              <div id="mobileBagsBtn" class="mobileBagsBtn">
+                <img src="res/menu.png"></img>
+                <span id="mobileBagName">Tašky</span>
+              </div>
+              <div id="mobileBagInfoBtn" class="mobileBagInfoBtn">
+                <img src="res/edit.png"></img>
+              </div>
+            </div>
             <div class="itemsTopBar">
               <span class="topBarItem">Název:</span>
               <select class="topBarSelect" id="nameDisplayOptions">
@@ -87,23 +103,29 @@ if(!isSet($_SESSION['user'])){
             <button class="bottomBtn" id="btn_addItem">Přidat položku</button>
           </div>
         </div>
-        <div class="bagInfo">
-          <form id="bagInfoForm">
-            <div class="bagInfoTitle">
-              <input name="bagName" maxlength="64" class="bagInfoName"></input>
-              <button type="button" name="deleteBag" class="deleteBagBtn">
-                <img class="enImg" src="res/delete.png" title="Smazat tašku"></img>
-                <img class="disImg" src="res/delete_disabled.png" title="Nelze smazat plnou tašku!"></img>
-              </button>
-            </div>
-            <div class="bagInfoContent">
-              <div class="bagInfoText">
-                Kdy odevzdat nevypršené položky:
-                <div id="div_bagDates"></div>
+        <div id="div_bagInfo" class="bagInfo mobileHidden">
+          <div class="bagInfoBox">
+            <form id="bagInfoForm">
+              <div class="bagInfoTitle">
+                <button id="bagInfoBackBtn" class="bagInfoBackBtn"><img src="res/back.png"></img></button>
+                <input name="bagName" maxlength="64" class="bagInfoName"></input>
+                <button type="button" name="deleteBag" class="deleteBagBtn">
+                  <img class="enImg" src="res/delete.png" title="Smazat tašku"></img>
+                  <img class="disImg" src="res/delete_disabled.png" title="Nelze smazat plnou tašku!"></img>
+                </button>
               </div>
-              <textarea class="bagNotesInput" name="bagNotes" maxlength="1024" placeholder="Popis"></textarea>
-            </div>
-          </form>
+              <div class="bagInfoContent">
+                <div class="bagInfoText">
+                  Kdy odevzdat nevypršené položky:
+                  <div id="div_bagDates"></div>
+                </div>
+                <textarea class="bagNotesInput" name="bagNotes" maxlength="1024" placeholder="Popis"></textarea>
+              </div>
+            </form>
+          </div>
+          <!-- <div class="bottomBtnBox saveBagInfo">
+            <button id="saveBagInfoBtn" class="bottomBtn">Uložit</button>
+          </div> -->
           <div class="bottomBtnBox donate">
             <button id="donateBtn" class="bottomBtn">Odevzdat</button>
           </div>
