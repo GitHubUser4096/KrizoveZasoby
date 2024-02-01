@@ -128,10 +128,11 @@ async function createAddItemDialog(){
 
     if(product.imgName) div.elements.productImage.style.backgroundImage = 'url(images/'+product.imgName+')';
     else div.elements.productImage.style.backgroundImage = 'url(res/noImage.png)';
-    div.elements.productName.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
-    div.elements.productName.title = div.elements.productName.innerText;
-    div.elements.productShortDesc.innerText = product.shortDesc;
-    div.elements.productShortDesc.title = product.shortDesc;
+    // div.elements.productName.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
+    div.elements.productName.innerText = product.shortDesc;
+    // div.elements.productName.title = div.elements.productName.innerText;
+    div.elements.productShortDesc.innerText = product.brand+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
+    // div.elements.productShortDesc.title = product.shortDesc;
     div.elements.productPackage.innerText = product.packageType;
 
   }
@@ -149,13 +150,15 @@ async function createAddItemDialog(){
     item.style.display = 'block';
     let titleDiv = document.createElement('div');
     titleDiv.className = 'suggestionItemTitle';
-    titleDiv.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
-    titleDiv.title = titleDiv.innerText;
+    // titleDiv.innerText = product.brand+' • '+product.productType+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'');
+    // titleDiv.title = titleDiv.innerText;
+    titleDiv.innerText = product.shortDesc;
     item.appendChild(titleDiv);
     let descDiv = document.createElement('div');
     descDiv.className = 'suggestionItemDesc';
-    descDiv.innerText = product.shortDesc;
-    descDiv.title = descDiv.innerText;
+    // descDiv.innerText = product.shortDesc;
+    // descDiv.title = descDiv.innerText;
+    descDiv.innerText = product.brand+(product.amountValue?(' • '+product.amountValue+' '+product.amountUnit):'')+(product.packageType?(' • '+product.packageType):'');
     item.appendChild(descDiv);
     item.onclick = function(){
       div.setProduct(product);

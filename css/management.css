@@ -17,7 +17,7 @@
   width: var(--actions-width);
   height: 100%;
   box-shadow: 0 10px 5px black;
-  overflow-y: auto;
+  /* overflow-y: auto; */
 }
 
 .actionsTitle {
@@ -85,6 +85,17 @@
   /* overflow-x: auto; */
 }
 
+.titleBar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50px;
+  font-size: 24px;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
 .items {
   position: absolute;
   left: 0;
@@ -98,7 +109,12 @@
 
 .listContent {
   overflow-y: auto;
-  height: 100%;
+  position: absolute;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* height: 100%; */
 }
 
 .hintLabel {
@@ -118,6 +134,50 @@
   /* transition: .2s; */
   overflow: hidden;
   /* cursor: pointer; */
+}
+
+/* .pageTitle {
+  font-size: 24px;
+} */
+
+.searchBox {
+  position: absolute;
+  right: 40px;
+}
+
+.searchBar {
+  box-sizing: border-box;
+  background: none;
+  border: none;
+  box-shadow: 0 0 5px black;
+  outline: none;
+  font-size: 18px;
+  height: 30px;
+  width: 200px;
+  display: inline-block;
+}
+
+.searchImg {
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 30px;
+  vertical-align: bottom;
+}
+
+.addProductBtn {
+  position: absolute;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border: none;
+  box-shadow: 0 0 5px black;
+  outline: none;
+  font-size: 24px;
+  background: var(--foreground);
+}
+
+.addProductBtn:hover {
+  background: var(--foreground-highlight);
 }
 
 .editSuggestionItem {
@@ -155,7 +215,7 @@
   text-overflow: ellipsis;
 }
 
-.editSuggestionItem .productShortDesc {
+.editSuggestionItem .productBrand {
   position: absolute;
   left: 110px;
   top: 55px;
@@ -166,7 +226,7 @@
   text-overflow: ellipsis;
 }
 
-.editSuggestionItem .productCode {
+.editSuggestionItem .productAmount {
   position: absolute;
   left: 110px;
   top: 77px;
@@ -177,7 +237,7 @@
   text-overflow: ellipsis;
 }
 
-.editSuggestionItem .productPackageType {
+.editSuggestionItem .productCode {
   position: absolute;
   left: 110px;
   top: 99px;
@@ -188,7 +248,7 @@
   text-overflow: ellipsis;
 }
 
-.editSuggestionItem .productDescription {
+.editSuggestionItem .productPackageType {
   position: absolute;
   left: 110px;
   top: 121px;
@@ -317,7 +377,7 @@
   text-overflow: ellipsis;
 }
 
-.productItem .productShortDesc {
+.productItem .productBrand {
   position: absolute;
   left: 110px;
   top: 30px;
@@ -328,7 +388,7 @@
   text-overflow: ellipsis;
 }
 
-.productItem .productCode {
+.productItem .productAmount {
   position: absolute;
   left: 110px;
   top: 52px;
@@ -339,7 +399,7 @@
   text-overflow: ellipsis;
 }
 
-.productItem .productPackageType {
+.productItem .productCode {
   position: absolute;
   left: 110px;
   top: 74px;
@@ -350,7 +410,7 @@
   text-overflow: ellipsis;
 }
 
-.productItem .productDescription {
+.productItem .productPackageType {
   position: absolute;
   left: 110px;
   top: 96px;
@@ -481,5 +541,69 @@
 }
 
 .main {
-  overflow-x: auto;
+  /* overflow-x: auto; */
+}
+
+.mobileMenu {
+  display: none;
+}
+
+@media only screen and (max-width: 820px) {
+  .statusbar {
+    display: none;
+  }
+  .main {
+    top: 50px;
+  }
+  .actions {
+    width: 100%;
+    display: none;
+  }
+  .currentAction {
+    left: 0;
+  }
+  .items {
+    min-width: auto;
+  }
+  .mobileMenu {
+    display: block;
+    width: 30px;
+    height: 30px;
+  }
+  .mobileMenu img {
+    width: 100%;
+  }
+  .titleBar {
+    left: 40px;
+  }
+  .showMenu .actions {
+    display: block;
+  }
+  .showMenu .currentAction {
+    display: none;
+  }
+  .searchBar {
+    width: calc(100% - 50px);
+    display: none;
+  }
+  .mobileSearch .pageTitle {
+    display: none;
+  }
+  .mobileSearch .searchBar {
+    display: inline-block;
+  }
+  .productItem {
+    height: 200px;
+  }
+  .productItem .options {
+    left: 0;
+    width: auto;
+    bottom: 0;
+  }
+  .productItem .productBrand {
+    width: 100%;
+  }
+  .productItem .product {
+    width: 100%;
+  }
 }

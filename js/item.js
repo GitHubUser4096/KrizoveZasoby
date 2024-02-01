@@ -190,12 +190,18 @@ async function createItem(item){
 
   }
 
-  itemBriefShortDesc.innerText = item.product.shortDesc;
-  itemBriefShortDesc.title = item.product.shortDesc;
-  itemDetailsShortDesc.innerText = item.product.shortDesc;
-  itemDetailsShortDesc.title = item.product.shortDesc;
+  let itemInfo = item.product.brand;
+
+  if(item.product.amountValue){
+    itemInfo += ' • '+div.item.product.amountValue+' '+div.item.product.amountUnit;
+  }
+
+  itemBriefShortDesc.innerText = itemInfo;
+  // itemBriefShortDesc.title = item.product.shortDesc;
+  itemDetailsShortDesc.innerText = itemInfo;
+  // itemDetailsShortDesc.title = item.product.shortDesc;
   itemDetailsPackage.innerText = item.product.packageType;
-  itemDetailsPackage.title = item.product.packageType??'';
+  // itemDetailsPackage.title = item.product.packageType??'';
   if(item.product.imgName) itemDetailsImg.style.backgroundImage = 'url(images/'+item.product.imgName+')';
   else itemDetailsImg.style.backgroundImage = 'url(res/noImage.png)';
 
@@ -242,16 +248,17 @@ async function createItem(item){
   }
 
   div.getDisplayName = function(){
-    let res = '';
-    if(itemDisplay=='typeFirst'){
-      res = div.item.product.type+' • '+div.item.product.brand;
-    } else {
-      res = div.item.product.brand+' • '+div.item.product.type;
-    }
-    if(div.item.product.amountValue){
-      res += ' • '+div.item.product.amountValue+' '+div.item.product.amountUnit;
-    }
-    return res;
+    // let res = '';
+    // if(itemDisplay=='typeFirst'){
+    //   res = div.item.product.type+' • '+div.item.product.brand;
+    // } else {
+    //   res = div.item.product.brand+' • '+div.item.product.type;
+    // }
+    // if(div.item.product.amountValue){
+    //   res += ' • '+div.item.product.amountValue+' '+div.item.product.amountUnit;
+    // }
+    // return res;
+    return div.item.product.shortDesc;
   }
 
   div.setItem = function(item){

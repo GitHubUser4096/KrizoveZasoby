@@ -30,25 +30,16 @@ if(count($products)>0 && $products[0]['id']!=$productId){
 }
 
 $brand = validate(['name'=>'brand', 'required'=>true, 'maxLength'=>64]);
-$type = validate(['name'=>'type', 'required'=>true, 'maxLength'=>64]);
 $shortDesc = validate(['name'=>'shortDesc', 'required'=>true, 'maxLength'=>128]);
 $amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1, 'max'=>99999]);
 $packageType = validate(['name'=>'packageType', 'maxLength'=>64]);
 $amountUnit = validate(['name'=>'amountUnit', 'required'=>true, 'enum'=>['g', 'ml']]);
-$description = validate(['name'=>'description', 'maxLength'=>1024]);
 
 $brands = $db->query("select * from Brand where name=?", $brand);
 if(count($brands)==0){
   $brandId = $db->insert("insert into Brand(name) values (?)", $brand);
 } else {
   $brandId = $brands[0]['id'];
-}
-
-$productTypes = $db->query("select * from ProductType where name=?", $type);
-if(count($productTypes)==0){
-  $productTypeId = $db->insert("insert into ProductType(name) values (?)", $type);
-} else {
-  $productTypeId = $productTypes[0]['id'];
 }
 
 if($packageType){
@@ -67,8 +58,8 @@ if($imgName && strlen($imgName)>64){
   fail('400 Bad request', 'imgName too long');
 }
 
-$db->execute("update Product set brandId=?, typeId=?, shortDesc=?, code=?, imgName=?, packageTypeId=?, description=?, amountValue=?, amountUnit=? where id=?",
-    $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $productId);
+$db->execute("update Product set brandId=?, shortDesc=?, code=?, imgName=?, packageTypeId=?, amountValue=?, amountUnit=? where id=?",
+    $brandId, $shortDesc, $code, $imgName, $packageTypeId, $amountValue, $amountUnit, $productId);
 
 $product = getProductById($productId, $db);
 

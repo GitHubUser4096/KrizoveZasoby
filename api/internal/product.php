@@ -4,11 +4,10 @@
 
 $productQueryString =
     "select
-      Product.id, Brand.name as 'brand', ProductType.name as 'type', ProductType.name as 'productType', amountValue, amountUnit, shortDesc, shortDesc as 'name', code, PackageType.name as 'packageType', imgName, description, createdBy
+      Product.id, Brand.name as 'brand', amountValue, amountUnit, shortDesc, shortDesc as 'name', code, PackageType.name as 'packageType', imgName, createdBy
     from Product
         left join Brand on Brand.id=brandId
-        left join PackageType on PackageType.id=packageTypeId
-        left join ProductType on ProductType.id=typeId";
+        left join PackageType on PackageType.id=packageTypeId";
 
 function getProductById($id, $db){
   global $productQueryString;
@@ -41,7 +40,7 @@ function searchProducts($searchPhrase, $db){
   $products = listProducts($db); // list products processes edits
   $res = [];
   foreach($products as $product){
-    $prodName = $product['brand'].' '.$product['type'].' '.$product['shortDesc'].' '.$product['code'];
+    $prodName = $product['brand'].' '.$product['shortDesc'].' '.$product['code'];
     if(strpos(strtolower($prodName), strtolower($searchPhrase))!==false){
       $res[] = $product;
     }
@@ -52,24 +51,20 @@ function searchProducts($searchPhrase, $db){
 function processEdits($productList, $db){
   for($i = 0; $i<count($productList); $i++){
     $edits = $db->query("select
-        ProductEditSuggestion.id, changedBrandId, Brand.name as 'brand', changedTypeId, ProductType.name as 'type', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.name as 'packageType', changedImgName, imgName, changedDescription, description
+        ProductEditSuggestion.id, changedBrandId, Brand.name as 'brand', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.name as 'packageType', changedImgName, imgName
       from ProductEditSuggestion
         left join Brand on Brand.id=brandId
         left join PackageType on PackageType.id=packageTypeId
-        left join ProductType on ProductType.id=typeId
       where editedBy=? and productId=?", $_SESSION['user']['id'], $productList[$i]['id']);
     if(count($edits)>0){
       $edit = $edits[0];
       if($edit['changedBrandId']) $productList[$i]['brand'] = $edit['brand'];
-      if($edit['changedTypeId']) $productList[$i]['type'] = $edit['type'];
-      if($edit['changedTypeId']) $productList[$i]['productType'] = $edit['type'];
       if($edit['changedAmountValue']) $productList[$i]['amountValue'] = $edit['amountValue'];
       if($edit['changedAmountUnit']) $productList[$i]['amountUnit'] = $edit['amountUnit'];
       if($edit['changedShortDesc']) $productList[$i]['shortDesc'] = $edit['shortDesc'];
       if($edit['changedCode']) $productList[$i]['code'] = $edit['code'];
       if($edit['changedPackageTypeId']) $productList[$i]['packageType'] = $edit['packageType'];
       if($edit['changedImgName']) $productList[$i]['imgName'] = $edit['imgName'];
-      if($edit['changedDescription']) $productList[$i]['description'] = $edit['description'];
     }
   }
   return $productList;

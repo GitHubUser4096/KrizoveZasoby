@@ -13,14 +13,11 @@ function GET(request){
 			if(this.readyState==4){
 				if(this.status==0){
 					if(window.hideLoading) hideLoading();
-					// alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
-					// reject({status:0, message:'Connection failed'});
 					reject(new Error("Chyba připojení"));
 				}
 				// TODO 401 should mean not authorized (reauth), 403 should mean forbidden (this should check only 401, not sure if implemented correctly everywhere on backend)
 				if(this.status==401 || this.status==403){
 					location.href = 'index.php?reauth';
-					// reject({status:this.status, message:'Auth failed'});
 					reject(new Error("Chyba autentizace"));
 				}
 				if(this.status>=200 && this.status<300) { // TODO status codes below 200 and 300-399 are not handled, this promise might get stuck
@@ -28,7 +25,6 @@ function GET(request){
 					resolve(this.responseText);
 				} else if(this.status>=400) {
 					if(XHR_DEBUG) console.error('GET:', request, this.status, this.responseText);
-					// reject({status:this.status, message:this.responseText});
 					reject(new Error(this.responseText));
 				}
 			}
@@ -47,13 +43,10 @@ function POST(request, data){
 			if(this.readyState==4){
 				if(this.status==0){
 					if(window.hideLoading) hideLoading();
-					// alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
-					// reject('Connection failed');
 					reject(new Error("Chyba připojení"));
 				}
 				if(this.status==401 || this.status==403){ // TODO above
 					location.href = 'index.php?reauth';
-					// reject('Auth failed');
 					reject(new Error("Chyba autentizace"));
 				}
 				if(this.status>=200 && this.status<300){
@@ -63,7 +56,6 @@ function POST(request, data){
 				} else if(this.status>=400){
 					if(XHR_DEBUG==XHR_DEBUG_NO_POST) console.error('POST:', request, this.status, this.responseText);
 					else if(XHR_DEBUG==XHR_DEBUG_ALL) console.error('POST:', request, data, this.status, this.responseText);
-					// reject({status:this.status, message:this.responseText});
 					reject(new Error(this.responseText));
 				}
 			}
@@ -99,13 +91,10 @@ async function POST_FILE(request, file){
 			if(this.readyState==4){
 				if(this.status==0){
 					if(window.hideLoading) hideLoading();
-					// alert('Akci nelze provést. Prosím zkontrolujte připojení k internetu.');
-					// reject('Connection failed');
 					reject(new Error("Chyba připojení"));
 				}
 				if(this.status==401 || this.status==403){ // TODO above
 					location.href = 'index.php?reauth';
-					// reject('Auth failed');
 					reject(new Error("Chyba autentizace"));
 				}
 				if(this.status>=200 && this.status<300){
@@ -120,7 +109,6 @@ async function POST_FILE(request, file){
 			}
 		}
 		xhr.open('POST', request, true);
-		// xhr.setRequestHeader("Content-type", "multipart/form-data");
 		let formData = new FormData();
 		formData.append('file', file);
 		xhr.send(formData);

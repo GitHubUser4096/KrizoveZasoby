@@ -329,12 +329,12 @@ window.onload = async function(){
 
   // name and sort change listeners
 
-  nameDisplayOptions.onchange = async function(){
-    itemDisplay = nameDisplayOptions.value;
-    localStorage.setItem('itemDisplay', itemDisplay);
-    sortItems();
-    refreshItems();
-  }
+  // nameDisplayOptions.onchange = async function(){
+  //   itemDisplay = nameDisplayOptions.value;
+  //   localStorage.setItem('itemDisplay', itemDisplay);
+  //   sortItems();
+  //   refreshItems();
+  // }
 
   sortOptions.onchange = async function(){
     itemSort = sortOptions.value;
@@ -456,11 +456,6 @@ window.onload = async function(){
     div_items.classList.add('mobileHidden');
   }
 
-  // saveBagInfoBtn.onclick = function(){
-  //   div_bagInfo.classList.add('mobileHidden');
-  //   div_items.classList.remove('mobileHidden');
-  // }
-
   bagInfoBackBtn.onclick = function(){
     div_bagInfo.classList.add('mobileHidden');
     div_items.classList.remove('mobileHidden');
@@ -486,10 +481,10 @@ window.onload = async function(){
 
   // init
 
-  itemDisplay = localStorage.getItem('itemDisplay') ?? 'brandFirst';
+  // itemDisplay = localStorage.getItem('itemDisplay') ?? 'brandFirst';
   itemSort = localStorage.getItem('itemSort') ?? 'date';
 
-  nameDisplayOptions.value = itemDisplay;
+  // nameDisplayOptions.value = itemDisplay;
   sortOptions.value = itemSort;
 
   await fetchConfig();

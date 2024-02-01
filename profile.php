@@ -36,7 +36,6 @@ if(!isSet($_SESSION['user'])){
 
     <div class="titlebar">
       <a class="titleLink" href="profile.php">
-        <!-- <img src="res/logo.png"></img> -->
         <img class="titleImg" src="res/icon.png"></img>
         <span class="titleText">Krizové Zásoby</span>
       </a>
@@ -85,11 +84,11 @@ if(!isSet($_SESSION['user'])){
               </div>
             </div>
             <div class="itemsTopBar">
-              <span class="topBarItem">Název:</span>
+              <!-- <span class="topBarItem">Název:</span>
               <select class="topBarSelect" id="nameDisplayOptions">
                 <option value="brandFirst">Značka • Typ</option>
                 <option value="typeFirst">Typ • Značka</option>
-              </select>
+              </select> -->
               <span class="topBarItem">Řazení:</span>
               <select class="topBarSelect" id="sortOptions">
                 <option value="date">Datum</option>
@@ -123,9 +122,6 @@ if(!isSet($_SESSION['user'])){
               </div>
             </form>
           </div>
-          <!-- <div class="bottomBtnBox saveBagInfo">
-            <button id="saveBagInfoBtn" class="bottomBtn">Uložit</button>
-          </div> -->
           <div class="bottomBtnBox donate">
             <button id="donateBtn" class="bottomBtn">Odevzdat</button>
           </div>

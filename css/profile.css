@@ -640,3 +640,10 @@
     height: calc(100% - 128px);
   }
 }
+
+@media only screen and (max-width: 500px) {
+  .initForm {
+    width: 100%;
+    margin: 0;
+  }
+}

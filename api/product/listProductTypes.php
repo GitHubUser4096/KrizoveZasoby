@@ -1,17 +1,19 @@
 <?php
 
-session_start();
+/****************** DEPRECATED ******************/
 
-require_once '../../lib/php/db.php';
-require_once '../../config/supplies.conf.php';
-require_once '../internal/common.php';
+// session_start();
 
-$db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
+// require_once '../../lib/php/db.php';
+// require_once '../../config/supplies.conf.php';
+// require_once '../internal/common.php';
 
-checkAuth();
+// $db = new DB(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME, DB_DEBUG);
 
-$productTypes = $db->query("select * from ProductType order by name");
+// checkAuth();
 
-echo json_encode($productTypes);
+// $productTypes = $db->query("select * from ProductType order by name");
+
+// echo json_encode($productTypes);
 
 ?>

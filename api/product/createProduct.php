@@ -22,12 +22,10 @@ checkRole('contributor');
 
 $code = validate(['name'=>'code', 'required'=>true, 'maxLength'=>64]);
 $brand = validate(['name'=>'brand', 'required'=>true, 'maxLength'=>64]);
-$type = validate(['name'=>'type', 'required'=>true, 'maxLength'=>64]);
 $shortDesc = validate(['name'=>'shortDesc', 'required'=>true, 'maxLength'=>128]);
 $amountValue = validate(['name'=>'amountValue', 'type'=>'int', 'min'=>1, 'max'=>99999]);
 $packageType = validate(['name'=>'packageType', 'maxLength'=>64]);
 $amountUnit = validate(['name'=>'amountUnit', 'required'=>true, 'enum'=>['g', 'ml']]);
-$description = validate(['name'=>'description', 'maxLength'=>1024]);
 
 $products = $db->query("select * from Product where code=?", $code);
 if(count($products)>0){
@@ -39,13 +37,6 @@ if(count($brands)==0){
   $brandId = $db->insert("insert into Brand(name) values (?)", $brand);
 } else {
   $brandId = $brands[0]['id'];
-}
-
-$productTypes = $db->query("select * from ProductType where name=?", $type);
-if(count($productTypes)==0){
-  $productTypeId = $db->insert("insert into ProductType(name) values (?)", $type);
-} else {
-  $productTypeId = $productTypes[0]['id'];
 }
 
 if($packageType){
@@ -65,8 +56,8 @@ if($imgName && strlen($imgName)>64){
   fail('400 Bad request', 'imgName too long');
 }
 
-$prodId = $db->insert("insert into Product(brandId, typeId, shortDesc, code, imgName, packageTypeId, description, amountValue, amountUnit, createdBy) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    $brandId, $productTypeId, $shortDesc, $code, $imgName, $packageTypeId, $description, $amountValue, $amountUnit, $_SESSION['user']['id']);
+$prodId = $db->insert("insert into Product(brandId, shortDesc, code, imgName, packageTypeId, amountValue, amountUnit, createdBy) values (?, ?, ?, ?, ?, ?, ?, ?)",
+    $brandId, $shortDesc, $code, $imgName, $packageTypeId, $amountValue, $amountUnit, $_SESSION['user']['id']);
 
 $product = getProductById($prodId, $db);
 

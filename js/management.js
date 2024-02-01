@@ -8,6 +8,8 @@ async function refresh(){
 
 async function loadEditSuggestions(){
 
+  titleBar.innerText = "Návrhy změn produktů";
+
   showLoading();
 
   let edits = JSON.parse(await GET('api/product/listEditSuggestions.php'));
@@ -20,89 +22,46 @@ async function loadEditSuggestions(){
 
     div.elements.email.innerText = edit.editedBy.email;
 
-    div.elements.oldTitle.innerText = div.elements.oldTitle.title = edit.oldBrand+' • '+edit.oldType+(edit.oldAmountValue ? (' • '+edit.oldAmountValue+' '+edit.oldAmountUnit) : '');
-    div.elements.oldShortDesc.innerText = div.elements.oldShortDesc.title = edit.oldShortDesc;
-    div.elements.oldCode.innerText = div.elements.oldCode.title = 'Kód: '+edit.oldCode;
-    div.elements.oldPackageType.innerText = div.elements.oldPackageType.title = 'Balení: '+(edit.oldPackageType??'-');
-    div.elements.oldDescription.innerText = div.elements.oldDescription.title = 'Poznámky: '+(edit.oldDescription??'-');
+    div.elements.oldTitle.innerText = edit.oldShortDesc;
+    div.elements.oldBrand.innerText = edit.oldBrand;
+    div.elements.oldAmount.innerText = edit.oldAmountValue ? (edit.oldAmountValue+' '+edit.oldAmountUnit) : '-';
+    div.elements.oldCode.innerText = edit.oldCode;
+    div.elements.oldPackageType.innerText = edit.oldPackageType??'-';
     if(edit.oldImgName) div.elements.oldImg.style.backgroundImage = 'url(images/'+edit.oldImgName+')';
     else div.elements.oldImg.style.backgroundImage = 'url(res/noImage.png)';
-    
-    let brandSpan = document.createElement('span');
-    let typeSpan = document.createElement('span');
-    let amountValueSpan = document.createElement('span');
-    let amountUnitSpan = document.createElement('span');
-
-    if(edit.changedBrandId){
-      brandSpan.innerText = edit.brand;
-      brandSpan.style.color = 'red';
-    } else {
-      brandSpan.innerText = edit.oldBrand;
-    }
-
-    if(edit.changedTypeId){
-      typeSpan.innerText = edit.type;
-      typeSpan.style.color = 'red';
-    } else {
-      typeSpan.innerText = edit.oldType;
-    }
-
-    if(edit.changedAmountValue){
-      amountValueSpan.innerText = edit.amountValue;
-      amountValueSpan.style.color = 'red';
-    } else {
-      amountValueSpan.innerText = edit.oldAmountValue;
-    }
-
-    if(edit.changedAmountUnit){
-      amountUnitSpan.innerText = edit.amountUnit;
-      amountUnitSpan.style.color = 'red';
-    } else {
-      amountUnitSpan.innerText = edit.oldAmountUnit;
-    }
-
-    div.elements.newTitle.appendChild(brandSpan);
-    div.elements.newTitle.appendChild(document.createTextNode(' • '));
-    div.elements.newTitle.appendChild(typeSpan);
-    if((edit.changedAmountValue && edit.amountValue) || edit.oldAmountValue){
-      div.elements.newTitle.appendChild(document.createTextNode(' • '));
-      div.elements.newTitle.appendChild(amountValueSpan);
-      div.elements.newTitle.appendChild(document.createTextNode(' '));
-      div.elements.newTitle.appendChild(amountUnitSpan);
-    }
-    div.elements.newTitle.title = div.elements.newTitle.innerText;
 
     if(edit.changedShortDesc){
-      div.elements.newShortDesc.innerText = edit.shortDesc;
-      div.elements.newShortDesc.style.color = 'red';
+      div.elements.newTitle.innerText = edit.shortDesc;
+      div.elements.newTitle.style.color = 'red';
     } else {
-      div.elements.newShortDesc.innerText = edit.oldShortDesc;
+      div.elements.newTitle.innerText = edit.oldShortDesc;
     }
-    div.elements.newShortDesc.title = div.elements.newShortDesc.innerText;
+    
+    if(edit.changedBrandId){
+      div.elements.newBrand.innerText = edit.brand;
+      div.elements.newBrand.style.color = 'red';
+    } else {
+      div.elements.newBrand.innerText = edit.oldBrand;
+    }
+
+    if(edit.changedAmountValue || edit.changedAmountUnit){
+      div.elements.newAmount.style.color = 'red';
+    }
+    div.elements.newAmount.innerText = (edit.changedAmountValue ? edit.amountValue : edit.oldAmountValue)+' '+(edit.changedAmountUnit ? edit.amountUnit : edit.oldAmountUnit);
 
     if(edit.changedCode){
-      div.elements.newCode.innerText = 'Kód: '+edit.code;
+      div.elements.newCode.innerText = edit.code;
       div.elements.newCode.style.color = 'red';
     } else {
-      div.elements.newCode.innerText = 'Kód: '+edit.oldCode;
+      div.elements.newCode.innerText = edit.oldCode;
     }
-    div.elements.newCode.title = div.elements.newCode.innerText;
 
     if(edit.changedPackageType){
-      div.elements.newPackageType.innerText = 'Balení: '+(edit.packageType??'-');
+      div.elements.newPackageType.innerText = edit.packageType??'-';
       div.elements.newPackageType.style.color = 'red';
     } else {
-      div.elements.newPackageType.innerText = 'Balení: '+(edit.oldPackageType??'-');
+      div.elements.newPackageType.innerText = edit.oldPackageType??'-';
     }
-    div.elements.newPackageType.title = div.elements.newPackageType.innerText;
-
-    if(edit.changedDescription){
-      div.elements.newDescription.innerText = 'Poznámky: '+(edit.description??'-');
-      div.elements.newDescription.style.color = 'red';
-    } else {
-      div.elements.newDescription.innerText = 'Poznámky: '+(edit.oldDescription??'-');
-    }
-    div.elements.newDescription.title = div.elements.newDescription.innerText;
 
     if(edit.changedImgName){
       if(edit.imgName) div.elements.newImg.style.backgroundImage = 'url(images/'+edit.imgName+')';
@@ -189,12 +148,14 @@ async function loadProducts(){
     let div = await LayoutManager.getLayout('layouts/product.html');
     div.className = 'itemContainer productItem';
 
-    div.elements.productTitle.innerText = div.elements.productTitle.title =
-        product.brand+' • '+product.type+(product.amountValue ? (' • '+product.amountValue+' '+product.amountUnit) : '');
-    div.elements.productShortDesc.innerText = div.elements.productShortDesc.title = product.shortDesc;
-    div.elements.productCode.innerText = div.elements.productCode.title = 'Kód: '+product.code;
-    div.elements.productPackageType.innerText = div.elements.productPackageType.title = 'Balení: '+(product.packageType??'-');
-    div.elements.productDescription.innerText = div.elements.productDescription.title = 'Poznámky: '+(product.description??'-');
+    div.searchable = (product.shortDesc+' '+product.brand+' '+product.code+' '+product.packageType).toLowerCase();
+
+    div.elements.productTitle.innerText = product.shortDesc;
+        // product.brand+' • '+product.type+(product.amountValue ? (' • '+product.amountValue+' '+product.amountUnit) : '');
+    div.elements.productBrand.innerText = 'Značka: '+product.brand;
+    div.elements.productAmount.innerText = 'Množství: '+(product.amountValue ? (product.amountValue+' '+product.amountUnit) : '-');
+    div.elements.productCode.innerText = 'Kód: '+product.code;
+    div.elements.productPackageType.innerText = 'Balení: '+(product.packageType??'-');
     if(product.imgName) div.elements.productImage.style.backgroundImage = 'url(images/'+product.imgName+')';
     else div.elements.productImage.style.backgroundImage = 'url(res/noImage.png)';
     div.elements.email.innerText = product.createdBy.email;
@@ -211,7 +172,51 @@ async function loadProducts(){
 
   }
 
+  titleBar.innerText = '';
   itemListContainer.innerText = '';
+
+  let titleDiv = document.createElement('span');
+  titleDiv.className = "pageTitle";
+  titleDiv.innerText = "Všechny produkty";
+  titleBar.appendChild(titleDiv);
+  let searchBox = document.createElement('span');
+  searchBox.className = "searchBox";
+  let searchBar = document.createElement('input');
+  searchBar.className = "searchBar";
+  searchBar.placeholder = "Hledat";
+  searchBox.appendChild(searchBar);
+  let searchImg = document.createElement('img');
+  searchImg.className = "searchImg";
+  searchImg.src = "res/search.png";
+  searchImg.onclick = function() {
+    if(titleBar.classList.contains('mobileSearch')) {
+      titleBar.classList.remove('mobileSearch');
+    } else {
+      titleBar.classList.add('mobileSearch');
+    }
+  }
+  searchBox.appendChild(searchImg);
+  titleBar.appendChild(searchBox);
+  let addProductBtn = document.createElement('button');
+  addProductBtn.innerText = "+";
+  addProductBtn.onclick = async function(e) {
+    showLoading();
+    if(!await checkAuth()) return;
+    await showDialog('addProduct');
+    hideLoading();
+  }
+  addProductBtn.className = "addProductBtn";
+  addProductBtn.title = "Přidat produkt";
+  titleBar.appendChild(addProductBtn);
+
+  searchBar.onchange = function(e) {
+    itemListContainer.innerText = '';
+    for(let div of divs){
+      if(div.searchable.indexOf(e.target.value.toLowerCase()) >= 0) {
+        itemListContainer.appendChild(div);
+      }
+    }
+  }
 
   for(let div of divs){
     itemListContainer.appendChild(div);
@@ -229,6 +234,8 @@ async function loadProducts(){
 }
 
 async function loadUsers(){
+
+  titleBar.innerText = "Uživatelé";
 
   showLoading();
 
@@ -276,6 +283,8 @@ async function loadUsers(){
 }
 
 async function loadCharityRequests(){
+
+  titleBar.innerText = "Registrace charit";
 
   showLoading();
 
@@ -366,6 +375,8 @@ async function loadCharityRequests(){
 
 async function loadCharities() {
 
+  titleBar.innerText = "Správa charit";
+
   showLoading();
 
   let divs = [];
@@ -440,6 +451,7 @@ function addActionBtn(text, onSelect){
   btn.onclick = async function(){
     itemListContainer.innerText = '';
     btn.onSelect();
+    main.classList.remove('showMenu');
   }
   actionBtns.push(btn);
   div_actionList.appendChild(btn);
@@ -472,6 +484,10 @@ window.onload = async function(){
   statusBarBackBtn.onclick = function(){
     // history.back();
     location.href = 'profile.php';
+  }
+
+  mobileMenu.onclick = function() {
+    main.classList.add('showMenu');
   }
 
   if(checkRole('editor')){

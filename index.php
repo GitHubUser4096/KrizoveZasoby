@@ -58,13 +58,6 @@ if(isSet($_SESSION['user'])){
       </div>
     </div>
 
-    <!-- <div id="sidebar" class="side sidebar">
-      <div class="sidebarButtons">
-        <button class="sideBtn loginBtn" id="loginBtn">Moje Zásoby</button>
-        <button class="signupBtn" id="signupBtn">Registrovat</button>
-      </div>
-    </div> -->
-
     <div id="loginDialog" class="side loginForm mobileHidden">
       <form name="loginForm" id="loginForm">
         <div class="formTitle">
@@ -128,8 +121,6 @@ if(isSet($_SESSION['user'])){
             <div class="msgBox" id="resetPasswordMsg"></div>
           </div>
           <div class="formRow">
-            <!-- Na váš e-mail byl odeslán kód pro obnovení hesla. -->
-            <!-- Zadejte kód, který byl odeslán na váš e-mail a nastavte nové heslo. -->
             Zadejte kód, který bude odeslán na váš e-mail (může trvat několik minut) a nastavte nové heslo.
           </div>
           <label class="formRow">
@@ -162,7 +153,7 @@ if(isSet($_SESSION['user'])){
             <div class="msgBox" id="signupMsg"></div>
           </div>
           <label class="formRow">
-            E-mail: <input class="formInput" name="email" autocomplete="off"></input>
+            E-mail: <input class="formInput" name="email" type="email" autocomplete="off"></input>
           </label>
           <label class="formRow">
             Heslo: <input class="formInput" name="password" type="password" autocomplete="new-password"></input>

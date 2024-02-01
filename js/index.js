@@ -8,8 +8,6 @@ window.onload = function(){
   let params = new URLSearchParams(location.search);
 
   if(params.has('reauth')){
-    // sidebar.style.display = 'none';
-    // loginDialog.style.display = 'block';
     loginMsg.style.display = 'block';
     loginMsg.innerText = 'Prosím přihlašte se znovu pro pokračování';
   } else if(params.has('resetPassword')){
@@ -20,33 +18,11 @@ window.onload = function(){
   }
 
   loginBtn.onclick = async function(){
-    
-    // sidebar.style.display = 'none';
-
-    // let auth;
-    // try {
-    //   auth = JSON.parse(await GET('api/user/auth.php'));
-    // } catch(e){
-    //   alert(e.message);
-    //   sidebar.style.display = 'block';
-    // }
-
-    // if(auth.loggedIn){
-    //   location.href = 'profile.php';
-    //   return;
-    // }
-
-    // main.style.display = 'none';
     main.classList.add('mobileHidden');
-    // loginDialog.style.display = 'block';
     loginDialog.classList.remove('mobileHidden');
-
   }
 
   loginForm_close.onclick = function(){
-    // loginDialog.style.display = 'none';
-    // sidebar.style.display = 'block';
-    // window.history.replaceState('', '', '?');
     loginDialog.classList.add('mobileHidden');
     main.classList.remove('mobileHidden');
     loginDialog.style.display = null;
@@ -93,8 +69,6 @@ window.onload = function(){
 
     e.preventDefault();
 
-    // if(forgotPasswordForm.submitted) return;
-
     if(!forgotPasswordForm.email.value){
       forgotPasswordMsg.style.background = 'red';
       forgotPasswordMsg.style.color = 'white';
@@ -104,13 +78,6 @@ window.onload = function(){
       forgotPasswordForm.email.classList.add('error');
       return;
     }
-
-    // forgotPasswordForm.submitted = true;
-
-    // forgotPasswordMsg.style.background = 'var(--foreground)';
-    // forgotPasswordMsg.style.color = 'black';
-    // forgotPasswordMsg.style.display = 'block';
-    // forgotPasswordMsg.innerText = 'Počkejte prosím...';
 
     (async function(){
       try {
@@ -136,16 +103,6 @@ window.onload = function(){
     e.preventDefault();
 
     if(resetPasswordForm.submitted) return;
-
-    // if(!resetPasswordForm.email.value){
-    //   resetPasswordMsg.style.background = 'red';
-    //   resetPasswordMsg.style.color = 'white';
-    //   resetPasswordMsg.style.display = 'block';
-    //   resetPasswordMsg.innerText = 'Prosím zadejte e-mail!';
-    //   resetPasswordForm.email.focus();
-    //   resetPasswordForm.email.classList.add('error');
-    //   return;
-    // }
 
     if(!resetPasswordForm.code.value){
       resetPasswordMsg.style.background = 'red';
@@ -302,7 +259,7 @@ window.onload = function(){
     let password = e.target.password.value;
     let confirmPassword = e.target.confirmPassword.value;
 
-    if(!email){ // TODO check it is an email
+    if(!email){
       signupForm.email.classList.add('error');
       signupForm.email.focus();
       signupMsg.style.background = 'red';
@@ -372,14 +329,8 @@ window.onload = function(){
 
   }
 
-  // signupBtn.onclick = function(){
-  //   sidebar.style.display = 'none';
-  //   signupDialog.style.display = 'block';
-  // }
-
   signupForm_close.onclick = function(){
     signupDialog.style.display = 'none';
-    // sidebar.style.display = 'block';
     loginDialog.style.display = 'block';
   }
 

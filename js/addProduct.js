@@ -17,17 +17,15 @@ async function createAddProductDialog(addItemDialog, editingProduct){
 
   div.onInit = function(){
 
-    div.elements.brand.focus();
+    div.elements.shortDesc.focus();
 
     if(editingProduct){
       div.elements.brand.value = editingProduct.brand;
-      div.elements.productType.value = editingProduct.productType;
       div.elements.amountValue.value = editingProduct.amountValue ? editingProduct.amountValue : '';
       div.elements.amountUnit.value = editingProduct.amountUnit ?? 'g';
       div.elements.shortDesc.value = editingProduct.shortDesc;
       div.elements.productCode.value = editingProduct.code;
       div.elements.packageType.value = editingProduct.packageType;
-      div.elements.description.value = editingProduct.description;
       if(editingProduct.imgName){
         div.elements.imgPreview.style.backgroundImage = "url('images/"+editingProduct.imgName+"')";
         imgName = editingProduct.imgName;
@@ -55,15 +53,6 @@ async function createAddProductDialog(addItemDialog, editingProduct){
         let option = document.createElement('option');
         option.value = brand.name;
         datalist_brands.appendChild(option);
-      }
-
-      let productTypes = JSON.parse(await GET('api/product/listProductTypes.php'));
-      datalist_type.innerText = '';
-
-      for(let productType of productTypes){
-        let option = document.createElement('option');
-        option.value = productType.name;
-        datalist_type.appendChild(option);
       }
 
       let packageTypes = JSON.parse(await GET('api/product/listPackageTypes.php'));
@@ -122,13 +111,11 @@ async function createAddProductDialog(addItemDialog, editingProduct){
 
     // TODO make names more consistent
     let brand = toFirstUpper(form.getValue(div.elements.brand));
-    let productType = toFirstUpper(form.getValue(div.elements.productType));
     let amountValue = form.getValue(div.elements.amountValue);
     let amountUnit = div.elements.amountUnit.value;
     let shortDesc = toFirstUpper(form.getValue(div.elements.shortDesc));
     let productCode = form.getValue(div.elements.productCode);
     let packageType = form.getValue(div.elements.packageType);
-    let description = form.getValue(div.elements.description);
 
     // let imgName = null;
     if(imgFile) {
@@ -143,12 +130,10 @@ async function createAddProductDialog(addItemDialog, editingProduct){
 
         product = JSON.parse(await POST('api/product/editProduct.php?productId='+editingProduct.id, {
           'brand': brand,
-          'type': productType,
           'shortDesc': shortDesc,
           'code': productCode,
           'imgName': imgName,
           'packageType': packageType,
-          'description': description,
           'amountValue': amountValue,
           'amountUnit': amountUnit,
         }));
@@ -157,13 +142,11 @@ async function createAddProductDialog(addItemDialog, editingProduct){
 
         let changed = {};
         if(brand!=editingProduct.brand) changed['brand'] = brand;
-        if(productType!=editingProduct.productType) changed['type'] = productType;
         if(amountValue!=editingProduct.amountValue) changed['amountValue'] = amountValue;
         if(amountUnit!=editingProduct.amountUnit) changed['amountUnit'] = amountUnit;
         if(shortDesc!=editingProduct.shortDesc) changed['shortDesc'] = shortDesc;
         if(productCode!=editingProduct.code) changed['code'] = productCode;
         if(packageType!=editingProduct.packageType) changed['packageType'] = packageType;
-        if(description!=editingProduct.description) changed['description'] = description;
         if(imgName!=editingProduct.imgName) changed['imgName'] = imgName;
 
         if(Object.keys(changed).length) { // save only if some property changed
@@ -179,17 +162,16 @@ async function createAddProductDialog(addItemDialog, editingProduct){
 
       let product = JSON.parse(await POST('api/product/createProduct.php', {
         'brand': brand,
-        'type': productType,
         'shortDesc': shortDesc,
         'code': productCode,
         'imgName': imgName,
         'packageType': packageType,
-        'description': description,
         'amountValue': amountValue,
         'amountUnit': amountUnit,
       }));
   
       if(addItemDialog) addItemDialog.setProduct(product);
+      await refresh();
 
     }
 

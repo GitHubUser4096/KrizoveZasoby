@@ -16,11 +16,10 @@ checkRole('editor');
 $editId = getParam('editId');
 
 $edits = $db->query("select
-      productId, ProductEditSuggestion.id, changedBrandId, Brand.id as 'brandId', changedTypeId, ProductType.id as 'typeId', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.id as 'packageTypeId', changedImgName, imgName, changedDescription, description
+      productId, ProductEditSuggestion.id, changedBrandId, Brand.id as 'brandId', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.id as 'packageTypeId', changedImgName, imgName
     from ProductEditSuggestion
       left join Brand on Brand.id=brandId
       left join PackageType on PackageType.id=packageTypeId
-      left join ProductType on ProductType.id=typeId
     where ProductEditSuggestion.id=?", $editId);
 
 if(count($edits)==0){
@@ -33,10 +32,6 @@ $edit = $edits[0];
 
 if($edit['changedBrandId']){
   $db->execute("update Product set brandId=? where id=?", $edit['brandId'], $edit['productId']);
-}
-
-if($edit['changedTypeId']){
-  $db->execute("update Product set typeId=? where id=?", $edit['typeId'], $edit['productId']);
 }
 
 if($edit['changedShortDesc']){
@@ -57,10 +52,6 @@ if($edit['changedImgName']){
 
 if($edit['changedPackageTypeId']){
   $db->execute("update Product set packageTypeId=? where id=?", $edit['packageTypeId'], $edit['productId']);
-}
-
-if($edit['changedDescription']){
-  $db->execute("update Product set description=? where id=?", $edit['description'], $edit['productId']);
 }
 
 if($edit['changedAmountValue']){

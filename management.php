@@ -48,6 +48,10 @@ if(!isSet($_SESSION['user'])){
       </div>
       <div class="currentAction">
         <div class="items">
+          <div class="mobileMenu" id="mobileMenu">
+            <img src="res/menu.png">
+          </div>
+          <div class="titleBar" id="titleBar"></div>
           <div class="listContent" id="itemListContainer">
           </div>
         </div>

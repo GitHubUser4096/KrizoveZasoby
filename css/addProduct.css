@@ -93,19 +93,9 @@
 
 .addProductDialog .brandBox {
   position: absolute;
-  left: 20px;
-  top: 40px;
-  /* width: 265px; */
-  width: calc(50% - 30px);
-  height: 70px;
-}
-
-.addProductDialog .productTypeBox {
-  position: absolute;
+  left: 190px;
+  top: 120px;
   right: 20px;
-  top: 40px;
-  /* width: 265px; */
-  width: calc(50% - 30px);
   height: 70px;
 }
 
@@ -113,20 +103,20 @@
   position: absolute;
   left: 20px;
   top: 120px;
-  width: 560px;
+  width: 150px;
   height: 70px;
 }
 
 .addProductDialog .amountInputBox {
   box-shadow: 0 0 5px black;
   height: 40px;
-  width: 110px;
+  width: 150px;
   position: relative;
   margin-top: 5px;
 }
 
 .addProductDialog .amountValue {
-  width: 60px;
+  width: 100px;
   display: block;
   position: absolute;
   box-shadow: none;
@@ -139,7 +129,7 @@
   width: 50px;
   display: block;
   position: absolute;
-  left: 60px;
+  left: 100px;
   box-shadow: none;
   margin-top: 0;
   box-sizing: border-box;
@@ -148,8 +138,8 @@
 
 .addProductDialog .shortDescBox {
   position: absolute;
-  left: 150px;
-  top: 120px;
+  left: 20px;
+  top: 40px;
   height: 70px;
   right: 20px;
 }
@@ -165,7 +155,7 @@
 .addProductDialog .packageTypeBox {
   position: absolute;
   left: 190px;
-  top: 310px;
+  top: 280px;
   height: 70px;
   right: 20px;
 }
@@ -178,19 +168,12 @@
   height: 175px;
 }
 
-.addProductDialog .descriptionBox {
-  position: absolute;
-  left: 20px;
-  top: 385px;
-  height: 150px;
-  right: 20px;
-}
-
 .addProductDialog .submitBox {
   position: absolute;
   left: 20px;
-  top: 555px;
+  /* top: 555px; */
   /* width: 545px; */
+  bottom: 0px;
   width: calc(100% - 40px);
   height: 100px;
 }

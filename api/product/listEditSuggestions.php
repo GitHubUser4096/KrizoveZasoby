@@ -15,11 +15,10 @@ checkRole('editor');
 $res = [];
 
 $edits = $db->query("select
-      productId, editedBy, ProductEditSuggestion.id, changedBrandId, Brand.name as 'brand', changedTypeId, ProductType.name as 'type', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.name as 'packageType', changedImgName, imgName, changedDescription, description
+      productId, editedBy, ProductEditSuggestion.id, changedBrandId, Brand.name as 'brand', changedAmountValue, amountValue, changedAmountUnit, amountUnit, changedShortDesc, shortDesc, changedCode, code, changedPackageTypeId, PackageType.name as 'packageType', changedImgName, imgName
     from ProductEditSuggestion
       left join Brand on Brand.id=brandId
-      left join PackageType on PackageType.id=packageTypeId
-      left join ProductType on ProductType.id=typeId");
+      left join PackageType on PackageType.id=packageTypeId");
 
 foreach($edits as $edit){
 
@@ -28,22 +27,19 @@ foreach($edits as $edit){
   $edit['editedBy'] = $user;
 
   $product = $db->query("select
-        Product.id, Brand.name as 'brand', ProductType.name as 'type', ProductType.name as 'productType', amountValue, amountUnit, shortDesc, shortDesc as 'name', code, PackageType.name as 'packageType', imgName, description
+        Product.id, Brand.name as 'brand', amountValue, amountUnit, shortDesc, shortDesc as 'name', code, PackageType.name as 'packageType', imgName
       from Product
           left join Brand on Brand.id=brandId
           left join PackageType on PackageType.id=packageTypeId
-          left join ProductType on ProductType.id=typeId
       where Product.id=?", $edit['productId'])[0];
 
   $edit['oldBrand'] = $product['brand'];
-  $edit['oldType'] = $product['type'];
   $edit['oldAmountValue'] = $product['amountValue'];
   $edit['oldAmountUnit'] = $product['amountUnit'];
   $edit['oldShortDesc'] = $product['shortDesc'];
   $edit['oldCode'] = $product['code'];
   $edit['oldPackageType'] = $product['packageType'];
   $edit['oldImgName'] = $product['imgName'];
-  $edit['oldDescription'] = $product['description'];
 
   $res[] = $edit;
 
